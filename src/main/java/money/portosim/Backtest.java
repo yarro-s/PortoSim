@@ -3,15 +3,13 @@ package money.portosim;
 import money.portosim.containers.PriceSeries;
 
 public class Backtest {
-    private final Strategy strategy;
+    private final AbstractStrategy strategy;
     private final PriceSeries priceSeries;
     private final Result result = new Result();
 
-    public Backtest(Strategy strategy, PriceSeries priceSeries) {
+    public Backtest(AbstractStrategy strategy, PriceSeries priceSeries) {
         this.strategy = strategy;
         this.priceSeries = priceSeries;
-
-        this.strategy.setResult(result);
     }
 
     public void run() {
@@ -19,7 +17,7 @@ public class Backtest {
             var date = currentPrices.getKey();
             var prices = currentPrices.getValue();
 
-            var portfolio = strategy.apply(date, prices);
+            var portfolio = strategy.makePortfolio(date, prices);
             result.update(date, prices, portfolio);
         });
     }
