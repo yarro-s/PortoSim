@@ -1,15 +1,12 @@
 package money.portosim;
 
+import java.util.Date;
 import money.portosim.containers.PriceMap;
 
-import java.util.Date;
-
-public abstract class Strategy {
-    private Result result;
-
-    void setResult(Result result) {
-        this.result = result;
-    }
-
-    public abstract Portfolio apply(Date date, PriceMap prices);
+/**
+ *
+ * @author yarrik
+ */
+public interface Strategy {
+    Portfolio makePortfolio(Date date, PriceMap prices);
 }

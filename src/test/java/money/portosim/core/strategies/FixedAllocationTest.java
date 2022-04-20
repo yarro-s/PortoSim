@@ -1,4 +1,4 @@
-package money.portosim.core;
+package money.portosim.core.strategies;
 
 import money.portosim.Portfolio;
 import money.portosim.containers.PriceMap;
@@ -27,8 +27,8 @@ public class FixedAllocationTest {
     public void multiAssetUpdateTest() throws CloneNotSupportedException {
         var fixedAlloc = new FixedAllocation(targetAlloc);
 
-        var pf0 = (Portfolio)fixedAlloc.apply(null, currentPrices).clone();
-        var pf1 = fixedAlloc.apply(null, updatedPrices);
+        var pf0 = (Portfolio) fixedAlloc.makePortfolio(null, currentPrices).clone();
+        var pf1 = fixedAlloc.makePortfolio(null, updatedPrices);
 
         var pf0Value = pf0.valueAtPrice(currentPrices).orElse(0.0);
         var pf1Value = pf1.valueAtPrice(updatedPrices).orElse(0.0);
@@ -47,8 +47,8 @@ public class FixedAllocationTest {
     public void multiAssetInvariantUpdateTest() throws CloneNotSupportedException {
         var fixedAlloc = new FixedAllocation(targetAlloc);
 
-        var pf0 = (Portfolio) fixedAlloc.apply(null, currentPrices).clone();
-        var pf1 = fixedAlloc.apply(null, currentPrices);
+        var pf0 = (Portfolio) fixedAlloc.makePortfolio(null, currentPrices).clone();
+        var pf1 = fixedAlloc.makePortfolio(null, currentPrices);
 
         var pf0Value = pf0.valueAtPrice(currentPrices).orElse(0.0);
         var pf1Value = pf1.valueAtPrice(currentPrices).orElse(0.0);
@@ -60,7 +60,7 @@ public class FixedAllocationTest {
     public void multiAssetInitTest() {
         var fixedAlloc = new FixedAllocation(targetAlloc);
 
-        var pf = fixedAlloc.apply(null, currentPrices);
+        var pf = fixedAlloc.makePortfolio(null, currentPrices);
 
         var pfValue = pf.valueAtPrice(currentPrices).orElse(0.0);
         Assert.assertTrue(pfValue > 0.0);
