@@ -1,5 +1,6 @@
 package money.portosim.core;
 
+import java.time.temporal.ChronoUnit;
 import money.portosim.Backtest;
 import money.portosim.containers.PriceMap;
 import money.portosim.containers.PriceSeries;
@@ -11,10 +12,124 @@ import money.portosim.strategies.ConstantAllocation;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Map;
+import money.portosim.helpers.SpecifiedAllocation;
+import money.portosim.helpers.SpecifiedMultiAllocation;
+import money.portosim.strategies.TimedStrategy;
 
 public class BacktestTest {
     private String csvDataSourcePath = "src/test/resources/simple.csv";
+    
+    @Test
+    public void fixedAllocMultiAssetTest() {
+        final Date[] timePoints = new Date[]{
+            new GregorianCalendar(2004, Calendar.JUNE, 31).getTime(),
+            new GregorianCalendar(2004, Calendar.DECEMBER, 30).getTime(),
+            new GregorianCalendar(2005, Calendar.JUNE, 31).getTime(),
+            new GregorianCalendar(2005, Calendar.DECEMBER, 30).getTime(),
+            new GregorianCalendar(2006, Calendar.JUNE, 31).getTime(),
+            new GregorianCalendar(2006, Calendar.DECEMBER, 30).getTime()
+        };
+        final PriceMap[] priceMaps = new PriceMap[]{
+            new PriceMap(Map.of("A", 125.0, "B", 50.0)),
+            new PriceMap(Map.of("A", 500.0, "B", 10.0)),
+            new PriceMap(Map.of("A", 200.0, "B", 80.0)),
+            new PriceMap(Map.of("A", 20.0, "B", 150.0)),
+            new PriceMap(Map.of("A", 350.0, "B", 250.0)),
+            new PriceMap(Map.of("A", 5.0, "B", 125.0))
+        };
+        final PriceSeries prices = new PriceSeries(Map.of(
+            timePoints[0], priceMaps[0],
+            timePoints[1], priceMaps[1],
+            timePoints[2], priceMaps[2],
+            timePoints[3], priceMaps[3],
+            timePoints[4], priceMaps[4],
+            timePoints[5], priceMaps[5])
+        );
+        final List<Double> weightsA = List.of(0.5, 0.9, 0.4);
+        final List<Double> weightsB = List.of(0.5, 0.1, 0.6);
+              
+        var multiAlloc = new SpecifiedMultiAllocation(Map.of("A", weightsA, "B", weightsB));
+        
+        var timedAlloc = new TimedStrategy(ChronoUnit.YEARS);
+        timedAlloc.setNextStrategy(multiAlloc); 
+        
+        var backtest = new Backtest(timedAlloc, prices);
+
+        backtest.run();
+        
+        var valueHist = backtest.getResult().getValueHistory();
+        
+        Assert.assertEquals(valueHist.get(timePoints[0]), weightsA.get(0) * priceMaps[0].get("A") + 
+                weightsB.get(0) * priceMaps[0].get("B"));
+        Assert.assertEquals(valueHist.get(timePoints[1]), weightsA.get(0) * priceMaps[1].get("A") + 
+                weightsB.get(0) * priceMaps[1].get("B"));
+        Assert.assertEquals(valueHist.get(timePoints[2]), weightsA.get(1) * priceMaps[2].get("A") + 
+                weightsB.get(1) * priceMaps[2].get("B"));
+        Assert.assertEquals(valueHist.get(timePoints[3]), weightsA.get(1) * priceMaps[3].get("A") + 
+                weightsB.get(1) * priceMaps[3].get("B"));
+        Assert.assertEquals(valueHist.get(timePoints[4]), weightsA.get(2) * priceMaps[4].get("A") + 
+                weightsB.get(2) * priceMaps[4].get("B"));
+        Assert.assertEquals(valueHist.get(timePoints[5]), weightsA.get(2) * priceMaps[5].get("A") + 
+                weightsB.get(2) * priceMaps[5].get("B"));
+    }
+
+    
+    @Test
+    public void fixedAllocSingleAssetTest() {
+        final Date[] timePoints = new Date[]{
+            new GregorianCalendar(2010, Calendar.JUNE, 31).getTime(),
+            new GregorianCalendar(2010, Calendar.DECEMBER, 30).getTime(),
+            new GregorianCalendar(2011, Calendar.JUNE, 31).getTime(),
+            new GregorianCalendar(2011, Calendar.DECEMBER, 30).getTime(),
+            new GregorianCalendar(2012, Calendar.JUNE, 31).getTime(),
+            new GregorianCalendar(2012, Calendar.DECEMBER, 30).getTime()
+        };
+        final PriceMap[] priceMaps = new PriceMap[]{
+            new PriceMap(Map.of("A", 125.0)),
+            new PriceMap(Map.of("A", 500.0)),
+            new PriceMap(Map.of("A", 200.0)),
+            new PriceMap(Map.of("A", 20.0)),
+            new PriceMap(Map.of("A", 350.0)),
+            new PriceMap(Map.of("A", 5.0))
+        };
+        final PriceSeries prices = new PriceSeries(Map.of(
+            timePoints[0], priceMaps[0],
+            timePoints[1], priceMaps[1],
+            timePoints[2], priceMaps[2],
+            timePoints[3], priceMaps[3],
+            timePoints[4], priceMaps[4],
+            timePoints[5], priceMaps[5])
+        );
+        final double[] weights = new double[] {0.5, 0.9, 0.4};
+        
+        var s = new SpecifiedAllocation("A", weights);
+        var timedAlloc = new TimedStrategy(ChronoUnit.YEARS);
+        timedAlloc.setNextStrategy(s); 
+        
+        var backtest = new Backtest(timedAlloc, prices);
+
+        backtest.run();
+        
+        var portfolioHist = backtest.getResult().getPortfolioHistory();
+        
+        Assert.assertEquals(portfolioHist.get(timePoints[0]).positions().get("A"), weights[0]);
+        Assert.assertEquals(portfolioHist.get(timePoints[1]).positions().get("A"), weights[0]);
+        Assert.assertEquals(portfolioHist.get(timePoints[2]).positions().get("A"), weights[1]);
+        Assert.assertEquals(portfolioHist.get(timePoints[3]).positions().get("A"), weights[1]);
+        Assert.assertEquals(portfolioHist.get(timePoints[4]).positions().get("A"), weights[2]);
+        Assert.assertEquals(portfolioHist.get(timePoints[5]).positions().get("A"), weights[2]);
+        
+        var valueHist = backtest.getResult().getValueHistory();
+        
+        Assert.assertEquals(valueHist.get(timePoints[0]), weights[0] * priceMaps[0].get("A"));
+        Assert.assertEquals(valueHist.get(timePoints[1]), weights[0] * priceMaps[1].get("A"));
+        Assert.assertEquals(valueHist.get(timePoints[2]), weights[1] * priceMaps[2].get("A"));
+        Assert.assertEquals(valueHist.get(timePoints[3]), weights[1] * priceMaps[3].get("A"));
+        Assert.assertEquals(valueHist.get(timePoints[4]), weights[2] * priceMaps[4].get("A"));
+        Assert.assertEquals(valueHist.get(timePoints[5]), weights[2] * priceMaps[5].get("A"));
+    }
 
     @Test
     public void constantAllocSingleAssetTest() {
