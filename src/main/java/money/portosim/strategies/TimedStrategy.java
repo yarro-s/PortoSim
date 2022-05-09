@@ -36,6 +36,10 @@ public class TimedStrategy extends StrategyChain {
             lastRebalanced = localDate;
             return true;
         } 
-        return rebalanceFrame.between(lastRebalanced, localDate) >= 1;
+        if (rebalanceFrame.between(lastRebalanced, localDate) >= 1) {
+            lastRebalanced = localDate;
+            return true;
+        }
+        return false;
     }
 }
