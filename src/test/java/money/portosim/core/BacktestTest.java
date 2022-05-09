@@ -16,10 +16,84 @@ import java.util.List;
 import java.util.Map;
 import money.portosim.helpers.SpecifiedAllocation;
 import money.portosim.helpers.SpecifiedMultiAllocation;
+import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
 
 public class BacktestTest {
     private String csvDataSourcePath = "src/test/resources/simple.csv";
+    
+    @Test
+    public void sp500GoldScaledTimedAllocTest() {       
+        final Date[] timePoints = new Date[]{
+            new GregorianCalendar(2018, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
+        };
+        var prices = new PriceSeries(Map.of(
+            timePoints[0], new PriceMap(Map.of("SP500", 1000.0, "GOLD", 1000.0)),
+            timePoints[1], new PriceMap(Map.of("SP500", 9575.0, "GOLD", 9772.0)),
+            timePoints[2], new PriceMap(Map.of("SP500", 1141.0, "GOLD", 1169.0))
+        ));
+        
+        var strategy = new TimedStrategy(ChronoUnit.YEARS);
+        strategy.setNextStrategy(new FixedAllocation(Map.of("SP500", 0.7, "GOLD", 0.3))); 
+        
+        var backtest = new Backtest(strategy, prices);
+
+        backtest.run();
+
+        var result = backtest.getResult();
+        
+        Assert.assertEquals(result.totalReturn().orElse(0), 1149.86 / 1000.0, 0.001);
+    }
+    
+    @Test
+    public void sp500GoldScaledAllocTest() {
+        var strategy = new FixedAllocation(Map.of("SP500", 0.6, "GOLD", 0.4)); 
+        
+        final Date[] timePoints = new Date[]{
+            new GregorianCalendar(2018, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
+        };
+        var prices = new PriceSeries(Map.of(
+            timePoints[0], new PriceMap(Map.of("SP500", 1000.0, "GOLD", 1000.0)),
+            timePoints[1], new PriceMap(Map.of("SP500", 957.538, "GOLD", 977.282)),
+            timePoints[2], new PriceMap(Map.of("SP500", 1141.291, "GOLD", 1169.839))
+        ));
+        
+        var backtest = new Backtest(strategy, prices);
+
+        backtest.run();
+
+        var result = backtest.getResult();
+        
+        Assert.assertEquals(result.totalReturn().orElse(0), 1152.710 / 1000.0, 0.001);
+    }
+    
+    @Test
+    public void sp500ScaledAllocTest() {
+        var strategy = new FixedAllocation(Map.of("SP500", 1.0)); 
+        
+        final Date[] timePoints = new Date[]{
+            new GregorianCalendar(2018, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
+        };
+        var prices = new PriceSeries(Map.of(
+            timePoints[0], new PriceMap(Map.of("SP500", 1000.0)),
+            timePoints[1], new PriceMap(Map.of("SP500", 957.538)),
+            timePoints[2], new PriceMap(Map.of("SP500", 1141.291))
+        ));
+        
+        var backtest = new Backtest(strategy, prices);
+
+        backtest.run();
+
+        var result = backtest.getResult();
+        
+        Assert.assertEquals(result.totalReturn().orElse(0), 1141.291 / 1000.0);
+    }
     
     @Test
     public void fixedAllocMultiAssetTest() {

@@ -27,10 +27,13 @@ public class BacktestFromCSV {
         backtest.run();
 
         var result = backtest.getResult();
+        var pfHist = backtest.getResult().getPortfolioHistory();
+        
         var expTotalReturn = prices.ordered().lastEntry()
                 .getValue().divide(prices.ordered().firstEntry().getValue())
                 .getOrDefault("SP500TR", 0.0);
 
         Assert.assertEquals(result.totalReturn().orElse(0.0), expTotalReturn, 0.001);
+        Assert.assertEquals(pfHist.size(), prices.size());
     }
 }

@@ -6,10 +6,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
+import money.portosim.AbstractStrategy;
+import money.portosim.Backtest;
 import money.portosim.Portfolio;
 import money.portosim.containers.PriceMap;
 import money.portosim.containers.PriceSeries;
 import money.portosim.containers.generic.NumericMap;
+import money.portosim.containers.generic.TaggedOrderedMap;
+import money.portosim.core.BacktestTest;
+import money.portosim.helpers.SpecifiedAllocation;
 import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
 import org.testng.Assert;
@@ -30,7 +35,7 @@ public class TimedStrategyTest {
     private Date initDate;
     private Date noUpdateDate;
     private Date updateDate;
-
+    
     @BeforeMethod
     public void setUp() {
         targetAlloc = new NumericMap<>(Map.of("A", 0.4, "B", 0.6));
@@ -43,7 +48,7 @@ public class TimedStrategyTest {
         noUpdateDate = new GregorianCalendar(2009, Calendar.DECEMBER, 21).getTime();
         updateDate = new GregorianCalendar(2010, Calendar.FEBRUARY, 20).getTime();
     }
-
+    
     @Test
     public void timedUpdateTest() throws CloneNotSupportedException {
         var fixedAlloc = new FixedAllocation(targetAlloc);
