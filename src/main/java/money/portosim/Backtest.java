@@ -12,7 +12,7 @@ public class Backtest {
         this.priceSeries = priceSeries;
     }
 
-    public void run() {
+    public Result run() {
         priceSeries.ordered().entrySet().stream().forEach(currentPrices -> {
             var date = currentPrices.getKey();
             var prices = currentPrices.getValue();
@@ -20,6 +20,7 @@ public class Backtest {
             var portfolio = strategy.makePortfolio(date, prices);
             result.update(date, prices, portfolio);
         });
+        return getResult();
     }
 
     public Result getResult() {
