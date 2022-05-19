@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Map;
 
 public class ConstantAllocation extends AbstractStrategy {
-    private Portfolio portfolio;
+    private final Portfolio portfolio;
 
     public ConstantAllocation(Map<String, Double> assetAmounts) {
         this.portfolio = new Portfolio(assetAmounts);

@@ -1,6 +1,5 @@
 package money.portosim.containers.generic;
 
-import money.portosim.QuantifiableResult;
 import money.portosim.QuantifiableSeries;
 
 import java.util.ArrayList;

@@ -12,8 +12,8 @@ import java.util.List;
 public class CSVPriceSeriesParser extends AbstractMapParser<String, Date, PriceMap> {
 
     private List<String> rawRecords;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private CSVPriceMapParser csvPriceMapParser;
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final CSVPriceMapParser csvPriceMapParser;
 
     public CSVPriceSeriesParser(CSVPriceMapParser csvPriceMapParser) {
         this.csvPriceMapParser = csvPriceMapParser;
@@ -38,7 +38,6 @@ public class CSVPriceSeriesParser extends AbstractMapParser<String, Date, PriceM
         try {
             date = simpleDateFormat.parse(strDate);
         } catch (ParseException e) {
-            e.printStackTrace();
         }
 
         return date;

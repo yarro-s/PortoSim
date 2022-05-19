@@ -5,7 +5,6 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import money.portosim.Portfolio;
-import money.portosim.AbstractStrategy;
 import money.portosim.containers.PriceMap;
 
 /**

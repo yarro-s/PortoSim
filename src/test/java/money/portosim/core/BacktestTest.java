@@ -20,7 +20,7 @@ import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
 
 public class BacktestTest {
-    private String csvDataSourcePath = "src/test/resources/simple.csv";
+    private final String csvDataSourcePath = "src/test/resources/simple.csv";
     
     @Test
     public void sp500GoldScaledTimedAllocTest() {       
@@ -36,7 +36,7 @@ public class BacktestTest {
         ));
         
         var strategy = new TimedStrategy(ChronoUnit.YEARS);
-        strategy.setNextStrategy(new FixedAllocation(Map.of("SP500", 0.7, "GOLD", 0.3))); 
+        strategy.chainTo(new FixedAllocation(Map.of("SP500", 0.7, "GOLD", 0.3))); 
         
         var backtest = new Backtest(strategy, prices);
 
@@ -127,7 +127,7 @@ public class BacktestTest {
         var multiAlloc = new SpecifiedMultiAllocation(Map.of("A", weightsA, "B", weightsB));
         
         var timedAlloc = new TimedStrategy(ChronoUnit.YEARS);
-        timedAlloc.setNextStrategy(multiAlloc); 
+        timedAlloc.chainTo(multiAlloc); 
         
         var backtest = new Backtest(timedAlloc, prices);
 
@@ -180,7 +180,7 @@ public class BacktestTest {
         
         var s = new SpecifiedAllocation("A", weights);
         var timedAlloc = new TimedStrategy(ChronoUnit.YEARS);
-        timedAlloc.setNextStrategy(s); 
+        timedAlloc.chainTo(s); 
         
         var backtest = new Backtest(timedAlloc, prices);
 

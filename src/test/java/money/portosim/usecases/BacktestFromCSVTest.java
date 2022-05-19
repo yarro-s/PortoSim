@@ -1,18 +1,26 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/EmptyTestNGTest.java to edit this template
+ */
 package money.portosim.usecases;
-
-import money.portosim.Backtest;
-import money.portosim.containers.PriceSeries;
-import money.portosim.containers.readers.CSVPriceSeriesReader;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-import money.portosim.containers.generic.NumericMap;
-import money.portosim.strategies.ConstantAllocation;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import money.portosim.Backtest;
+import money.portosim.containers.PriceSeries;
+import money.portosim.containers.generic.NumericMap;
+import money.portosim.containers.readers.CSVPriceSeriesReader;
+import money.portosim.strategies.ConstantAllocation;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-public class BacktestFromCSV {
-    private String sp500DailyCSV = "src/test/resources/sp500_3yr_daily.csv";
+/**
+ *
+ * @author yarro
+ */
+public class BacktestFromCSVTest {
+    
+    private final String sp500DailyCSV = "src/test/resources/sp500_3yr_daily.csv";
 
     @Test
     public void constantAllocSP500() throws FileNotFoundException {

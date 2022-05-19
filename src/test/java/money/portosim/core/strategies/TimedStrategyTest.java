@@ -1,24 +1,16 @@
 package money.portosim.core.strategies;
 
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
-import money.portosim.AbstractStrategy;
-import money.portosim.Backtest;
 import money.portosim.Portfolio;
 import money.portosim.containers.PriceMap;
-import money.portosim.containers.PriceSeries;
 import money.portosim.containers.generic.NumericMap;
-import money.portosim.containers.generic.TaggedOrderedMap;
-import money.portosim.core.BacktestTest;
-import money.portosim.helpers.SpecifiedAllocation;
 import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
 import org.testng.Assert;
-import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -54,7 +46,7 @@ public class TimedStrategyTest {
         var fixedAlloc = new FixedAllocation(targetAlloc);
         var timedAlloc = new TimedStrategy(ChronoUnit.MONTHS);
         
-        timedAlloc.setNextStrategy(fixedAlloc); 
+        timedAlloc.chainTo(fixedAlloc); 
 
         var pf1 = (Portfolio) timedAlloc.makePortfolio(initDate, currentPrices).clone();
         var pf2 = timedAlloc.makePortfolio(noUpdateDate, updatedPrices1);

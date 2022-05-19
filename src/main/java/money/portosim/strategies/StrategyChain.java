@@ -21,7 +21,8 @@ public abstract class StrategyChain extends AbstractStrategy {
        return nextStrategy.makePortfolio(date, prices);
     }
 
-    public void setNextStrategy(Strategy nextStrategy) {
+    public AbstractStrategy chainTo(Strategy nextStrategy) {
         this.nextStrategy = nextStrategy;
+        return this;
     }
 }

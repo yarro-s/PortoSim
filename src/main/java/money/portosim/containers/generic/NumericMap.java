@@ -14,7 +14,7 @@ public class NumericMap<K> extends TaggedMap<K, Double> implements AlgebraicComp
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
-        return new NumericMap<K>(asMap());
+        return new NumericMap<>(asMap());
     }
 
     @Override

@@ -7,8 +7,8 @@ import money.portosim.containers.PriceMap;
 import java.util.*;
 
 public class Result implements QuantifiableResult {
-    private TaggedOrderedMap<Date, Portfolio> portfolioHistory;
-    private NumericOrderedMap<Date> valueHistory;
+    private final TaggedOrderedMap<Date, Portfolio> portfolioHistory;
+    private final NumericOrderedMap<Date> valueHistory;
 
     @Override
     public List<Double> numSeries() {
@@ -24,7 +24,6 @@ public class Result implements QuantifiableResult {
         try {
             portfolioHistory.put(date, (Portfolio) portfolio.clone());
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
         }
         valueHistory.put(date, portfolio.valueAtPrice(prices).orElse(0.0));
     }

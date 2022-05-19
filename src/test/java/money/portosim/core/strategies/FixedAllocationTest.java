@@ -12,7 +12,6 @@ import org.testng.annotations.Test;
 import money.portosim.containers.generic.NumericMap;
 
 import java.util.Map;
-import money.portosim.Backtest;
 import money.portosim.containers.PriceSeries;
 
 public class FixedAllocationTest {

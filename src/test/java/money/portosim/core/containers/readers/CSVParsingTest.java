@@ -8,7 +8,6 @@ import money.portosim.containers.readers.CSVPriceSeriesReader;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Calendar;
@@ -16,7 +15,7 @@ import java.util.GregorianCalendar;
 import java.util.Map;
 
 public class CSVParsingTest {
-    private String csvDataSourcePath = "src/test/resources/simple.csv";
+    private final String csvDataSourcePath = "src/test/resources/simple.csv";
 
     @Test
     public void readCSV() throws FileNotFoundException {

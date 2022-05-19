@@ -18,7 +18,6 @@ public class CSVPriceSeriesReader {
             var csKeyMapping = this.reader.readLine();
             priceSeriesParser = new CSVPriceSeriesParser(new CSVPriceMapParser(csKeyMapping, true));
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -30,7 +29,6 @@ public class CSVPriceSeriesReader {
                 if ((record = reader.readLine()) == null) break;
                 else recordList.add(record);
             } catch (IOException e) {
-                e.printStackTrace();
             }
         }
         return priceSeriesParser.parseAll(recordList);
