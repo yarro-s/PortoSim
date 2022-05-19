@@ -5,7 +5,6 @@ import money.portosim.containers.PriceMap;
 import java.util.Date;
 
 public abstract class AbstractStrategy implements Strategy {
-    private Result result;
     private Portfolio portfolio;
     
     @Override
