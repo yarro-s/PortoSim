@@ -17,6 +17,35 @@ public class BacktestBuilder {
     private TimedStrategy timedStrategy; 
     private Backtest backtest;
     private PriceSeries prices;
+
+    public BacktestBuilder() { }
+    
+    public BacktestBuilder(AbstractStrategy strategy) {
+        setStrategy(strategy);
+    }    
+
+    public BacktestBuilder(PriceSeries prices) {
+        setPrices(prices);
+    }
+
+    public BacktestBuilder(ChronoUnit rebalancePeriod) {
+        setRebalancePeriod(rebalancePeriod);
+    }
+    
+    public Result run(AbstractStrategy strategy) {
+        setStrategy(strategy);
+        return run();
+    }
+    
+    public Result run(PriceSeries prices) {
+        setPrices(prices);
+        return run();
+    }
+    
+    public Result run(ChronoUnit rebalancePeriod) {
+        setRebalancePeriod(rebalancePeriod);
+        return run();
+    }
     
     public Result run() {
         backtest = getStrategy() == null || prices == null 
