@@ -26,6 +26,37 @@ public class BacktestBuilderTest {
     private final String sp500GoldMonthlyCSV = "src/test/resources/sp500_gold_3yr_monthly.csv";
     
     @Test
+    public void sp500PlusGoldConvenienceMethods() throws FileNotFoundException {
+        // Load prices from the CSV file
+        var priceReader = new CSVPriceSeriesReader(new FileReader(sp500GoldMonthlyCSV));
+        PriceSeries prices = priceReader.readPrices();
+        
+        // Define a constant allocation portfolio
+        var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
+        
+        var resultStrategyInitRunPrices = new BacktestBuilder(myStrategy)
+                .setRebalancePeriod(ChronoUnit.YEARS)
+                .run(prices);
+        
+        Assert.assertEquals(resultStrategyInitRunPrices.totalReturn().orElse(0.0), 1.2026, 0.0001);
+        Assert.assertEquals(resultStrategyInitRunPrices.getPortfolioHistory().size(), prices.size());
+        
+        var resultPricesInitRunStrategy = new BacktestBuilder(prices)
+                .setRebalancePeriod(ChronoUnit.YEARS)
+                .run(myStrategy);
+        
+        Assert.assertEquals(resultPricesInitRunStrategy.totalReturn().orElse(0.0), 1.2026, 0.0001);
+        Assert.assertEquals(resultPricesInitRunStrategy.getPortfolioHistory().size(), prices.size());  
+        
+        var resultRebalanceInitRunPrices = new BacktestBuilder(ChronoUnit.YEARS)
+                .setStrategy(myStrategy)
+                .run(prices);
+        
+        Assert.assertEquals(resultRebalanceInitRunPrices.totalReturn().orElse(0.0), 1.2026, 0.0001);
+        Assert.assertEquals(resultRebalanceInitRunPrices.getPortfolioHistory().size(), prices.size());
+    }
+    
+    @Test
     public void sp500PlusGoldBuilding() throws FileNotFoundException {
         // Load prices from the CSV file
         var priceReader = new CSVPriceSeriesReader(new FileReader(sp500GoldMonthlyCSV));
