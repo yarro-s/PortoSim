@@ -8,7 +8,7 @@ Find the full sample [here](https://github.com/yarro-s/PortoSim/blob/master/samp
 First load prices from a CSV file
 
 ```java
-var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500GoldMonthlyCSV));
+var priceSource = new QuoteSeriesCSVSource(new FileReader("sp500_gold_3yr_monthly.csv"));
 var prices = new QuoteSeries(priceSource);
 ```
 
