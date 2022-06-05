@@ -25,8 +25,9 @@ public class NumericSeriesTest {
         var actualVolatility = ns.volatility().orElse(0.0);
 
         var expAverage = (100.0 + 120.0 + 90.0 + 135.0) / 4.0;
-        var expVolatility = Math.sqrt((Math.pow(100.0 - expAverage, 2.0) + Math.pow(120.0 - expAverage, 2.0)
-                + Math.pow(90.0 - expAverage, 2.0) + Math.pow(135.0 - expAverage, 2.0)) / 4.0);
+        var expVolatility = Math.sqrt((Math.pow(100.0 - expAverage, 2.0) 
+                + Math.pow(120.0 - expAverage, 2.0) + Math.pow(90.0 - expAverage, 2.0) 
+                + Math.pow(135.0 - expAverage, 2.0)) / 4.0);
 
         Assert.assertEquals(actualVolatility, expVolatility);
     }

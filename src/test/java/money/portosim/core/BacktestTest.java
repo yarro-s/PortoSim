@@ -20,7 +20,6 @@ import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
 
 public class BacktestTest {
-    private final String csvDataSourcePath = "src/test/resources/simple.csv";
     
     @Test
     public void sp500GoldScaledTimedAllocTest() {       

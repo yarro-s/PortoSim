@@ -6,7 +6,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Map;
-import money.portosim.containers.QuoteSeries;
 
 public class PortfolioTest {
 
