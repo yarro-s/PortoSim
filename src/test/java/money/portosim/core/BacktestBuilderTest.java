@@ -9,8 +9,8 @@ import java.io.FileReader;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import money.portosim.BacktestBuilder;
-import money.portosim.containers.PriceSeries;
-import money.portosim.containers.readers.CSVPriceSeriesReader;
+import money.portosim.containers.QuoteSeries;
+import money.portosim.containers.readers.CSVQuoteSeriesReader;
 import money.portosim.strategies.FixedAllocation;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -28,8 +28,8 @@ public class BacktestBuilderTest {
     @Test
     public void sp500PlusGoldConvenienceMethods() throws FileNotFoundException {
         // Load prices from the CSV file
-        var priceReader = new CSVPriceSeriesReader(new FileReader(sp500GoldMonthlyCSV));
-        PriceSeries prices = priceReader.readPrices();
+        var priceReader = new CSVQuoteSeriesReader(new FileReader(sp500GoldMonthlyCSV));
+        QuoteSeries prices = new QuoteSeries(priceReader.readPrices());
         
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
@@ -59,8 +59,8 @@ public class BacktestBuilderTest {
     @Test
     public void sp500PlusGoldBuilding() throws FileNotFoundException {
         // Load prices from the CSV file
-        var priceReader = new CSVPriceSeriesReader(new FileReader(sp500GoldMonthlyCSV));
-        PriceSeries prices = priceReader.readPrices();
+        var priceReader = new CSVQuoteSeriesReader(new FileReader(sp500GoldMonthlyCSV));
+        QuoteSeries prices = priceReader.readPrices();
         
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));

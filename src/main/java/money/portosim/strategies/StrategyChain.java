@@ -8,7 +8,7 @@ import java.util.Date;
 import money.portosim.AbstractStrategy;
 import money.portosim.Portfolio;
 import money.portosim.Strategy;
-import money.portosim.containers.PriceMap;
+import money.portosim.containers.Quote;
 
 /**
  *
@@ -17,7 +17,7 @@ import money.portosim.containers.PriceMap;
 public abstract class StrategyChain extends AbstractStrategy {
     private Strategy nextStrategy;
     
-    public Portfolio runNextStrategy(Date date, PriceMap prices) {
+    public Portfolio runNextStrategy(Date date, Quote prices) {
        return nextStrategy.makePortfolio(date, prices);
     }
 

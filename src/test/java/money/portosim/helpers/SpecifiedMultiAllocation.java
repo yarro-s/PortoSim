@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import money.portosim.AbstractStrategy;
 import money.portosim.Portfolio;
-import money.portosim.containers.PriceMap;
+import money.portosim.containers.Quote;
 
 /**
  *
@@ -17,7 +17,7 @@ public class SpecifiedMultiAllocation extends AbstractStrategy {
     Map<String, List<Double>> allocs;
 
     @Override
-    protected Portfolio apply(Date date, PriceMap prices) {
+    protected Portfolio apply(Date date, Quote prices) {
         var portfolio = new Portfolio();
         
         for (var entry : allocs.entrySet()) {

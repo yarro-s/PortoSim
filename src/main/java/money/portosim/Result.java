@@ -1,14 +1,13 @@
 package money.portosim;
 
-import money.portosim.containers.generic.NumericOrderedMap;
-import money.portosim.containers.generic.TaggedOrderedMap;
-import money.portosim.containers.PriceMap;
-
 import java.util.*;
+import money.portosim.containers.NumericSeries;
+import money.portosim.containers.Quote;
+import money.portosim.containers.core.Series;
 
 public class Result implements QuantifiableResult {
-    private final TaggedOrderedMap<Date, Portfolio> portfolioHistory;
-    private final NumericOrderedMap<Date> valueHistory;
+    private final Series<Portfolio> portfolioHistory;
+    private final NumericSeries valueHistory;
 
     @Override
     public List<Double> numSeries() {
@@ -16,11 +15,11 @@ public class Result implements QuantifiableResult {
     }
 
     Result() {
-        this.portfolioHistory = new TaggedOrderedMap<>();
-        this.valueHistory = new NumericOrderedMap<>();
+        this.portfolioHistory = new Series<>();
+        this.valueHistory = new NumericSeries();
     }
 
-    void update(Date date, PriceMap prices, Portfolio portfolio) {
+    void update(Date date, Quote prices, Portfolio portfolio) {
         try {
             portfolioHistory.put(date, (Portfolio) portfolio.clone());
         } catch (CloneNotSupportedException e) {
@@ -28,11 +27,11 @@ public class Result implements QuantifiableResult {
         valueHistory.put(date, portfolio.valueAtPrice(prices).orElse(0.0));
     }
 
-    public TaggedOrderedMap<Date, Portfolio> getPortfolioHistory() {
+    public Series<Portfolio> getPortfolioHistory() {
         return portfolioHistory;
     }
 
-    public NumericOrderedMap<Date> getValueHistory() {
+    public NumericSeries getValueHistory() {
         return valueHistory;
     }
 }
