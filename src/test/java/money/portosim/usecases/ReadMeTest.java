@@ -4,15 +4,14 @@
  */
 package money.portosim.usecases;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import money.portosim.Backtest;
 import money.portosim.BacktestBuilder;
-import money.portosim.containers.readers.CSVQuoteSeriesReader;
+import money.portosim.containers.QuoteSeries;
+import money.portosim.containers.readers.QuoteSeriesCSVSource;
 import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
 import org.testng.Assert;
@@ -29,10 +28,10 @@ public class ReadMeTest {
     private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     
     @Test
-    public void containerFeatures() throws FileNotFoundException, ParseException { 
+    public void containerFeatures() throws Exception { 
         // Load prices from a CSV file
-        var priceReader = new CSVQuoteSeriesReader(new FileReader(spyGoldDailyCSV));
-        var prices = priceReader.readPrices();
+        var priceSource = new QuoteSeriesCSVSource(new FileReader(spyGoldDailyCSV));
+        var prices = new QuoteSeries(priceSource);
         
         var priceSlice = prices.from("2015-01-02").to("2018-11-30");   // also accepts Date
        
@@ -42,10 +41,10 @@ public class ReadMeTest {
     }
     
     @Test
-    public void sp500PlusGoldSimpleBuild() throws FileNotFoundException {
+    public void sp500PlusGoldSimpleBuild() throws Exception {
         // Load prices from a CSV file
-        var priceReader = new CSVQuoteSeriesReader(new FileReader(sp500GoldMonthlyCSV));
-        var prices = priceReader.readPrices();
+        var priceSource = new QuoteSeriesCSVSource(new FileReader(spyGoldDailyCSV));
+        var prices = new QuoteSeries(priceSource);
         
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
@@ -60,10 +59,10 @@ public class ReadMeTest {
     }
     
     @Test
-    public void sp500PlusGoldAlloc() throws FileNotFoundException {
+    public void sp500PlusGoldAlloc() throws Exception {
         // Load prices from the CSV file
-        var priceReader = new CSVQuoteSeriesReader(new FileReader(sp500GoldMonthlyCSV));
-        var prices = priceReader.readPrices();
+        var priceSource = new QuoteSeriesCSVSource(new FileReader(spyGoldDailyCSV));
+        var prices = new QuoteSeries(priceSource);
         
         // Define a constant allocation portfolio
         var fixedAllocation = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
