@@ -5,18 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-public abstract class AbstractMapParser<RR, K, V> {
+public abstract class AbstractMapParser<R, K, V> {
 
-    public Map<K, V> parseAll(List<RR> rawRecords) {
+    public Map<K, V> parseAll(List<R> rawRecords) {
         Map<K, V> m = new HashMap<>();
 
         IntStream.range(0, rawRecords.size()).forEach(recIdx ->
-                m.put(recordToTag(recIdx), recordToVal(rawRecords.get(recIdx))));
+                m.put(recordToKey(recIdx), recordToVal(rawRecords.get(recIdx))));
 
         return m;
     }
 
-    protected abstract K recordToTag(int recIdx);
+    protected abstract K recordToKey(int recIdx);
 
-    protected abstract V recordToVal(RR rawRecord);
+    protected abstract V recordToVal(R rawRecord);
 }

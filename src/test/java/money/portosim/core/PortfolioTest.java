@@ -1,11 +1,12 @@
 package money.portosim.core;
 
 import money.portosim.Portfolio;
-import money.portosim.containers.PriceMap;
+import money.portosim.containers.Quote;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Map;
+import money.portosim.containers.QuoteSeries;
 
 public class PortfolioTest {
 
@@ -16,7 +17,7 @@ public class PortfolioTest {
         p1.positions().put("AAPL", 25.3);   // put shares
         p1.positions().put("T", 500.1);
 
-        var currentPrices = new PriceMap(Map.of("AAPL", 515.5, "T", 650.2));
+        var currentPrices = new Quote(Map.of("AAPL", 515.5, "T", 650.2));
 
         var currentValue = p1.valueAtPrice(currentPrices);
 
@@ -39,14 +40,15 @@ public class PortfolioTest {
 
         var pSum = p1.positions().add(d1.positions());
 
-        var pExp = new Portfolio(Map.of("IBM", 1000.0 - 300, "XOM", 50.5 + 10.5));
-        Assert.assertEquals(pSum.toString(), pExp.toString());
+        Assert.assertEquals(pSum.get("IBM"), 1000.0 - 300);
+        Assert.assertEquals(pSum.get("XOM"), 50.5 + 10.5);
 
         p1.positions().put("T", 0.0);   // make the asset known to the portfolio
 
         pSum = p1.positions().add(d1.positions());
-
-        pExp = new Portfolio(Map.of("IBM", 1000.0 - 300, "XOM", 50.5 + 10.5, "T", 200.0));
-        Assert.assertEquals(pSum.toString(), pExp.toString());
+        
+        Assert.assertEquals(pSum.get("IBM"), 1000.0 - 300);
+        Assert.assertEquals(pSum.get("XOM"), 50.5 + 10.5);
+        Assert.assertEquals(pSum.get("T"), 200.0);
     }
 }

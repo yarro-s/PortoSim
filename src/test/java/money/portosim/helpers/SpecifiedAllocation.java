@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Map;
 import money.portosim.AbstractStrategy;
 import money.portosim.Portfolio;
-import money.portosim.containers.PriceMap;
+import money.portosim.containers.Quote;
 
 /**
  *
@@ -17,7 +17,7 @@ public class SpecifiedAllocation extends AbstractStrategy {
     private final String assetID;
 
     @Override
-    protected Portfolio apply(Date date, PriceMap prices) {
+    protected Portfolio apply(Date date, Quote prices) {
         if (step >= allocation.length) {
             step = 0;
         }

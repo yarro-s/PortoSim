@@ -1,7 +1,7 @@
 package money.portosim.containers.readers;
 
-import money.portosim.containers.PriceMap;
-import money.portosim.containers.PriceSeries;
+import money.portosim.containers.Quote;
+import money.portosim.containers.QuoteSeries;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,29 +9,29 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class CSVPriceSeriesParser extends AbstractMapParser<String, Date, PriceMap> {
+public class CSVQuoteSeriesParser extends AbstractMapParser<String, Date, Quote> {
 
     private List<String> rawRecords;
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private final CSVPriceMapParser csvPriceMapParser;
+    private final CSVQuoteParser cSVQuoteParser;
 
-    public CSVPriceSeriesParser(CSVPriceMapParser csvPriceMapParser) {
-        this.csvPriceMapParser = csvPriceMapParser;
+    public CSVQuoteSeriesParser(CSVQuoteParser csvQuoteParser) {
+        this.cSVQuoteParser = csvQuoteParser;
     }
 
-    public PriceSeries parseAll(String nlsRecords) {
+    public QuoteSeries parseAll(String nlsRecords) {
         rawRecords = Arrays.asList(nlsRecords.split(System.lineSeparator()));
         return parseAll(rawRecords);
     }
 
     @Override
-    public PriceSeries parseAll(List<String> records) {
+    public QuoteSeries parseAll(List<String> records) {
         rawRecords = records;
-        return new PriceSeries(super.parseAll(records));
+        return new QuoteSeries(super.parseAll(records));
     }
 
     @Override
-    protected Date recordToTag(int recIdx) {
+    protected Date recordToKey(int recIdx) {
         var strDate = splitRawRecord(rawRecords.get(recIdx))[0];
 
         Date date = new Date();
@@ -44,10 +44,10 @@ public class CSVPriceSeriesParser extends AbstractMapParser<String, Date, PriceM
     }
 
     @Override
-    protected PriceMap recordToVal(String rawRecord) {
+    protected Quote recordToVal(String rawRecord) {
         var listRecord = Arrays.asList(splitRawRecord(rawRecord));
         var vals = listRecord.subList(1, listRecord.size());
-        return csvPriceMapParser.parseAll(vals);
+        return cSVQuoteParser.parseAll(vals);
     }
 
     private String[] splitRawRecord(String rawRecord) {

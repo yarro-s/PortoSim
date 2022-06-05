@@ -1,13 +1,13 @@
 package money.portosim;
 
-import money.portosim.containers.PriceSeries;
+import money.portosim.containers.QuoteSeries;
 
 public class Backtest {
     private final AbstractStrategy strategy;
-    private final PriceSeries priceSeries;
+    private final QuoteSeries priceSeries;
     private final Result result = new Result();
 
-    public Backtest(AbstractStrategy strategy, PriceSeries priceSeries) {
+    public Backtest(AbstractStrategy strategy, QuoteSeries priceSeries) {
         this.strategy = strategy;
         this.priceSeries = priceSeries;
     }

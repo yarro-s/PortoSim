@@ -1,7 +1,7 @@
 package money.portosim;
 
-import money.portosim.containers.generic.NumericMap;
-import money.portosim.containers.PriceMap;
+import money.portosim.containers.NumericMap;
+import money.portosim.containers.Quote;
 
 import java.util.Map;
 import java.util.OptionalDouble;
@@ -13,8 +13,8 @@ public class Portfolio {
         return positions;
     }
 
-    public OptionalDouble valueAtPrice(PriceMap assetPrices) {
-        return this.positions().multiply(assetPrices).values().stream().reduce(Double::sum)
+    public OptionalDouble valueAtPrice(Quote assetPrices) {
+        return this.positions().mult(assetPrices).values().stream().reduce(Double::sum)
                 .map(OptionalDouble::of).orElseGet(OptionalDouble::empty);
     }
 

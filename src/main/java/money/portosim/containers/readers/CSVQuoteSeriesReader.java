@@ -1,6 +1,6 @@
 package money.portosim.containers.readers;
 
-import money.portosim.containers.PriceSeries;
+import money.portosim.containers.QuoteSeries;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,20 +8,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSVPriceSeriesReader {
+public class CSVQuoteSeriesReader {
     BufferedReader reader;
-    CSVPriceSeriesParser priceSeriesParser;
+    CSVQuoteSeriesParser priceQuoteSeriesParser;
 
-    public CSVPriceSeriesReader(FileReader reader) {
+    public CSVQuoteSeriesReader(FileReader reader) {
         this.reader = new BufferedReader(reader);
         try {
             var csKeyMapping = this.reader.readLine();
-            priceSeriesParser = new CSVPriceSeriesParser(new CSVPriceMapParser(csKeyMapping, true));
+            priceQuoteSeriesParser = new CSVQuoteSeriesParser(new CSVQuoteParser(csKeyMapping, true));
         } catch (IOException e) {
         }
     }
 
-    public PriceSeries readPrices() {
+    public QuoteSeries readPrices() {
         List<String> recordList = new ArrayList<>();
         while (true) {
             try {
@@ -31,6 +31,6 @@ public class CSVPriceSeriesReader {
             } catch (IOException e) {
             }
         }
-        return priceSeriesParser.parseAll(recordList);
+        return priceQuoteSeriesParser.parseAll(recordList);
     }
 }
