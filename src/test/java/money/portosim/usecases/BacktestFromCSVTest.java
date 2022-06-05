@@ -6,11 +6,10 @@ package money.portosim.usecases;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import money.portosim.Backtest;
 import money.portosim.containers.NumericMap;
+import money.portosim.containers.readers.CSVQuoteSeriesReader;
 import money.portosim.containers.QuoteSeries;
-import money.portosim.containers.readers.QuoteSeriesCSVSource;
 import money.portosim.strategies.ConstantAllocation;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -24,9 +23,9 @@ public class BacktestFromCSVTest {
     private final String sp500DailyCSV = "src/test/resources/sp500_3yr_daily.csv";
 
     @Test
-    public void constantAllocSP500() throws FileNotFoundException, IOException {
-        var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500DailyCSV));
-        var prices = new QuoteSeries(priceSource);
+    public void constantAllocSP500() throws FileNotFoundException {
+        var priceReader = new CSVQuoteSeriesReader(new FileReader(sp500DailyCSV));
+        QuoteSeries prices = priceReader.readPrices();
 
         var asset = new NumericMap<String>();
         asset.put("SP500TR", 1.0);

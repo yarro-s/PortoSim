@@ -8,8 +8,8 @@ Find the full sample [here](https://github.com/yarro-s/PortoSim/blob/master/samp
 First load prices from a CSV file
 
 ```java
-var priceSource = new QuoteSeriesCSVSource(new FileReader(spyGoldDailyCSV));
-var prices = new QuoteSeries(priceSource);
+var priceReader = new CSVQuoteSeriesReader(new FileReader(sp500GoldMonthlyCSV));
+var prices = priceReader.readPrices();
 ```
 
 Then define a fixed allocation 70% stocks / 30% gold portfolio
@@ -34,12 +34,12 @@ System.out.println("Total return is " + result.totalReturn().orElse(0));
 A TreeMap-based container with some additional features is used to store price data as maps
 
 ```java
-var priceSource = new QuoteSeriesCSVSource(new FileReader(spyGoldDailyCSV));
-var prices = new QuoteSeries(priceSource);
+var priceReader = new CSVQuoteSeriesReader(new FileReader(spyGoldDailyCSV));
+var prices = priceReader.readPrices();
         
 var priceSlice = prices.from("2015-01-02").to("2018-11-30");   // also accepts Date
 
-System.out.println("First: " + priceSlice.firstEntry());  // 2015-01-02={SPY=205.4, GLD=114.1}
-System.out.println("Last: " + priceSlice.lastEntry());    // 2018-11-30={SPY=275.7, GLD=115.5}
+System.out.println("First: " + priceSlice.ordered().firstEntry());  // 2015-01-02={SPY=205.4, GLD=114.1}
+System.out.println("Last: " + priceSlice.ordered().lastEntry());    // 2018-11-30={SPY=275.7, GLD=115.5}
 ```
 
