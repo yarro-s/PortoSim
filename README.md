@@ -8,8 +8,8 @@ Find the full sample [here](https://github.com/yarro-s/PortoSim/blob/master/samp
 First load prices from a CSV file
 
 ```java
-var priceReader = new CSVQuoteSeriesReader(new FileReader(sp500GoldMonthlyCSV));
-var prices = priceReader.readPrices();
+var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500GoldMonthlyCSV));
+var prices = new QuoteSeries(priceSource);
 ```
 
 Then define a fixed allocation 70% stocks / 30% gold portfolio
