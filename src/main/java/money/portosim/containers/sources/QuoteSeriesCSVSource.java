@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package money.portosim.containers.readers;
+package money.portosim.containers.sources;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import money.portosim.containers.Quote;
 import money.portosim.containers.QuoteSeries;
-import money.portosim.containers.readers.CSVHeaderRowColumn;
+import money.portosim.containers.sources.CSVHeaderRowColumn;
 
 /**
  *

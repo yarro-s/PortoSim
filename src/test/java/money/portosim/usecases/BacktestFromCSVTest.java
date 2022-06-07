@@ -8,7 +8,7 @@ import java.io.FileReader;
 import money.portosim.Backtest;
 import money.portosim.containers.NumericMap;
 import money.portosim.containers.QuoteSeries;
-import money.portosim.containers.readers.QuoteSeriesCSVSource;
+import money.portosim.containers.sources.QuoteSeriesCSVSource;
 import money.portosim.strategies.ConstantAllocation;
 import org.testng.Assert;
 import org.testng.annotations.Test;

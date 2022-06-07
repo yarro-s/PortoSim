@@ -11,7 +11,7 @@ import money.portosim.Backtest;
 import money.portosim.BacktestBuilder;
 import money.portosim.containers.QuoteSeries;
 import money.portosim.containers.core.Series;
-import money.portosim.containers.readers.QuoteSeriesCSVSource;
+import money.portosim.containers.sources.QuoteSeriesCSVSource;
 import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
 import org.testng.Assert;

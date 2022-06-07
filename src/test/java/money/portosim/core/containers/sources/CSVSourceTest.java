@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package money.portosim.core.containers.readers;
+package money.portosim.core.containers.sources;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import money.portosim.containers.QuoteSeries;
-import money.portosim.containers.readers.QuoteSeriesCSVSource;
+import money.portosim.containers.sources.QuoteSeriesCSVSource;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
  *
  * @author yarro
  */
-public class QuoteSeriesCSVSourceTest {
+public class CSVSourceTest {
     private final String csvDataSourcePath = "src/test/resources/simple.csv";
     
     @Test

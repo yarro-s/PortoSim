@@ -9,7 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import money.portosim.BacktestBuilder;
 import money.portosim.containers.QuoteSeries;
-import money.portosim.containers.readers.QuoteSeriesCSVSource;
+import money.portosim.containers.sources.QuoteSeriesCSVSource;
 import money.portosim.strategies.FixedAllocation;
 import org.testng.Assert;
 import org.testng.annotations.Test;
