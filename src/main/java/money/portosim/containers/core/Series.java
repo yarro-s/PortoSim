@@ -84,4 +84,8 @@ public class Series<V> extends AbstractMap<Date, V> implements OrderedMap<Date, 
         
         return date;
     }  
+    
+    public static String dateToIsoString(Date date) {
+        return formatter.format(date);
+    }  
 }
