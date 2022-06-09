@@ -6,19 +6,8 @@ package money.portosim.core.containers.sources;
 
 import org.testng.annotations.Test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import java.sql.Statement;
-import java.util.Date;
-import java.util.Map;
-import money.portosim.containers.Quote;
 import money.portosim.containers.QuoteSeries;
 import money.portosim.containers.sources.QuoteSeriesSQLSource;
-import money.portosim.containers.sources.SQLKeyCategoryData;
 import org.testng.Assert;
 
 /**
