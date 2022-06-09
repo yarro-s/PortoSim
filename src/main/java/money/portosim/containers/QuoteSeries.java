@@ -4,16 +4,10 @@
  */
 package money.portosim.containers;
 
-import money.portosim.containers.core.Series;
-import money.portosim.containers.core.AlgebraicMap;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
 import java.util.Date;
 import java.util.Map;
-import java.util.NavigableMap;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import money.portosim.containers.core.AlgebraicMap;
 import money.portosim.containers.core.Series;
 
@@ -29,6 +23,40 @@ public class QuoteSeries extends Series<Quote> implements AlgebraicMap<Date, Quo
     
     public QuoteSeries(Map<Date, Quote> m) {
         super(m);
+    }
+    
+    public Series<Double> getSeries(String seriesKey) {
+        final Series<Double> series = new Series<>();
+        
+        keySet().forEach(k -> {
+            var val = get(k).get(seriesKey);
+            
+            if (val != null) {
+                series.put(k, val);
+            }         
+        });
+        
+        return series;
+    }
+    
+    public Series<Double> putSeries(String seriesKey, Series<Double> series) {
+        keySet().forEach(k -> {
+            var quote = get(k);
+            if (quote != null) {
+                var seriesVal = series.get(k);
+                
+                if (seriesVal != null)
+                    quote.put(seriesKey, seriesVal);
+            }
+        });
+        
+        return getSeries(seriesKey);
+    }
+    
+    public Quote mapSeries(Function<Series<Double>, Double> f) {
+        var seriesKeys = firstEntry().getValue().keySet();     
+        return new Quote(seriesKeys.stream().collect(Collectors.toMap(Function.identity(),
+                sk -> f.apply(getSeries(sk)))));
     }
     
     @Override
