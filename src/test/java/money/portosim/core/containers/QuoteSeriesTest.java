@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.Set;
+import money.portosim.Metrics;
 import org.testng.Assert;
 import money.portosim.containers.Quote;
 import money.portosim.containers.QuoteSeries;
@@ -21,6 +22,31 @@ import org.testng.annotations.Test;
 public class QuoteSeriesTest {
     private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         
+    @Test
+    public void rollingWindowAverage() {
+        var qs = new QuoteSeries();
+        
+        qs.put("2010-01-01", new Quote(Map.of("A", 100.0, "B", 5*100.0)));
+        qs.put("2010-02-01", new Quote(Map.of("A", 120.0, "B", 5*120.0)));
+        qs.put("2010-03-01", new Quote(Map.of("A", 90.0, "B", 5*90.0)));
+        qs.put("2010-04-01", new Quote(Map.of("A", 15.5, "B", 5*15.5)));
+        qs.put("2010-05-01", new Quote(Map.of("A", 32.0, "B", 5*32.0)));
+        qs.put("2010-06-01", new Quote(Map.of("A", 60.0, "B", 5*60.0)));
+        qs.put("2010-07-01", new Quote(Map.of("A", 75.0, "B", 5*75.0)));
+
+        var qsAverage = qs.rolling(3, (s) -> Metrics.average(new QuoteSeries(s)));
+
+        Assert.assertEquals(qsAverage.size(), qs.size() - 3 + 1);
+        
+        var avgVal = (100.0 + 120.0 + 90.0) / 3;
+        Assert.assertEquals(qsAverage.get("2010-03-01").get("A"), avgVal, 0.001);
+        Assert.assertEquals(qsAverage.get("2010-03-01").get("B"), 5*avgVal, 0.001);
+        
+        avgVal = (32.0 + 60.0 + 75.0) / 3;
+        Assert.assertEquals(qsAverage.get("2010-07-01").get("A"), avgVal, 0.001);
+        Assert.assertEquals(qsAverage.get("2010-07-01").get("B"), 5*avgVal, 0.001);
+    }
+    
     @Test
     public void combineSumQuotes() throws ParseException {
         var quoteT1 = new Quote(Map.of("SPY", 100.0, "QQQ", 1500.5));

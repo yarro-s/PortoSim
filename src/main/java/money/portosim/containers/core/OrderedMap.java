@@ -5,10 +5,13 @@
 package money.portosim.containers.core;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.function.Function;
 
 /**
  *
@@ -16,6 +19,19 @@ import java.util.SortedMap;
  */
 public interface OrderedMap<T, V> extends NavigableMap<T, V> {
     public NavigableMap<T, V> ordered();
+    
+    default public Map<T, V> rolling(int n, Function<SortedMap<T, V>, V> f) {
+        var allKeys = (T[]) navigableKeySet().toArray();
+        var result = new HashMap<T, V>();
+        
+        for (int k0 = 0; k0 <= allKeys.length - n; k0++) {
+            var kT = allKeys[k0 + n - 1];
+            var window = subMap(allKeys[k0], true, kT, true);
+            
+            result.put(kT, f.apply(window));
+        }       
+        return result;
+    }
             
     @Override
     default public Set<Entry<T, V>> entrySet() {

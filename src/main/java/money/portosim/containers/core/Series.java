@@ -12,7 +12,9 @@ import java.util.Date;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 /**
  *
@@ -22,7 +24,12 @@ public class Series<V> extends AbstractMap<Date, V> implements OrderedMap<Date, 
     
     private final NavigableMap<Date, V> nm;
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
+    
+    @Override
+    public Series<V> rolling(int n, Function<SortedMap<Date, V>, V> f) {
+        return new Series<>(OrderedMap.super.rolling(n, f)); 
+    }
+    
     public V put(String isoDate, V val) {
         Date date = isoStringToDate(isoDate);
         if (date != null)

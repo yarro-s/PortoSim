@@ -4,6 +4,7 @@
  */
 package money.portosim.core.containers;
 
+import money.portosim.Metrics;
 import money.portosim.containers.NumericSeries;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -13,6 +14,31 @@ import org.testng.annotations.Test;
  * @author yarro
  */
 public class NumericSeriesTest { 
+    
+    @Test
+    public void rollingWindowAverage() {
+        var ns = new NumericSeries();
+        
+        ns.put("2010-01-01", 100.0);
+        ns.put("2010-02-01", 120.0);
+        ns.put("2010-03-01", 90.0);
+        ns.put("2010-04-01", 15.5);
+        ns.put("2010-05-01", 32.0);
+        ns.put("2010-06-01", 60.0);
+        ns.put("2010-07-01", 75.0);
+
+        var nsAverage = ns.rolling(3, (s) -> Metrics.average(s.values()));
+
+        var expAverage = new NumericSeries();
+        
+        expAverage.put("2010-03-01", (100.0 + 120.0 + 90.0) / 3);
+        expAverage.put("2010-04-01", (120.0 + 90.0 + 15.5) / 3);
+        expAverage.put("2010-05-01", (90.0 + 15.5 + 32.0) / 3);
+        expAverage.put("2010-06-01", (15.5 + 32.0 + 60.0) / 3);
+        expAverage.put("2010-07-01", (32.0 + 60.0 + 75.0) / 3);
+        
+        Assert.assertEquals(nsAverage, expAverage);
+    }
     
     @Test
     public void volatilityCalc() {

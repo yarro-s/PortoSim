@@ -6,6 +6,7 @@ package money.portosim.containers;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import money.portosim.containers.core.AlgebraicMap;
@@ -23,6 +24,11 @@ public class QuoteSeries extends Series<Quote> implements AlgebraicMap<Date, Quo
     
     public QuoteSeries(Map<Date, Quote> m) {
         super(m);
+    }
+
+    @Override
+    public QuoteSeries rolling(int n, Function<SortedMap<Date, Quote>, Quote> f) {
+        return new QuoteSeries(super.rolling(n, f)); 
     }
     
     public Series<Double> getSeries(String seriesKey) {
