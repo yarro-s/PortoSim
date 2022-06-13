@@ -4,7 +4,6 @@
  */
 package money.portosim.containers;
 
-import money.portosim.containers.core.AlgebraicMap;
 import java.util.Map;
 import money.portosim.containers.core.AlgebraicMap;
 

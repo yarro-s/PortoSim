@@ -23,6 +23,26 @@ public class QuoteSeriesTest {
     private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         
     @Test
+    public void volatilityCalc() {
+        var qs = new QuoteSeries();
+        
+        qs.put("2010-01-01", new Quote(Map.of("A", 100.0, "B", 5*100.0)));
+        qs.put("2010-02-01", new Quote(Map.of("A", 120.0, "B", 5*120.0)));
+        qs.put("2010-03-01", new Quote(Map.of("A", 90.0, "B", 5*90.0)));
+        qs.put("2010-04-01", new Quote(Map.of("A", 135.5, "B", 5*135.5)));
+
+        var actualVolatility = qs.quant().volatility();
+
+        var expAverage = (100.0 + 120.0 + 90.0 + 135.5) / 4.0;
+        var expVolatility = Math.sqrt((Math.pow(100.0 - expAverage, 2.0) 
+                + Math.pow(120.0 - expAverage, 2.0) + Math.pow(90.0 - expAverage, 2.0) 
+                + Math.pow(135.5 - expAverage, 2.0)) / 4.0);
+        
+        Assert.assertEquals(actualVolatility.get("A"), expVolatility);    
+        Assert.assertEquals(actualVolatility.get("B"), 5 * expVolatility);
+    }
+    
+    @Test
     public void rollingWindowAverage() {
         var qs = new QuoteSeries();
         
@@ -34,7 +54,7 @@ public class QuoteSeriesTest {
         qs.put("2010-06-01", new Quote(Map.of("A", 60.0, "B", 5*60.0)));
         qs.put("2010-07-01", new Quote(Map.of("A", 75.0, "B", 5*75.0)));
 
-        var qsAverage = qs.rolling(3, (s) -> Metrics.average(new QuoteSeries(s)));
+        var qsAverage = qs.rolling(3, (s) -> new QuoteSeries(s).quant().average());
 
         Assert.assertEquals(qsAverage.size(), qs.size() - 3 + 1);
         

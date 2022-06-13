@@ -4,16 +4,11 @@
  */
 package money.portosim.containers;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
-import java.util.Set;
-import java.util.TreeMap;
+import money.portosim.Quantifiable;
 import money.portosim.QuantifiableSeries;
 import money.portosim.containers.core.AlgebraicMap;
 import money.portosim.containers.core.Series;
@@ -24,6 +19,22 @@ import money.portosim.containers.core.Series;
  */
 public class NumericSeries extends Series<Double> implements AlgebraicMap<Date, Double>, 
         QuantifiableSeries {
+     
+    private class Quant implements Quantifiable {
+
+        @Override
+        public QuoteSeries seriesMap() {
+            var res = new QuoteSeries();
+            res.putSeries(" ", NumericSeries.this);
+            return res;                  
+        }
+        
+    }
+        
+    public Quantifiable quant() {
+        return new NumericSeries.Quant();
+    }
+    
     
     public NumericSeries() { 
         super();

@@ -32,7 +32,7 @@ public class MetricsTest {
     @Test
     public void seriesVolatility() {
            
-        var vol = Metrics.volatility(quoteSeries);
+        var vol = quoteSeries.quant().volatility();
         
         Assert.assertEquals(vol.get("A"), 3.7003, 0.0001);
         Assert.assertEquals(vol.get("B"), 0.9014, 0.0001);
@@ -41,7 +41,7 @@ public class MetricsTest {
     @Test
     public void seriesAverage() {
         
-        var avgVal = Metrics.average(quoteSeries);
+        var avgVal = quoteSeries.quant().average();
         
         final Quote exp = new Quote(Map.of("A", 24.65, "B", 10.75));
         Assert.assertEquals(avgVal, exp);

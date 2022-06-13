@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import money.portosim.Quantifiable;
 import money.portosim.containers.core.AlgebraicMap;
 import money.portosim.containers.core.Series;
 
@@ -18,6 +19,19 @@ import money.portosim.containers.core.Series;
  */
 public class QuoteSeries extends Series<Quote> implements AlgebraicMap<Date, Quote> {
 
+    private class Quant implements Quantifiable {
+
+        @Override
+        public QuoteSeries seriesMap() {
+            return QuoteSeries.this;                  
+        }
+        
+    }
+    
+    public Quantifiable quant() {
+        return new Quant();
+    }
+    
     public QuoteSeries() { 
         super();
     }
@@ -46,14 +60,8 @@ public class QuoteSeries extends Series<Quote> implements AlgebraicMap<Date, Quo
     }
     
     public Series<Double> putSeries(String seriesKey, Series<Double> series) {
-        keySet().forEach(k -> {
-            var quote = get(k);
-            if (quote != null) {
-                var seriesVal = series.get(k);
-                
-                if (seriesVal != null)
-                    quote.put(seriesKey, seriesVal);
-            }
+        series.entrySet().forEach(tv -> {
+            put(tv.getKey(), new Quote(Map.of(seriesKey, tv.getValue())));
         });
         
         return getSeries(seriesKey);
