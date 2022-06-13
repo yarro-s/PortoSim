@@ -20,12 +20,11 @@ import money.portosim.containers.core.Series;
 public class QuoteSeries extends Series<Quote> implements AlgebraicMap<Date, Quote> {
 
     private class Quant implements Quantifiable {
-
-        @Override
-        public QuoteSeries seriesMap() {
-            return QuoteSeries.this;                  
-        }
         
+        @Override
+        public Quote seriesMap(Function<NumericSeries, Double> f) {
+            return QuoteSeries.this.mapSeries(f);
+        }     
     }
     
     public Quantifiable quant() {
@@ -45,8 +44,8 @@ public class QuoteSeries extends Series<Quote> implements AlgebraicMap<Date, Quo
         return new QuoteSeries(super.rolling(n, f)); 
     }
     
-    public Series<Double> getSeries(String seriesKey) {
-        final Series<Double> series = new Series<>();
+    public NumericSeries getSeries(String seriesKey) {
+        final NumericSeries series = new NumericSeries();
         
         keySet().forEach(k -> {
             var val = get(k).get(seriesKey);
@@ -59,7 +58,7 @@ public class QuoteSeries extends Series<Quote> implements AlgebraicMap<Date, Quo
         return series;
     }
     
-    public Series<Double> putSeries(String seriesKey, Series<Double> series) {
+    public Series<Double> putSeries(String seriesKey, NumericSeries series) {
         series.entrySet().forEach(tv -> {
             put(tv.getKey(), new Quote(Map.of(seriesKey, tv.getValue())));
         });
@@ -67,7 +66,7 @@ public class QuoteSeries extends Series<Quote> implements AlgebraicMap<Date, Quo
         return getSeries(seriesKey);
     }
     
-    public Quote mapSeries(Function<Series<Double>, Double> f) {
+    public Quote mapSeries(Function<NumericSeries, Double> f) {
         var seriesKeys = firstEntry().getValue().keySet();     
         return new Quote(seriesKeys.stream().collect(Collectors.toMap(Function.identity(),
                 sk -> f.apply(getSeries(sk)))));

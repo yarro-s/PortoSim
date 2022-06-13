@@ -5,31 +5,31 @@
 package money.portosim;
 
 import java.util.ArrayList;
+import java.util.function.Function;
+import money.portosim.containers.NumericSeries;
 import money.portosim.containers.Quote;
-import money.portosim.containers.QuoteSeries;
 
 /**
  *
  * @author yarro
  */
 public interface Quantifiable {
-    QuoteSeries seriesMap();
+    
+    Quote seriesMap(Function<NumericSeries, Double> f);
 
     default Quote volatility() {
-        return seriesMap().mapSeries(s -> Metrics.volatility(s.values()));       
+        return seriesMap(s -> Metrics.volatility(s.values()));    
     }
     
     default Quote average() {
-        return seriesMap().mapSeries(s -> Metrics.average(s.values()));       
+        return seriesMap(s -> Metrics.average(s.values()));       
     }
     
     default Quote cummulativeGrowthRate() {
-        return seriesMap().mapSeries(s -> 
-                Metrics.cummulativeGrowthRate(new ArrayList<>(s.values())));       
+        return seriesMap(s -> Metrics.cummulativeGrowthRate(new ArrayList<>(s.values())));       
     }
     
     default Quote totalReturn() {
-        return seriesMap().mapSeries(s -> 
-                Metrics.totalReturn(new ArrayList<>(s.values())));       
+        return seriesMap(s -> Metrics.totalReturn(new ArrayList<>(s.values())));       
     }
 }
