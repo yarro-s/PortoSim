@@ -1,17 +1,24 @@
 package money.portosim;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.OptionalDouble;
 
 public interface QuantifiableSeries {
-    List<Double> numSeries();
+    
+    List<Double> asList();
 
-    default OptionalDouble volatility() {
-        try {
-            return OptionalDouble.of(Metrics.volatility(numSeries()));
-        } catch (NoSuchElementException e) {
-            return OptionalDouble.empty();
-        }
+    default double volatility() {
+        return Metrics.volatility(asList());      
+    }
+    
+    default double average() {
+        return Metrics.average(asList());             
+    }
+    
+    default double cummulativeGrowthRate() {
+        return Metrics.cummulativeGrowthRate(asList());     
+    }
+    
+    default double totalReturn() {
+        return Metrics.totalReturn(asList());      
     }
 }

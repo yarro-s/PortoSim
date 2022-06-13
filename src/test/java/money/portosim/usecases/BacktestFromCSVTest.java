@@ -40,7 +40,7 @@ public class BacktestFromCSVTest {
                 .getValue().div(prices.ordered().firstEntry().getValue())
                 .getOrDefault("SP500TR", 0.0);
 
-        Assert.assertEquals(result.totalReturn().orElse(0.0), expTotalReturn, 0.001);
+        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 0.001);
         Assert.assertEquals(pfHist.size(), prices.size());
     }
 }

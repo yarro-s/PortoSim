@@ -53,7 +53,7 @@ public class ReadMeTest {
                 .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
                 .run(prices);    // test on the historic prices
         
-        Assert.assertEquals(result.totalReturn().orElse(0.0), 1.2026, 0.0001);
+        Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
     }
     
@@ -75,7 +75,7 @@ public class ReadMeTest {
         // Run the backtest
         var result = backtest.run();
         
-        Assert.assertEquals(result.totalReturn().orElse(0.0), 1.2026, 0.0001);
+        Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
     }    
 }

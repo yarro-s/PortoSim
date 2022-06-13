@@ -48,7 +48,7 @@ public class NumericSeriesTest {
         ns.put("2010-03-01", 90.0);
         ns.put("2010-04-01", 135.0);
 
-        var actualVolatility = ns.quant().volatility().get(" ");
+        var actualVolatility = ns.quant().volatility();
 
         var expAverage = (100.0 + 120.0 + 90.0 + 135.0) / 4.0;
         var expVolatility = Math.sqrt((Math.pow(100.0 - expAverage, 2.0) 

@@ -5,13 +5,12 @@ import money.portosim.containers.NumericSeries;
 import money.portosim.containers.Quote;
 import money.portosim.containers.core.Series;
 
-public class Result implements QuantifiableResult {
+public class Result {
     private final Series<Portfolio> portfolioHistory;
     private final NumericSeries valueHistory;
 
-    @Override
-    public List<Double> numSeries() {
-        return new ArrayList<>(getValueHistory().ordered().values());
+    public QuantifiableSeries quant() {
+        return valueHistory.quant();
     }
 
     Result() {

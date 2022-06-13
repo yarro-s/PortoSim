@@ -33,26 +33,26 @@ public class BacktestBuilderTest {
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
         
-        var resultStrategyInitRunPrices = new BacktestBuilder(myStrategy)
+        var resStratInitRunPrices = new BacktestBuilder(myStrategy)
                 .setRebalancePeriod(ChronoUnit.YEARS)
                 .run(prices);
         
-        Assert.assertEquals(resultStrategyInitRunPrices.totalReturn().orElse(0.0), 1.2026, 0.0001);
-        Assert.assertEquals(resultStrategyInitRunPrices.getPortfolioHistory().size(), prices.size());
+        Assert.assertEquals(resStratInitRunPrices.quant().totalReturn(), 1.2026, 0.0001);
+        Assert.assertEquals(resStratInitRunPrices.getPortfolioHistory().size(), prices.size());
         
-        var resultPricesInitRunStrategy = new BacktestBuilder(prices)
+        var resPricesInitRunStrategy = new BacktestBuilder(prices)
                 .setRebalancePeriod(ChronoUnit.YEARS)
                 .run(myStrategy);
         
-        Assert.assertEquals(resultPricesInitRunStrategy.totalReturn().orElse(0.0), 1.2026, 0.0001);
-        Assert.assertEquals(resultPricesInitRunStrategy.getPortfolioHistory().size(), prices.size());  
+        Assert.assertEquals(resPricesInitRunStrategy.quant().totalReturn(), 1.2026, 0.0001);
+        Assert.assertEquals(resPricesInitRunStrategy.getPortfolioHistory().size(), prices.size());  
         
-        var resultRebalanceInitRunPrices = new BacktestBuilder(ChronoUnit.YEARS)
+        var resRebalanceInitRunPrices = new BacktestBuilder(ChronoUnit.YEARS)
                 .setStrategy(myStrategy)
                 .run(prices);
         
-        Assert.assertEquals(resultRebalanceInitRunPrices.totalReturn().orElse(0.0), 1.2026, 0.0001);
-        Assert.assertEquals(resultRebalanceInitRunPrices.getPortfolioHistory().size(), prices.size());
+        Assert.assertEquals(resRebalanceInitRunPrices.quant().totalReturn(), 1.2026, 0.0001);
+        Assert.assertEquals(resRebalanceInitRunPrices.getPortfolioHistory().size(), prices.size());
     }
     
     @Test
@@ -70,7 +70,7 @@ public class BacktestBuilderTest {
                 .setPrices(prices)
                 .run();
         
-        Assert.assertEquals(result.totalReturn().orElse(0.0), 1.2026, 0.0001);
+        Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
     }
     
