@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.function.Function;
 import money.portosim.QuantifiableSeries;
 import money.portosim.containers.core.AlgebraicMap;
 import money.portosim.containers.core.Series;
@@ -17,6 +19,11 @@ import money.portosim.containers.core.Series;
  * @author yarro
  */
 public class NumericSeries extends Series<Double> implements AlgebraicMap<Date, Double> {
+
+    @Override
+    public NumericSeries rolling(int n, Function<SortedMap<Date, Double>, Double> f) {
+        return new NumericSeries(super.rolling(n, f)); 
+    }
      
     private class Quant implements QuantifiableSeries {
 

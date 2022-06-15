@@ -6,6 +6,7 @@ package money.portosim.containers;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,6 +19,22 @@ import money.portosim.containers.core.Series;
  * @author yarro
  */
 public class QuoteSeries extends Series<Quote> implements AlgebraicMap<Date, Quote> {
+      
+    public NumericMatrix transpose() {
+        final NumericMatrix quoteSeries = new NumericMatrix();
+        Set<String> seriesKeys = entrySet().iterator().next().getValue().keySet();
+        
+        seriesKeys.forEach(k -> {
+            final NumericSeries series = new NumericSeries();
+            entrySet().forEach(e -> {
+                var timestamp = e.getKey();
+                var valueAtTimepoint = e.getValue().get(k);
+                series.put(timestamp, valueAtTimepoint);
+            });
+            quoteSeries.put(k, series);
+        });
+        return quoteSeries;
+    }
 
     private class Quant implements Quantifiable {
         
