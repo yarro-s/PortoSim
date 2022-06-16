@@ -19,7 +19,7 @@ import money.portosim.QuantifiableMatrix;
  *
  * @author yarro
  */
-public class NumericMatrix extends AbstractMap<String, NumericSeries> 
+public class SeriesQuote extends AbstractMap<String, NumericSeries> 
         implements AlgebraicMap<String, NumericSeries> {
 
     private Map<String, NumericSeries> m;
@@ -33,7 +33,7 @@ public class NumericMatrix extends AbstractMap<String, NumericSeries>
         
         @Override
         public Map<String, Double> map(Function<NumericSeries, Double> f) {
-            return NumericMatrix.this.map(f);
+            return SeriesQuote.this.map(f);
         }     
     }
     
@@ -41,16 +41,16 @@ public class NumericMatrix extends AbstractMap<String, NumericSeries>
         return new Quant();
     }
     
-    public NumericMatrix() { 
+    public SeriesQuote() { 
         m = new HashMap<>();
     }
     
-    public NumericMatrix(Map<String, NumericSeries> m) {
+    public SeriesQuote(Map<String, NumericSeries> m) {
         this.m = new HashMap<>(m);
     }
 
-    public NumericMatrix rolling(int n, Function<SortedMap<Date, Double>, Double> f) {
-        return new NumericMatrix(map(s -> s.rolling(n, f)));
+    public SeriesQuote rolling(int n, Function<SortedMap<Date, Double>, Double> f) {
+        return new SeriesQuote(map(s -> s.rolling(n, f)));
     }
     
     public NumericSeries get(String key) {
@@ -79,25 +79,25 @@ public class NumericMatrix extends AbstractMap<String, NumericSeries>
     }
     
     @Override
-    public NumericMatrix add(AlgebraicMap<String, NumericSeries> arg) {
+    public SeriesQuote add(AlgebraicMap<String, NumericSeries> arg) {
         var res0 = AlgebraicMap.super.add(arg);
-        var res = new NumericMatrix(res0);
+        var res = new SeriesQuote(res0);
         return res;
     }
 
     @Override
-    public NumericMatrix mult(AlgebraicMap<String, NumericSeries> arg) {
-        return new NumericMatrix(AlgebraicMap.super.mult(arg));
+    public SeriesQuote mult(AlgebraicMap<String, NumericSeries> arg) {
+        return new SeriesQuote(AlgebraicMap.super.mult(arg));
     }   
     
     @Override
-    public NumericMatrix div(AlgebraicMap<String, NumericSeries> arg) {
-        return new NumericMatrix(AlgebraicMap.super.div(arg));
+    public SeriesQuote div(AlgebraicMap<String, NumericSeries> arg) {
+        return new SeriesQuote(AlgebraicMap.super.div(arg));
     }
     
     @Override
-    public NumericMatrix sub(AlgebraicMap<String, NumericSeries> arg) {
-        return new NumericMatrix(AlgebraicMap.super.sub(arg));
+    public SeriesQuote sub(AlgebraicMap<String, NumericSeries> arg) {
+        return new SeriesQuote(AlgebraicMap.super.sub(arg));
     }     
     
     @Override

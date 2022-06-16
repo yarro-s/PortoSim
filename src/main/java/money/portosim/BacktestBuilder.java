@@ -5,7 +5,7 @@
 package money.portosim;
 
 import java.time.temporal.ChronoUnit;
-import money.portosim.containers.QuoteSeries;
+import money.portosim.containers.SeriesQuote;
 import money.portosim.strategies.TimedStrategy;
 
 /**
@@ -16,7 +16,7 @@ public class BacktestBuilder {
     private AbstractStrategy strategy;
     private TimedStrategy timedStrategy; 
     private Backtest backtest;
-    private QuoteSeries prices;
+    private SeriesQuote prices;
 
     public BacktestBuilder() { }
     
@@ -24,7 +24,7 @@ public class BacktestBuilder {
         setStrategy(strategy);
     }    
 
-    public BacktestBuilder(QuoteSeries prices) {
+    public BacktestBuilder(SeriesQuote prices) {
         setPrices(prices);
     }
 
@@ -37,7 +37,7 @@ public class BacktestBuilder {
         return run();
     }
     
-    public Result run(QuoteSeries prices) {
+    public Result run(SeriesQuote prices) {
         setPrices(prices);
         return run();
     }
@@ -53,7 +53,7 @@ public class BacktestBuilder {
         return backtest.run();
     }
     
-    public BacktestBuilder setPrices(QuoteSeries prices) {
+    public BacktestBuilder setPrices(SeriesQuote prices) {
         this.prices = prices;
         return this;
     }

@@ -30,11 +30,11 @@ public class ReadMeTest {
     public void containerFeatures() throws Exception { 
         // Load prices from a CSV file   
         var priceSource = new QuoteSeriesCSVSource(new FileReader(spyGoldDailyCSV));
-        var prices = new QuoteSeries(priceSource);
+        var prices = new QuoteSeries(priceSource).transpose();
         
-        var priceSlice = prices.from("2015-01-02").to("2018-11-30");   // also accepts Date
+        var priceSlice = prices.transpose().from("2015-01-02").to("2018-11-30");   // also accepts Date
        
-        Assert.assertTrue(priceSlice.size() < prices.size());
+        Assert.assertTrue(priceSlice.size() < prices.transpose().size());
         Assert.assertEquals(priceSlice.firstEntry().getKey(), Series.isoStringToDate("2015-01-02"));
         Assert.assertEquals(priceSlice.lastEntry().getKey(), Series.isoStringToDate("2018-11-30"));
     }
@@ -43,7 +43,7 @@ public class ReadMeTest {
     public void sp500PlusGoldSimpleBuild() throws Exception {
         // Load prices from a CSV file
         var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500GoldMonthlyCSV));
-        var prices = new QuoteSeries(priceSource);
+        var prices = new QuoteSeries(priceSource).transpose();
         
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
@@ -54,14 +54,14 @@ public class ReadMeTest {
                 .run(prices);    // test on the historic prices
         
         Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.0001);
-        Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
+        Assert.assertEquals(result.getPortfolioHistory().size(), prices.transpose().size());
     }
     
     @Test
     public void sp500PlusGoldAlloc() throws Exception {
         // Load prices from the CSV file   
         var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500GoldMonthlyCSV));
-        var prices = new QuoteSeries(priceSource);
+        var prices = new QuoteSeries(priceSource).transpose();
         
         // Define a constant allocation portfolio
         var fixedAllocation = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
@@ -76,6 +76,6 @@ public class ReadMeTest {
         var result = backtest.run();
         
         Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.0001);
-        Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
+        Assert.assertEquals(result.getPortfolioHistory().size(), prices.transpose().size());
     }    
 }

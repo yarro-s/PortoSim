@@ -28,7 +28,7 @@ public class BacktestBuilderTest {
     public void sp500PlusGoldConvenienceMethods() throws Exception {
         // Load prices from the CSV file
         var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500GoldMonthlyCSV));
-        var prices = new QuoteSeries(priceSource);
+        var prices = new QuoteSeries(priceSource).transpose();
         
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
@@ -38,28 +38,31 @@ public class BacktestBuilderTest {
                 .run(prices);
         
         Assert.assertEquals(resStratInitRunPrices.quant().totalReturn(), 1.2026, 0.0001);
-        Assert.assertEquals(resStratInitRunPrices.getPortfolioHistory().size(), prices.size());
+        Assert.assertEquals(resStratInitRunPrices.getPortfolioHistory().size(), 
+                prices.transpose().size());
         
         var resPricesInitRunStrategy = new BacktestBuilder(prices)
                 .setRebalancePeriod(ChronoUnit.YEARS)
                 .run(myStrategy);
         
         Assert.assertEquals(resPricesInitRunStrategy.quant().totalReturn(), 1.2026, 0.0001);
-        Assert.assertEquals(resPricesInitRunStrategy.getPortfolioHistory().size(), prices.size());  
+        Assert.assertEquals(resPricesInitRunStrategy.getPortfolioHistory().size(), 
+                prices.transpose().size());  
         
         var resRebalanceInitRunPrices = new BacktestBuilder(ChronoUnit.YEARS)
                 .setStrategy(myStrategy)
                 .run(prices);
         
         Assert.assertEquals(resRebalanceInitRunPrices.quant().totalReturn(), 1.2026, 0.0001);
-        Assert.assertEquals(resRebalanceInitRunPrices.getPortfolioHistory().size(), prices.size());
+        Assert.assertEquals(resRebalanceInitRunPrices.getPortfolioHistory().size(), 
+                prices.transpose().size());
     }
     
     @Test
     public void sp500PlusGoldBuilding() throws Exception {
         // Load prices from the CSV file
         var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500GoldMonthlyCSV));
-        var prices = new QuoteSeries(priceSource);
+        var prices = new QuoteSeries(priceSource).transpose();
         
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
@@ -71,7 +74,7 @@ public class BacktestBuilderTest {
                 .run();
         
         Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.0001);
-        Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
+        Assert.assertEquals(result.getPortfolioHistory().size(), prices.transpose().size());
     }
     
 }

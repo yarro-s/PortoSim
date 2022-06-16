@@ -20,8 +20,8 @@ import money.portosim.containers.core.Series;
  */
 public class QuoteSeries extends Series<Quote> implements AlgebraicMap<Date, Quote> {
       
-    public NumericMatrix transpose() {
-        final NumericMatrix quoteSeries = new NumericMatrix();
+    public SeriesQuote transpose() {
+        final SeriesQuote quoteSeries = new SeriesQuote();
         Set<String> seriesKeys = entrySet().iterator().next().getValue().keySet();
         
         seriesKeys.forEach(k -> {

@@ -14,7 +14,7 @@ import money.portosim.containers.NumericSeries;
 import org.testng.Assert;
 import money.portosim.containers.Quote;
 import money.portosim.containers.QuoteSeries;
-import money.portosim.containers.NumericMatrix;
+import money.portosim.containers.SeriesQuote;
 import org.testng.annotations.Test;
 
 /**
@@ -26,7 +26,7 @@ public class SeriesQuoteTest {
         
     @Test
     public void volatilityCalc() throws ParseException {
-        var sq = new NumericMatrix();
+        var sq = new SeriesQuote();
         sq.put("A", new NumericSeries(Map.of(
                 formatter.parse("2010-01-01"), 100.0,
                 formatter.parse("2010-02-01"), 120.0,
@@ -54,7 +54,7 @@ public class SeriesQuoteTest {
     @Test
     public void rollingWindowAverage() throws ParseException {
         
-        var sq = new NumericMatrix();
+        var sq = new SeriesQuote();
         sq.put("A", new NumericSeries(Map.of(
                 formatter.parse("2010-01-01"), 100.0,
                 formatter.parse("2010-02-01"), 120.0,
@@ -100,7 +100,7 @@ public class SeriesQuoteTest {
               formatter.parse("2010-01-31"), 1500.5,
               formatter.parse("2011-01-31"), 10000.0
         ));
-        var series = new NumericMatrix(Map.of("SPY", seriesSPY, "QQQ", seriesQQQ));
+        var series = new SeriesQuote(Map.of("SPY", seriesSPY, "QQQ", seriesQQQ));
         
         var combineSum = series.sum();
         

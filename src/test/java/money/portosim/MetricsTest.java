@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Map;
 import money.portosim.containers.Quote;
 import money.portosim.containers.QuoteSeries;
-import money.portosim.containers.NumericMatrix;
+import money.portosim.containers.SeriesQuote;
 import money.portosim.containers.sources.QuoteSeriesCSVSource;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 public class MetricsTest {
     private final String csvDataSourcePath = "src/test/resources/simple.csv"; 
     private QuoteSeries quoteSeries; 
-    private NumericMatrix seriesQuote;
+    private SeriesQuote seriesQuote;
     
     @BeforeClass
     public void setup() throws FileNotFoundException, IOException {

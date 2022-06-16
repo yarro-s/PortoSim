@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import money.portosim.containers.SeriesQuote;
 import money.portosim.helpers.SpecifiedAllocation;
 import money.portosim.helpers.SpecifiedMultiAllocation;
 import money.portosim.strategies.FixedAllocation;
@@ -32,7 +33,7 @@ public class BacktestTest {
             timePoints[0], new Quote(Map.of("SP500", 1000.0, "GOLD", 1000.0)),
             timePoints[1], new Quote(Map.of("SP500", 9575.0, "GOLD", 9772.0)),
             timePoints[2], new Quote(Map.of("SP500", 1141.0, "GOLD", 1169.0))
-        ));
+        )).transpose();
         
         var strategy = new TimedStrategy(ChronoUnit.YEARS);
         strategy.chainTo(new FixedAllocation(Map.of("SP500", 0.7, "GOLD", 0.3))); 
@@ -59,7 +60,7 @@ public class BacktestTest {
             timePoints[0], new Quote(Map.of("SP500", 1000.0, "GOLD", 1000.0)),
             timePoints[1], new Quote(Map.of("SP500", 957.538, "GOLD", 977.282)),
             timePoints[2], new Quote(Map.of("SP500", 1141.291, "GOLD", 1169.839))
-        ));
+        )).transpose();
         
         var backtest = new Backtest(strategy, prices);
 
@@ -83,7 +84,7 @@ public class BacktestTest {
             timePoints[0], new Quote(Map.of("SP500", 1000.0)),
             timePoints[1], new Quote(Map.of("SP500", 957.538)),
             timePoints[2], new Quote(Map.of("SP500", 1141.291))
-        ));
+        )).transpose();
         
         var backtest = new Backtest(strategy, prices);
 
@@ -112,14 +113,14 @@ public class BacktestTest {
             new Quote(Map.of("A", 350.0, "B", 250.0)),
             new Quote(Map.of("A", 5.0, "B", 125.0))
         };
-        final QuoteSeries prices = new QuoteSeries(Map.of(
+        final SeriesQuote prices = new QuoteSeries(Map.of(
             timePoints[0], priceMaps[0],
             timePoints[1], priceMaps[1],
             timePoints[2], priceMaps[2],
             timePoints[3], priceMaps[3],
             timePoints[4], priceMaps[4],
             timePoints[5], priceMaps[5])
-        );
+        ).transpose();
         final List<Double> weightsA = List.of(0.5, 0.9, 0.4);
         final List<Double> weightsB = List.of(0.5, 0.1, 0.6);
               
@@ -167,14 +168,14 @@ public class BacktestTest {
             new Quote(Map.of("A", 350.0)),
             new Quote(Map.of("A", 5.0))
         };
-        final QuoteSeries prices = new QuoteSeries(Map.of(
+        final SeriesQuote prices = new QuoteSeries(Map.of(
             timePoints[0], priceMaps[0],
             timePoints[1], priceMaps[1],
             timePoints[2], priceMaps[2],
             timePoints[3], priceMaps[3],
             timePoints[4], priceMaps[4],
             timePoints[5], priceMaps[5])
-        );
+        ).transpose();
         final double[] weights = new double[] {0.5, 0.9, 0.4};
         
         var s = new SpecifiedAllocation("A", weights);
@@ -217,11 +218,11 @@ public class BacktestTest {
                 new Quote(Map.of("A", 80.0)),
                 new Quote(Map.of("A", 260.0))
         };
-        QuoteSeries prices = new QuoteSeries(Map.of(
+        var prices = new QuoteSeries(Map.of(
                 timePoints[0], priceMaps[0],
                 timePoints[1], priceMaps[1],
                 timePoints[2], priceMaps[2])
-        );
+        ).transpose();
 
         var assetAmounts = new NumericMap<>(Map.of("A", 24.0));
 
@@ -251,11 +252,11 @@ public class BacktestTest {
                 new Quote(Map.of("A", 20.0, "B", 200.0)),
                 new Quote(Map.of("A", 80.0, "B", 150.0))
         };
-        QuoteSeries prices = new QuoteSeries(Map.of(
+        var prices = new QuoteSeries(Map.of(
                 timePoints[0], priceMaps[0],
                 timePoints[1], priceMaps[1],
                 timePoints[2], priceMaps[2])
-        );
+        ).transpose();
 
         NumericMap<String> assetAmounts = new NumericMap<>(Map.of("A", 10.0, "B", 25.0));
 

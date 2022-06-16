@@ -24,7 +24,7 @@ public class BacktestFromCSVTest {
     @Test
     public void constantAllocSP500() throws Exception {    
         var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500DailyCSV));
-        var prices = new QuoteSeries(priceSource);
+        var prices = new QuoteSeries(priceSource).transpose();
 
         var asset = new NumericMap<String>();
         asset.put("SP500TR", 1.0);
@@ -36,11 +36,11 @@ public class BacktestFromCSVTest {
         var result = backtest.getResult();
         var pfHist = backtest.getResult().getPortfolioHistory();
         
-        var expTotalReturn = prices.ordered().lastEntry()
-                .getValue().div(prices.ordered().firstEntry().getValue())
+        var expTotalReturn = prices.transpose().lastEntry()
+                .getValue().div(prices.transpose().firstEntry().getValue())
                 .getOrDefault("SP500TR", 0.0);
 
         Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 0.001);
-        Assert.assertEquals(pfHist.size(), prices.size());
+        Assert.assertEquals(pfHist.size(), prices.transpose().size());
     }
 }
