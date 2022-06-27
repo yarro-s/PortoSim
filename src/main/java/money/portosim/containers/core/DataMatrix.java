@@ -142,6 +142,8 @@ public class DataMatrix<I, K, T> extends AbstractMap<Pair<I, K>, T> implements M
     
     @Override
     public T put(Pair<I, K> ik, T val) {
+        indices.add(ik.left());
+        keys.add(ik.right());
         return m.put(ik, val);
     }
 }
