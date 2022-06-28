@@ -120,6 +120,16 @@ public class DataMatrix<I, K, T> extends AbstractMap<Pair<I, K>, T> implements M
         public OrderedFrame<I, T> to(I endIdx) {
             return seriesView.to(endIdx);
         }
+
+        @Override
+        public Entry<I, T> firstEntry() {
+            return seriesView.firstEntry();
+        }
+
+        @Override
+        public Entry<I, T> lastEntry() {
+            return seriesView.lastEntry();
+        }
         
     }
     

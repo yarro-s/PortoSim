@@ -70,4 +70,14 @@ public class DataSeries<I, T> extends AbstractMap<I, T> implements OrderedFrame<
     static <I, T> DataSeries<I, T> of(Map<I, T> m) {
         return new DataSeries<>(m);
     }
+
+    @Override
+    public Entry<I, T> firstEntry() {
+        return tm.firstEntry(); 
+    }
+
+    @Override
+    public Entry<I, T> lastEntry() {
+        return tm.lastEntry();
+    }
 }

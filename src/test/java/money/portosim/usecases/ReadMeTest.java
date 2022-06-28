@@ -6,12 +6,12 @@ package money.portosim.usecases;
 
 import java.io.FileReader;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Map;
 import money.portosim.Backtest;
 import money.portosim.BacktestBuilder;
-import money.portosim.containers.QuoteSeries;
-import money.portosim.containers.core.Series;
-import money.portosim.containers.sources.QuoteSeriesCSVSource;
+import money.portosim.containers.sources.NumMatrixCSVSource;
 import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
 import org.testng.Assert;
@@ -29,21 +29,22 @@ public class ReadMeTest {
     @Test
     public void containerFeatures() throws Exception { 
         // Load prices from a CSV file   
-        var priceSource = new QuoteSeriesCSVSource(new FileReader(spyGoldDailyCSV));
-        var prices = new QuoteSeries(priceSource).transpose();
+        var prices = new NumMatrixCSVSource(new FileReader(spyGoldDailyCSV));
+        var startDate = new GregorianCalendar(2015, Calendar.JANUARY, 02).getTime();
+        var endDate = new GregorianCalendar(2018, Calendar.NOVEMBER, 30).getTime();
+                
         
-        var priceSlice = prices.transpose().from("2015-01-02").to("2018-11-30");   // also accepts Date
+        var priceSlice = prices.rows().from(startDate).to(endDate);   // also accepts Date
        
-        Assert.assertTrue(priceSlice.size() < prices.transpose().size());
-        Assert.assertEquals(priceSlice.firstEntry().getKey(), Series.isoStringToDate("2015-01-02"));
-        Assert.assertEquals(priceSlice.lastEntry().getKey(), Series.isoStringToDate("2018-11-30"));
+        Assert.assertTrue(priceSlice.size() < prices.rows().size());
+        Assert.assertEquals(priceSlice.firstEntry().getKey(), startDate);
+        Assert.assertEquals(priceSlice.lastEntry().getKey(), endDate);
     }
     
     @Test
     public void sp500PlusGoldSimpleBuild() throws Exception {
         // Load prices from a CSV file
-        var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500GoldMonthlyCSV));
-        var prices = new QuoteSeries(priceSource).transpose();
+        var prices = new NumMatrixCSVSource(new FileReader(sp500GoldMonthlyCSV));
         
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
@@ -54,14 +55,13 @@ public class ReadMeTest {
                 .run(prices);    // test on the historic prices
         
         Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.0001);
-        Assert.assertEquals(result.getPortfolioHistory().size(), prices.transpose().size());
+        Assert.assertEquals(result.getPortfolioHistory().size(), prices.rows().size());
     }
     
     @Test
     public void sp500PlusGoldAlloc() throws Exception {
         // Load prices from the CSV file   
-        var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500GoldMonthlyCSV));
-        var prices = new QuoteSeries(priceSource).transpose();
+        var prices = new NumMatrixCSVSource(new FileReader(sp500GoldMonthlyCSV));
         
         // Define a constant allocation portfolio
         var fixedAllocation = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
@@ -76,6 +76,6 @@ public class ReadMeTest {
         var result = backtest.run();
         
         Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.0001);
-        Assert.assertEquals(result.getPortfolioHistory().size(), prices.transpose().size());
+        Assert.assertEquals(result.getPortfolioHistory().size(), prices.rows().size());
     }    
 }

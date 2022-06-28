@@ -5,6 +5,7 @@
 package money.portosim.containers.core;
 
 import java.util.List;
+import java.util.SortedMap;
 import java.util.function.Function;
 
 /**
@@ -18,4 +19,8 @@ public interface OrderedFrame<I, T> extends Frame<I, T> {
     public OrderedFrame<I, T> from(I startIdx);
     
     public OrderedFrame<I, T> to(I endIdx);
+    
+    public Entry<I, T> firstEntry();
+    
+    public Entry<I, T> lastEntry();
 }
