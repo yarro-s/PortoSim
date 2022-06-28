@@ -4,27 +4,28 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import money.portosim.Portfolio;
-import money.portosim.containers.Quote;
 import money.portosim.strategies.FixedAllocation;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import money.portosim.containers.NumericMap;
 
 import java.util.Map;
-import money.portosim.containers.QuoteSeries;
+import money.portosim.containers.core.Pair;
+import money.portosim.containers.numeric.NumDataMatrix;
+import money.portosim.containers.numeric.NumFrame;
+import money.portosim.containers.numeric.NumRecord;
 
 public class FixedAllocationTest {
 
-    private NumericMap<String> targetAlloc;
-    private Quote currentPrices;
-    private Quote updatedPrices;
+    private NumFrame<String> targetAlloc;
+    private NumFrame<String> currentPrices;
+    private NumFrame<String> updatedPrices;
 
     @BeforeMethod
     public void setUp() {
-        targetAlloc = new NumericMap<>(Map.of("A", 0.4, "B", 0.6));
-        currentPrices = new Quote(Map.of("A", 10.0, "B", 60.0));
-        updatedPrices = new Quote(Map.of("A", 200.0, "B", 350.0));
+        targetAlloc = new NumRecord<>(Map.of("A", 0.4, "B", 0.6));
+        currentPrices = new NumRecord<>(Map.of("A", 10.0, "B", 60.0));
+        updatedPrices = new NumRecord<>(Map.of("A", 200.0, "B", 350.0));
     }
     
     @Test
@@ -36,13 +37,12 @@ public class FixedAllocationTest {
             new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
             new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
         };
-        var prices = new QuoteSeries(Map.of(
-            timePoints[0], new Quote(Map.of("SP500", 5511.21, "GOLD", 1343.35)),
-            timePoints[1], new Quote(Map.of("SP500", 5383.6299, "GOLD", 1322.5000)),
-            timePoints[2], new Quote(Map.of("SP500", 6551.0000, "GOLD", 1580.8500))
-        ));
-
-        var currPrice = prices.get(timePoints[0]);
+        var prices = new NumDataMatrix<>(Map.of(
+            Pair.of(timePoints[0], "SP500"), 5511.21, Pair.of(timePoints[0], "GOLD"), 1343.35,
+            Pair.of(timePoints[1], "SP500"), 5383.6299, Pair.of(timePoints[1], "GOLD"), 1322.5000,
+            Pair.of(timePoints[2], "SP500"), 6551.0000, Pair.of(timePoints[2], "GOLD"), 1580.8500));
+       
+        var currPrice = prices.rows().get(timePoints[0]);
         var pf = strategy.makePortfolio(timePoints[0], currPrice);
         
         var sp500ExpAmount = 0.6 * 1000 / 5511.21; 
@@ -53,7 +53,7 @@ public class FixedAllocationTest {
         Assert.assertEquals(pf.valueAtPrice(currPrice).orElse(0.0), 
                 sp500ExpAmount * 5511.21 + goldExpAmount * 1343.35);
         
-        currPrice = prices.get(timePoints[1]);
+        currPrice = prices.rows().get(timePoints[1]);
         pf = strategy.makePortfolio(timePoints[1], currPrice);
         
         var pfValue = pf.valueAtPrice(currPrice).orElse(0.0);
@@ -64,7 +64,7 @@ public class FixedAllocationTest {
         Assert.assertEquals(pf.positions().get("GOLD"), goldExpAmount);
         Assert.assertEquals(pfValue, sp500ExpAmount * 5383.6299 + goldExpAmount * 1322.5000);
         
-        currPrice = prices.get(timePoints[2]);
+        currPrice = prices.rows().get(timePoints[2]);
         pf = strategy.makePortfolio(timePoints[2], currPrice);
         
         pfValue = pf.valueAtPrice(currPrice).orElse(0.0);
@@ -88,7 +88,7 @@ public class FixedAllocationTest {
 
         Assert.assertTrue(pf1Value > pf0Value);
 
-        var updValuesBeforeRebalance = new NumericMap<String>(pf0.positions().mult(updatedPrices));
+        var updValuesBeforeRebalance = new NumRecord<String>(pf0.positions().mult(updatedPrices));
         Assert.assertEquals(pf1Value, updValuesBeforeRebalance.sum());
 
         var expUpdatedAmounts = Map.of("A", 0.4 * pf1Value / 200.0,

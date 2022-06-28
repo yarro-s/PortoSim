@@ -5,7 +5,7 @@ import money.portosim.AbstractStrategy;
 
 import java.util.Date;
 import java.util.Map;
-import money.portosim.containers.Quote;
+import money.portosim.containers.numeric.NumFrame;
 
 public class ConstantAllocation extends AbstractStrategy {
     private final Portfolio portfolio;
@@ -15,7 +15,7 @@ public class ConstantAllocation extends AbstractStrategy {
     }
 
     @Override
-    public Portfolio apply(Date date, Quote prices) {
+    public Portfolio apply(Date date, NumFrame<String> prices) {
        return portfolio;
     }
 

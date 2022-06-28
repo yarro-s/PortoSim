@@ -1,29 +1,28 @@
 package money.portosim;
 
-import money.portosim.containers.NumericMap;
-import money.portosim.containers.Quote;
-
 import java.util.Map;
 import java.util.OptionalDouble;
+import money.portosim.containers.numeric.NumFrame;
+import money.portosim.containers.numeric.NumRecord;
 
 public class Portfolio {
-    NumericMap<String> positions;
+    NumFrame<String> positions;
 
-    public NumericMap<String> positions() {
+    public NumFrame<String> positions() {
         return positions;
     }
 
-    public OptionalDouble valueAtPrice(Quote assetPrices) {
+    public OptionalDouble valueAtPrice(NumFrame<String> assetPrices) {
         return this.positions().mult(assetPrices).values().stream().reduce(Double::sum)
                 .map(OptionalDouble::of).orElseGet(OptionalDouble::empty);
     }
 
     public Portfolio() {
-        positions = new NumericMap<>();
+        positions = new NumRecord<>();
     }
 
     public Portfolio(Map<String, Double> m) {
-        positions = new NumericMap<>(m);
+        positions = new NumRecord<>(m);
     }
 
     @Override

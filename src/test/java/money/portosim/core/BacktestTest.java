@@ -15,6 +15,11 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import money.portosim.containers.SeriesQuote;
+import money.portosim.containers.core.Pair;
+import money.portosim.containers.numeric.NumDataMatrix;
+import money.portosim.containers.numeric.NumFrame;
+import money.portosim.containers.numeric.NumMatrix;
+import money.portosim.containers.numeric.NumRecord;
 import money.portosim.helpers.SpecifiedAllocation;
 import money.portosim.helpers.SpecifiedMultiAllocation;
 import money.portosim.strategies.FixedAllocation;
@@ -29,11 +34,11 @@ public class BacktestTest {
             new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
             new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
         };
-        var prices = new QuoteSeries(Map.of(
-            timePoints[0], new Quote(Map.of("SP500", 1000.0, "GOLD", 1000.0)),
-            timePoints[1], new Quote(Map.of("SP500", 9575.0, "GOLD", 9772.0)),
-            timePoints[2], new Quote(Map.of("SP500", 1141.0, "GOLD", 1169.0))
-        )).transpose();
+        var prices = new NumDataMatrix<>(Map.of(
+            Pair.of(timePoints[0], "SP500"), 1000.0, Pair.of(timePoints[0], "GOLD"), 1000.0,
+            Pair.of(timePoints[1], "SP500"), 9575.0, Pair.of(timePoints[1], "GOLD"), 9772.0,
+            Pair.of(timePoints[2], "SP500"), 1141.0, Pair.of(timePoints[2], "GOLD"), 1169.0
+        ));
         
         var strategy = new TimedStrategy(ChronoUnit.YEARS);
         strategy.chainTo(new FixedAllocation(Map.of("SP500", 0.7, "GOLD", 0.3))); 
@@ -56,11 +61,11 @@ public class BacktestTest {
             new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
             new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
         };
-        var prices = new QuoteSeries(Map.of(
-            timePoints[0], new Quote(Map.of("SP500", 1000.0, "GOLD", 1000.0)),
-            timePoints[1], new Quote(Map.of("SP500", 957.538, "GOLD", 977.282)),
-            timePoints[2], new Quote(Map.of("SP500", 1141.291, "GOLD", 1169.839))
-        )).transpose();
+        var prices = new NumDataMatrix<>(Map.of(
+            Pair.of(timePoints[0], "SP500"), 1000.0, Pair.of(timePoints[0], "GOLD"), 1000.0,
+            Pair.of(timePoints[1], "SP500"), 957.538, Pair.of(timePoints[1], "GOLD"), 977.282,
+            Pair.of(timePoints[2], "SP500"), 1141.291, Pair.of(timePoints[2], "GOLD"), 1169.839
+        ));
         
         var backtest = new Backtest(strategy, prices);
 
@@ -80,11 +85,11 @@ public class BacktestTest {
             new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
             new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
         };
-        var prices = new QuoteSeries(Map.of(
-            timePoints[0], new Quote(Map.of("SP500", 1000.0)),
-            timePoints[1], new Quote(Map.of("SP500", 957.538)),
-            timePoints[2], new Quote(Map.of("SP500", 1141.291))
-        )).transpose();
+        var prices = new NumDataMatrix<>(Map.of(
+            Pair.of(timePoints[0], "SP500"), 1000.0,
+            Pair.of(timePoints[1], "SP500"), 957.538, 
+            Pair.of(timePoints[2], "SP500"), 1141.291 
+        ));
         
         var backtest = new Backtest(strategy, prices);
 
@@ -105,22 +110,21 @@ public class BacktestTest {
             new GregorianCalendar(2006, Calendar.JUNE, 31).getTime(),
             new GregorianCalendar(2006, Calendar.DECEMBER, 30).getTime()
         };
-        final Quote[] priceMaps = new Quote[]{
-            new Quote(Map.of("A", 125.0, "B", 50.0)),
-            new Quote(Map.of("A", 500.0, "B", 10.0)),
-            new Quote(Map.of("A", 200.0, "B", 80.0)),
-            new Quote(Map.of("A", 20.0, "B", 150.0)),
-            new Quote(Map.of("A", 350.0, "B", 250.0)),
-            new Quote(Map.of("A", 5.0, "B", 125.0))
+        final Map<String, Double>[] priceMaps = new Map[]{
+            Map.of("A", 125.0, "B", 50.0),
+            Map.of("A", 500.0, "B", 10.0),
+            Map.of("A", 200.0, "B", 80.0),
+            Map.of("A", 20.0, "B", 150.0),
+            Map.of("A", 350.0, "B", 250.0),
+            Map.of("A", 5.0, "B", 125.0)
         };
-        final SeriesQuote prices = new QuoteSeries(Map.of(
-            timePoints[0], priceMaps[0],
-            timePoints[1], priceMaps[1],
-            timePoints[2], priceMaps[2],
-            timePoints[3], priceMaps[3],
-            timePoints[4], priceMaps[4],
-            timePoints[5], priceMaps[5])
-        ).transpose();
+        var prices = new NumDataMatrix<>(Map.of(
+            Pair.of(timePoints[0], "A"), 125.0, Pair.of(timePoints[0], "B"), 50.0,
+            Pair.of(timePoints[1], "A"), 500.0, Pair.of(timePoints[1], "B"), 10.0,
+            Pair.of(timePoints[2], "A"), 200.0, Pair.of(timePoints[2], "B"), 80.0,
+            Pair.of(timePoints[3], "A"), 20.0, Pair.of(timePoints[3], "B"), 150.0,
+            Pair.of(timePoints[4], "A"), 350.0, Pair.of(timePoints[4], "B"), 250.0));
+        
         final List<Double> weightsA = List.of(0.5, 0.9, 0.4);
         final List<Double> weightsB = List.of(0.5, 0.1, 0.6);
               
@@ -145,8 +149,6 @@ public class BacktestTest {
                 weightsB.get(1) * priceMaps[3].get("B"));
         Assert.assertEquals(valueHist.get(timePoints[4]), weightsA.get(2) * priceMaps[4].get("A") + 
                 weightsB.get(2) * priceMaps[4].get("B"));
-        Assert.assertEquals(valueHist.get(timePoints[5]), weightsA.get(2) * priceMaps[5].get("A") + 
-                weightsB.get(2) * priceMaps[5].get("B"));
     }
 
     
@@ -160,22 +162,22 @@ public class BacktestTest {
             new GregorianCalendar(2012, Calendar.JUNE, 31).getTime(),
             new GregorianCalendar(2012, Calendar.DECEMBER, 30).getTime()
         };
-        final Quote[] priceMaps = new Quote[]{
-            new Quote(Map.of("A", 125.0)),
-            new Quote(Map.of("A", 500.0)),
-            new Quote(Map.of("A", 200.0)),
-            new Quote(Map.of("A", 20.0)),
-            new Quote(Map.of("A", 350.0)),
-            new Quote(Map.of("A", 5.0))
+        final NumFrame<String>[] priceMaps = new NumFrame[]{
+                new NumRecord<>(Map.of("A", 125.0)),
+                new NumRecord<>(Map.of("A", 500.0)),
+                new NumRecord<>(Map.of("A", 200.0)),
+                new NumRecord<>(Map.of("A", 20.0)),
+                new NumRecord<>(Map.of("A", 350.0)),
+                new NumRecord<>(Map.of("A", 5.0))
         };
-        final SeriesQuote prices = new QuoteSeries(Map.of(
-            timePoints[0], priceMaps[0],
-            timePoints[1], priceMaps[1],
-            timePoints[2], priceMaps[2],
-            timePoints[3], priceMaps[3],
-            timePoints[4], priceMaps[4],
-            timePoints[5], priceMaps[5])
-        ).transpose();
+        var prices = new NumDataMatrix<Date, String>(Map.of(
+                Pair.of(timePoints[0], "A"), 125.0,
+                Pair.of(timePoints[1], "A"), 500.0,
+                Pair.of(timePoints[2], "A"), 200.0,
+                Pair.of(timePoints[3], "A"), 20.0,
+                Pair.of(timePoints[4], "A"), 350.0,
+                Pair.of(timePoints[5], "A"), 5.0));
+        
         final double[] weights = new double[] {0.5, 0.9, 0.4};
         
         var s = new SpecifiedAllocation("A", weights);
@@ -213,18 +215,17 @@ public class BacktestTest {
                 new GregorianCalendar(2011, Calendar.DECEMBER, 31).getTime(),
                 new GregorianCalendar(2012, Calendar.DECEMBER, 31).getTime()
         };
-        Quote[] priceMaps = new Quote[]{
-                new Quote(Map.of("A", 125.0)),
-                new Quote(Map.of("A", 80.0)),
-                new Quote(Map.of("A", 260.0))
+        var priceMaps = new NumFrame[]{
+                new NumRecord<>(Map.of("A", 125.0)),
+                new NumRecord<>(Map.of("A", 80.0)),
+                new NumRecord<>(Map.of("A", 260.0))
         };
-        var prices = new QuoteSeries(Map.of(
-                timePoints[0], priceMaps[0],
-                timePoints[1], priceMaps[1],
-                timePoints[2], priceMaps[2])
-        ).transpose();
+        var prices = new NumDataMatrix<Date, String>(Map.of(
+                Pair.of(timePoints[0], "A"), 125.0,
+                Pair.of(timePoints[1], "A"), 80.0,
+                Pair.of(timePoints[2], "A"), 260.0));
 
-        var assetAmounts = new NumericMap<>(Map.of("A", 24.0));
+        var assetAmounts = new NumRecord<>(Map.of("A", 24.0));
 
         var constAlloc = new ConstantAllocation(assetAmounts);
         var backtest = new Backtest(constAlloc, prices);
@@ -233,8 +234,8 @@ public class BacktestTest {
 
         var result = backtest.getResult();
 
-        var expValue0 = assetAmounts.mult(priceMaps[0]).sum();
-        var expValueN = assetAmounts.mult(priceMaps[priceMaps.length-1]).sum();
+        var expValue0 = new NumRecord<>(assetAmounts.mult(priceMaps[0])).sum();
+        var expValueN = new NumRecord<>(assetAmounts.mult(priceMaps[priceMaps.length-1])).sum();
         var expTotalReturn = expValueN / expValue0;
 
         Assert.assertEquals(result.quant().totalReturn(), expTotalReturn);
@@ -247,18 +248,18 @@ public class BacktestTest {
                 new GregorianCalendar(2006, Calendar.DECEMBER, 31).getTime(),
                 new GregorianCalendar(2007, Calendar.DECEMBER, 31).getTime()
         };
-        Quote[] priceMaps = new Quote[]{
-                new Quote(Map.of("A", 50.0, "B", 120.0)),
-                new Quote(Map.of("A", 20.0, "B", 200.0)),
-                new Quote(Map.of("A", 80.0, "B", 150.0))
+        var priceMaps = new NumFrame[]{
+                new NumRecord<>(Map.of("A", 50.0, "B", 120.0)),
+                new NumRecord<>(Map.of("A", 20.0, "B", 200.0)),
+                new NumRecord<>(Map.of("A", 80.0, "B", 150.0))
         };
-        var prices = new QuoteSeries(Map.of(
-                timePoints[0], priceMaps[0],
-                timePoints[1], priceMaps[1],
-                timePoints[2], priceMaps[2])
-        ).transpose();
+        var prices = new NumDataMatrix<Date, String>(Map.of(
+                Pair.of(timePoints[0], "A"), 50.0, Pair.of(timePoints[0], "B"), 120.0,
+                Pair.of(timePoints[1], "A"), 20.0, Pair.of(timePoints[1], "B"), 200.0,
+                Pair.of(timePoints[2], "A"), 80.0, Pair.of(timePoints[2], "B"), 150.0
+        ));
 
-        NumericMap<String> assetAmounts = new NumericMap<>(Map.of("A", 10.0, "B", 25.0));
+        NumFrame<String> assetAmounts = new NumRecord<>(Map.of("A", 10.0, "B", 25.0));
 
         var constAlloc = new ConstantAllocation(assetAmounts);
         var backtest = new Backtest(constAlloc, prices);
@@ -267,8 +268,8 @@ public class BacktestTest {
 
         var result = backtest.getResult();
 
-        var expValue0 = assetAmounts.mult(priceMaps[0]).sum();
-        var expValueN = assetAmounts.mult(priceMaps[priceMaps.length-1]).sum();
+        var expValue0 = new NumRecord<>(assetAmounts.mult(priceMaps[0])).sum();
+        var expValueN = new NumRecord<>(assetAmounts.mult(priceMaps[priceMaps.length-1])).sum();
         var expTotalReturn = expValueN / expValue0;
 
         Assert.assertEquals(result.quant().totalReturn(), expTotalReturn);

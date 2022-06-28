@@ -1,20 +1,20 @@
 package money.portosim;
 
-import money.portosim.containers.SeriesQuote;
-import money.portosim.containers.QuoteSeries;
+import java.util.Date;
+import money.portosim.containers.numeric.NumMatrix;
 
 public class Backtest {
     private final AbstractStrategy strategy;
-    private final SeriesQuote priceSeries;
+    private final NumMatrix<Date, String> priceSeries;
     private final Result result = new Result();
 
-    public Backtest(AbstractStrategy strategy, SeriesQuote priceSeries) {
+    public Backtest(AbstractStrategy strategy, NumMatrix<Date, String> priceSeries) {
         this.strategy = strategy;
         this.priceSeries = priceSeries;
     }
 
     public Result run() {
-        priceSeries.transpose().entrySet().stream().forEach(currentPrices -> {
+        priceSeries.rows().entrySet().stream().forEach(currentPrices -> {
             var date = currentPrices.getKey();
             var prices = currentPrices.getValue();
 

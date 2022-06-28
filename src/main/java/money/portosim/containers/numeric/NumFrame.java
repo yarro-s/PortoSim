@@ -20,6 +20,30 @@ public interface NumFrame<L> extends Frame<L, Double> {
         return compose(nm, Double::sum);
     }
     
+    default public Map<L, Double> mult(Double val) {
+        return bind(val, (x, y) -> x * y);
+    }
+    
+    default public Map<L, Double> mult(NumFrame<L> nm) {
+        return compose(nm, (x, y) -> x * y);
+    }
+    
+    default public Map<L, Double> div(Double val) {
+        return bind(val, (x, y) -> x / y);
+    }
+    
+    default public Map<L, Double> div(NumFrame<L> nm) {
+        return compose(nm, (x, y) -> x / y);
+    }
+    
+    default public Map<L, Double> sub(Double val) {
+        return bind(val, (x, y) -> x - y);
+    }
+    
+    default public Map<L, Double> sub(NumFrame<L> nm) {
+        return compose(nm, (x, y) -> x - y);
+    }
+    
     default public Double sum() {
         return reduce(Double::sum);
     }

@@ -2,8 +2,8 @@ package money.portosim;
 
 import java.util.*;
 import money.portosim.containers.NumericSeries;
-import money.portosim.containers.Quote;
 import money.portosim.containers.core.Series;
+import money.portosim.containers.numeric.NumFrame;
 
 public class Result {
     private final Series<Portfolio> portfolioHistory;
@@ -18,7 +18,7 @@ public class Result {
         this.valueHistory = new NumericSeries();
     }
 
-    void update(Date date, Quote prices, Portfolio portfolio) {
+    void update(Date date, NumFrame<String> prices, Portfolio portfolio) {
         try {
             portfolioHistory.put(date, (Portfolio) portfolio.clone());
         } catch (CloneNotSupportedException e) {

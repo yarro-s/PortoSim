@@ -8,7 +8,6 @@ import java.util.Map;
 import money.portosim.containers.core.DataMatrix;
 import money.portosim.containers.numeric.NumDataMatrix;
 import money.portosim.containers.core.Pair;
-import money.portosim.containers.core.Frame;
 import money.portosim.containers.core.Matrix;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
