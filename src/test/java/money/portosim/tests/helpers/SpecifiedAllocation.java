@@ -1,4 +1,4 @@
-package money.portosim.helpers;
+package money.portosim.tests.helpers;
 
 import java.util.Date;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package money.portosim.core.containers;
+package money.portosim.tests.core.containers;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

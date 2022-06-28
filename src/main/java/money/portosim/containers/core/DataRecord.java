@@ -13,7 +13,7 @@ import java.util.Set;
  *
  * @author yarro
  */
-public class DataRecord<K, T> extends AbstractMap<K, T> implements Frame<K, T> {
+class DataRecord<K, T> extends AbstractMap<K, T> implements Frame<K, T> {
     
     private final Map<K, T> m;
 

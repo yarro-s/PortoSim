@@ -4,6 +4,7 @@
  */
 package money.portosim.containers.core;
 
+import java.util.Map;
 import money.portosim.containers.core.Pair;
 
 /**
@@ -11,7 +12,15 @@ import money.portosim.containers.core.Pair;
  * @author yarro
  */
 public interface Matrix<I, K, T> extends Frame<Pair<I, K>, T> {
-    public Frame<K, ? extends OrderedFrame<I, T>> columns(); 
+    Frame<K, ? extends OrderedFrame<I, T>> columns(); 
     
-    public OrderedFrame<I, ? extends Frame<K, T>> rows(); 
+    OrderedFrame<I, ? extends Frame<K, T>> rows(); 
+    
+    static <I, K, T> Matrix<I, K, T> of(Map<Pair<I, K>, T> m) {
+        return new DataMatrix<>(m);
+    } 
+    
+    static <I, K, T> Matrix<I, K, T> empty() {
+        return new DataMatrix<>();
+    } 
 }

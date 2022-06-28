@@ -1,4 +1,4 @@
-package money.portosim.core.strategies;
+package money.portosim.tests.core.strategies;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,9 +11,8 @@ import org.testng.annotations.Test;
 
 import java.util.Map;
 import money.portosim.containers.core.Pair;
-import money.portosim.containers.numeric.NumDataMatrix;
 import money.portosim.containers.numeric.NumFrame;
-import money.portosim.containers.numeric.NumRecord;
+import money.portosim.containers.numeric.NumMatrix;
 
 public class FixedAllocationTest {
 
@@ -23,9 +22,9 @@ public class FixedAllocationTest {
 
     @BeforeMethod
     public void setUp() {
-        targetAlloc = new NumRecord<>(Map.of("A", 0.4, "B", 0.6));
-        currentPrices = new NumRecord<>(Map.of("A", 10.0, "B", 60.0));
-        updatedPrices = new NumRecord<>(Map.of("A", 200.0, "B", 350.0));
+        targetAlloc = NumFrame.of(Map.of("A", 0.4, "B", 0.6));
+        currentPrices = NumFrame.of(Map.of("A", 10.0, "B", 60.0));
+        updatedPrices = NumFrame.of(Map.of("A", 200.0, "B", 350.0));
     }
     
     @Test
@@ -37,7 +36,7 @@ public class FixedAllocationTest {
             new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
             new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
         };
-        var prices = new NumDataMatrix<>(Map.of(
+        var prices = NumMatrix.of(Map.of(
             Pair.of(timePoints[0], "SP500"), 5511.21, Pair.of(timePoints[0], "GOLD"), 1343.35,
             Pair.of(timePoints[1], "SP500"), 5383.6299, Pair.of(timePoints[1], "GOLD"), 1322.5000,
             Pair.of(timePoints[2], "SP500"), 6551.0000, Pair.of(timePoints[2], "GOLD"), 1580.8500));
@@ -88,7 +87,7 @@ public class FixedAllocationTest {
 
         Assert.assertTrue(pf1Value > pf0Value);
 
-        var updValuesBeforeRebalance = new NumRecord<String>(pf0.positions().mult(updatedPrices));
+        var updValuesBeforeRebalance = NumFrame.of(pf0.positions().mult(updatedPrices));
         Assert.assertEquals(pf1Value, updValuesBeforeRebalance.sum());
 
         var expUpdatedAmounts = Map.of("A", 0.4 * pf1Value / 200.0,

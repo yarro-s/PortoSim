@@ -17,7 +17,7 @@ import java.util.function.Function;
  *
  * @author yarro
  */
-public class DataSeries<I, T> extends AbstractMap<I, T> implements OrderedFrame<I, T> {
+class DataSeries<I, T> extends AbstractMap<I, T> implements OrderedFrame<I, T> {
 
     private final NavigableMap<I, T> tm;
     
@@ -65,10 +65,6 @@ public class DataSeries<I, T> extends AbstractMap<I, T> implements OrderedFrame<
     @Override
     public T put(I index, T value) {
         return tm.put(index, value); 
-    }
-    
-    static <I, T> DataSeries<I, T> of(Map<I, T> m) {
-        return new DataSeries<>(m);
     }
 
     @Override

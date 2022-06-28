@@ -5,7 +5,7 @@
 package money.portosim.containers.core;
 
 import java.util.List;
-import java.util.SortedMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -14,13 +14,21 @@ import java.util.function.Function;
  */
 public interface OrderedFrame<I, T> extends Frame<I, T> {
     
-    public <V> OrderedFrame<I, V> rolling(int n, Function<List<T>, V> f);
+    <V> OrderedFrame<I, V> rolling(int n, Function<List<T>, V> f);
     
-    public OrderedFrame<I, T> from(I startIdx);
+    OrderedFrame<I, T> from(I startIdx);
     
-    public OrderedFrame<I, T> to(I endIdx);
+    OrderedFrame<I, T> to(I endIdx);
     
-    public Entry<I, T> firstEntry();
+    Entry<I, T> firstEntry();
     
-    public Entry<I, T> lastEntry();
+    Entry<I, T> lastEntry();
+    
+    static <I, T> OrderedFrame<I, T> of(Map<I, T> m) {
+        return new DataSeries<>(m);
+    }
+    
+    static <I, T> OrderedFrame<I, T> empty() {
+        return new DataSeries<>();
+    }
 }

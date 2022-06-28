@@ -1,4 +1,4 @@
-package money.portosim.core.strategies;
+package money.portosim.tests.core.strategies;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
@@ -7,7 +7,6 @@ import java.util.GregorianCalendar;
 import java.util.Map;
 import money.portosim.Portfolio;
 import money.portosim.containers.numeric.NumFrame;
-import money.portosim.containers.numeric.NumRecord;
 import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
 import org.testng.Assert;
@@ -30,11 +29,11 @@ public class TimedStrategyTest {
     
     @BeforeMethod
     public void setUp() {
-        targetAlloc = new NumRecord<>(Map.of("A", 0.4, "B", 0.6));
+        targetAlloc = NumFrame.of(Map.of("A", 0.4, "B", 0.6));
         
-        currentPrices = new NumRecord<>(Map.of("A", 10.0, "B", 60.0));
-        updatedPrices1 = new NumRecord<>(Map.of("A", 200.0, "B", 350.0));
-        updatedPrices2 = new NumRecord<>(Map.of("A", 500.0, "B", 100.0));
+        currentPrices = NumFrame.of(Map.of("A", 10.0, "B", 60.0));
+        updatedPrices1 = NumFrame.of(Map.of("A", 200.0, "B", 350.0));
+        updatedPrices2 = NumFrame.of(Map.of("A", 500.0, "B", 100.0));
         
         initDate = new GregorianCalendar(2009, Calendar.DECEMBER, 10).getTime();
         noUpdateDate = new GregorianCalendar(2009, Calendar.DECEMBER, 21).getTime();

@@ -4,21 +4,34 @@
  */
 package money.portosim.containers.numeric;
 
+import java.util.AbstractMap;
 import java.util.Map;
-import money.portosim.containers.core.DataRecord;
+import java.util.Set;
+import money.portosim.containers.core.Frame;
 
 /**
  *
  * @author yarro
  */
-public class NumRecord<K> extends DataRecord<K, Double> 
-        implements NumFrame<K> {
+class NumRecord<K> extends AbstractMap<K, Double> implements NumFrame<K> {
+    
+    final Frame<K, Double> frame;
      
     public NumRecord(Map<K, Double> m) {
-        super(m);
+        frame = Frame.of(m);
     }
 
     public NumRecord() {
-        super();
+        frame = Frame.empty();
+    }
+
+    @Override
+    public Set<Entry<K, Double>> entrySet() {
+        return frame.entrySet();
+    }
+
+    @Override
+    public Double put(K key, Double value) {
+        return frame.put(key, value);
     }
 }

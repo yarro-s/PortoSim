@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/EmptyTestNGTest.java to edit this template
  */
-package money.portosim.core.containers;
+package money.portosim.tests.core.containers;
 
 import java.util.Map;
 import money.portosim.containers.core.DataMatrix;
-import money.portosim.containers.numeric.NumDataMatrix;
 import money.portosim.containers.core.Pair;
 import money.portosim.containers.core.Matrix;
+import money.portosim.containers.numeric.NumMatrix;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -32,7 +32,7 @@ public class MatrixTest {
     
     @Test
     public void sumAllFrame() {
-        var nf = new NumDataMatrix<>(tf);
+        var nf = NumMatrix.of(tf);
         double frameSum = nf.sum();
         
         Assert.assertEquals(frameSum, 100.5 + 245.0 + 307.4 + 843.2 + 367.4 + 
@@ -41,8 +41,8 @@ public class MatrixTest {
     
     @Test
     public void addFrame() {
-        var nf = new NumDataMatrix<>(tf);
-        var otherNM = new NumDataMatrix<>(tf);
+        var nf = NumMatrix.of(tf);
+        var otherNM = NumMatrix.of(tf);
         
         otherNM.put(Pair.of(1, "A"), 64.1); otherNM.put(Pair.of(1, "B"), 15.9);
         otherNM.put(Pair.of(2, "A"), 15.0); otherNM.put(Pair.of(2, "B"), 65.1);
@@ -50,7 +50,7 @@ public class MatrixTest {
         otherNM.put(Pair.of(4, "A"), 43.0); otherNM.put(Pair.of(4, "B"), 15.0);
         otherNM.put(Pair.of(5, "A"), 32.4); otherNM.put(Pair.of(5, "B"), 125.5);
         
-        var addedFrame = new NumDataMatrix<>(nf.add(otherNM));
+        var addedFrame = NumMatrix.of(nf.add(otherNM));
         
         Assert.assertEquals(addedFrame.columns().get("A").get(1), 100.5 + 64.1);
         Assert.assertEquals(addedFrame.rows().get(5).get("B"), 1.5 + 125.5);
@@ -58,8 +58,8 @@ public class MatrixTest {
        
     @Test
     public void addVal() {
-        var nm = new NumDataMatrix<>(tf);
-        var addedVal = new NumDataMatrix<>(nm.add(50000.6));
+        var nm = NumMatrix.of(tf);
+        var addedVal = NumMatrix.of(nm.add(50000.6));
         
         Assert.assertEquals(addedVal.columns().get("A").get(1), 100.5 + 50000.6);
         Assert.assertEquals(addedVal.rows().get(5).get("B"), 1.5 + 50000.6);

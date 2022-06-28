@@ -3,7 +3,6 @@ package money.portosim;
 import java.util.Map;
 import java.util.OptionalDouble;
 import money.portosim.containers.numeric.NumFrame;
-import money.portosim.containers.numeric.NumRecord;
 
 public class Portfolio {
     NumFrame<String> positions;
@@ -18,11 +17,11 @@ public class Portfolio {
     }
 
     public Portfolio() {
-        positions = new NumRecord<>();
+        positions = NumFrame.empty();
     }
 
     public Portfolio(Map<String, Double> m) {
-        positions = new NumRecord<>(m);
+        positions = NumFrame.of(m);
     }
 
     @Override

@@ -4,14 +4,10 @@
  */
 package money.portosim.containers.numeric;
 
-import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import money.portosim.containers.core.DataMatrix;
-import money.portosim.containers.core.DataRecord;
-import money.portosim.containers.core.DataSeries;
 import money.portosim.containers.core.Pair;
 import money.portosim.containers.core.Frame;
 import money.portosim.containers.core.OrderedFrame;
@@ -20,7 +16,7 @@ import money.portosim.containers.core.OrderedFrame;
  *
  * @author yarro
  */
-public class NumDataMatrix<I, K> extends DataMatrix<I, K, Double> 
+class NumDataMatrix<I, K> extends DataMatrix<I, K, Double> 
         implements NumMatrix<I, K> { 
 
     public NumDataMatrix(Map<Pair<I, K>, Double> m) {
@@ -45,13 +41,13 @@ public class NumDataMatrix<I, K> extends DataMatrix<I, K, Double>
 
     @Override
     public OrderedFrame<I, ? extends NumFrame<K>> rows() {
-        return new DataSeries<>(indices.stream().collect(Collectors.toMap(Function.identity(), 
+        return OrderedFrame.of(indices.stream().collect(Collectors.toMap(Function.identity(), 
                 NumFrameView::new)));
     }
         
     @Override
     public Frame<K, ? extends NumOrderedFrame<I>> columns() { 
-        return new DataRecord<>(keys.stream().collect(Collectors.toMap(Function.identity(), 
+        return Frame.of(keys.stream().collect(Collectors.toMap(Function.identity(), 
                 NumOrderedFrameView::new)));
     }
 }

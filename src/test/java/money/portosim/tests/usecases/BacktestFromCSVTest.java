@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/EmptyTestNGTest.java to edit this template
  */
-package money.portosim.usecases;
+package money.portosim.tests.usecases;
 
 import java.io.FileReader;
 import money.portosim.Backtest;

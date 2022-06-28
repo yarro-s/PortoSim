@@ -7,7 +7,6 @@ import money.portosim.AbstractStrategy;
 import java.util.Date;
 import java.util.Map;
 import money.portosim.containers.numeric.NumFrame;
-import money.portosim.containers.numeric.NumRecord;
 
 public class FixedAllocation extends AbstractStrategy {
     private final NumericMap<String> targetAllocation;
@@ -26,7 +25,7 @@ public class FixedAllocation extends AbstractStrategy {
     }
     
     private Portfolio rebalancePortfolio(NumFrame<String> prices, double availableValue) {
-        var scaledAllocation = new NumRecord<String>(targetAllocation.mult(availableValue));
+        var scaledAllocation = NumFrame.of(targetAllocation.mult(availableValue));
         var updatedAmounts = scaledAllocation.div(prices);
 
         return new Portfolio(updatedAmounts);

@@ -1,11 +1,11 @@
-package money.portosim.core;
+package money.portosim.tests.core;
 
 import money.portosim.Portfolio;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Map;
-import money.portosim.containers.numeric.NumRecord;
+import money.portosim.containers.numeric.NumFrame;
 
 public class PortfolioTest {
 
@@ -16,7 +16,7 @@ public class PortfolioTest {
         p1.positions().put("AAPL", 25.3);   // put shares
         p1.positions().put("T", 500.1);
 
-        var currentPrices = new NumRecord<>(Map.of("AAPL", 515.5, "T", 650.2));
+        var currentPrices = NumFrame.of(Map.of("AAPL", 515.5, "T", 650.2));
 
         var currentValue = p1.valueAtPrice(currentPrices);
 

@@ -4,6 +4,7 @@
  */
 package money.portosim.containers.numeric;
 
+import java.util.Map;
 import money.portosim.containers.core.OrderedFrame;
 
 /**
@@ -12,4 +13,11 @@ import money.portosim.containers.core.OrderedFrame;
  */
 public interface NumOrderedFrame<L> extends OrderedFrame<L, Double>, NumFrame<L> {
     
+    static <L> NumOrderedFrame<L> of(Map<L, Double> m) {
+        return new NumSeries<>(m);
+    } 
+    
+    static <L> NumOrderedFrame<L> empty() {
+        return new NumSeries<>();
+    } 
 }

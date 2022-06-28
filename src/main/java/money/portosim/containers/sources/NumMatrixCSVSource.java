@@ -5,29 +5,20 @@
 package money.portosim.containers.sources;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import money.portosim.containers.core.Frame;
-import money.portosim.containers.core.Matrix;
 import money.portosim.containers.core.OrderedFrame;
 import money.portosim.containers.core.Pair;
-import money.portosim.containers.numeric.NumDataMatrix;
 import money.portosim.containers.numeric.NumFrame;
 import money.portosim.containers.numeric.NumMatrix;
 import money.portosim.containers.numeric.NumOrderedFrame;
@@ -65,7 +56,7 @@ public class NumMatrixCSVSource extends AbstractMap<Pair<Date, String>, Double>
     }
     
     private void readMap() {
-        numMatrix = new NumDataMatrix<>();
+        numMatrix = NumMatrix.empty();
         try {
             //fileReader.reset();
             var reader = new BufferedReader(fileReader);

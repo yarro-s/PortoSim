@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package money.portosim.core.containers.sources;
+package money.portosim.tests.core.containers.sources;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

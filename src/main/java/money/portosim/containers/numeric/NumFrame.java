@@ -12,40 +12,47 @@ import money.portosim.containers.core.Frame;
  * @author yarro
  */
 public interface NumFrame<L> extends Frame<L, Double> {
-    default public Map<L, Double> add(Double val) {
-        return bind(val, Double::sum);
+    default NumFrame<L> add(Double val) {
+        return NumFrame.of(bind(val, Double::sum));
     }
     
-    default public Map<L, Double> add(NumFrame<L> nm) {
-        return compose(nm, Double::sum);
+    default NumFrame<L> add(NumFrame<L> nm) {
+        return NumFrame.of(compose(nm, Double::sum));
     }
     
-    default public Map<L, Double> mult(Double val) {
-        return bind(val, (x, y) -> x * y);
+    default NumFrame<L> mult(Double val) {
+        return NumFrame.of(bind(val, (x, y) -> x * y));
     }
     
-    default public Map<L, Double> mult(NumFrame<L> nm) {
-        return compose(nm, (x, y) -> x * y);
+    default NumFrame<L> mult(NumFrame<L> nm) {
+        return NumFrame.of(compose(nm, (x, y) -> x * y));
     }
     
-    default public Map<L, Double> div(Double val) {
-        return bind(val, (x, y) -> x / y);
+    default NumFrame<L> div(Double val) {
+        return NumFrame.of(bind(val, (x, y) -> x / y));
     }
     
-    default public Map<L, Double> div(NumFrame<L> nm) {
-        return compose(nm, (x, y) -> x / y);
+    default NumFrame<L> div(NumFrame<L> nm) {
+        return NumFrame.of(compose(nm, (x, y) -> x / y));
     }
     
-    default public Map<L, Double> sub(Double val) {
-        return bind(val, (x, y) -> x - y);
+    default NumFrame<L> sub(Double val) {
+        return NumFrame.of(bind(val, (x, y) -> x - y));
     }
     
-    default public Map<L, Double> sub(NumFrame<L> nm) {
-        return compose(nm, (x, y) -> x - y);
+    default NumFrame<L> sub(NumFrame<L> nm) {
+        return NumFrame.of(compose(nm, (x, y) -> x - y));
     }
     
-    default public Double sum() {
+    default Double sum() {
         return reduce(Double::sum);
     }
     
+    static <L> NumFrame<L> of(Map<L, Double> m) {
+        return new NumRecord<>(m);
+    }
+    
+    static <L> NumFrame<L> empty() {
+        return new NumRecord<>();
+    }
 }

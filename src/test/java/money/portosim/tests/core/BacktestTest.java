@@ -1,12 +1,9 @@
-package money.portosim.core;
+package money.portosim.tests.core;
 
 import java.time.temporal.ChronoUnit;
 import money.portosim.Backtest;
-import money.portosim.containers.Quote;
-import money.portosim.containers.QuoteSeries;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import money.portosim.containers.NumericMap;
 import money.portosim.strategies.ConstantAllocation;
 
 import java.util.Calendar;
@@ -14,14 +11,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-import money.portosim.containers.SeriesQuote;
 import money.portosim.containers.core.Pair;
-import money.portosim.containers.numeric.NumDataMatrix;
-import money.portosim.containers.numeric.NumFrame;
 import money.portosim.containers.numeric.NumMatrix;
-import money.portosim.containers.numeric.NumRecord;
-import money.portosim.helpers.SpecifiedAllocation;
-import money.portosim.helpers.SpecifiedMultiAllocation;
+import money.portosim.containers.numeric.NumFrame;
+import money.portosim.tests.helpers.SpecifiedAllocation;
+import money.portosim.tests.helpers.SpecifiedMultiAllocation;
 import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
 
@@ -34,7 +28,7 @@ public class BacktestTest {
             new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
             new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
         };
-        var prices = new NumDataMatrix<>(Map.of(
+        var prices = NumMatrix.of(Map.of(
             Pair.of(timePoints[0], "SP500"), 1000.0, Pair.of(timePoints[0], "GOLD"), 1000.0,
             Pair.of(timePoints[1], "SP500"), 9575.0, Pair.of(timePoints[1], "GOLD"), 9772.0,
             Pair.of(timePoints[2], "SP500"), 1141.0, Pair.of(timePoints[2], "GOLD"), 1169.0
@@ -61,7 +55,7 @@ public class BacktestTest {
             new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
             new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
         };
-        var prices = new NumDataMatrix<>(Map.of(
+        var prices = NumMatrix.of(Map.of(
             Pair.of(timePoints[0], "SP500"), 1000.0, Pair.of(timePoints[0], "GOLD"), 1000.0,
             Pair.of(timePoints[1], "SP500"), 957.538, Pair.of(timePoints[1], "GOLD"), 977.282,
             Pair.of(timePoints[2], "SP500"), 1141.291, Pair.of(timePoints[2], "GOLD"), 1169.839
@@ -85,7 +79,7 @@ public class BacktestTest {
             new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
             new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
         };
-        var prices = new NumDataMatrix<>(Map.of(
+        var prices = NumMatrix.of(Map.of(
             Pair.of(timePoints[0], "SP500"), 1000.0,
             Pair.of(timePoints[1], "SP500"), 957.538, 
             Pair.of(timePoints[2], "SP500"), 1141.291 
@@ -118,7 +112,7 @@ public class BacktestTest {
             Map.of("A", 350.0, "B", 250.0),
             Map.of("A", 5.0, "B", 125.0)
         };
-        var prices = new NumDataMatrix<>(Map.of(
+        var prices = NumMatrix.of(Map.of(
             Pair.of(timePoints[0], "A"), 125.0, Pair.of(timePoints[0], "B"), 50.0,
             Pair.of(timePoints[1], "A"), 500.0, Pair.of(timePoints[1], "B"), 10.0,
             Pair.of(timePoints[2], "A"), 200.0, Pair.of(timePoints[2], "B"), 80.0,
@@ -163,14 +157,14 @@ public class BacktestTest {
             new GregorianCalendar(2012, Calendar.DECEMBER, 30).getTime()
         };
         final NumFrame<String>[] priceMaps = new NumFrame[]{
-                new NumRecord<>(Map.of("A", 125.0)),
-                new NumRecord<>(Map.of("A", 500.0)),
-                new NumRecord<>(Map.of("A", 200.0)),
-                new NumRecord<>(Map.of("A", 20.0)),
-                new NumRecord<>(Map.of("A", 350.0)),
-                new NumRecord<>(Map.of("A", 5.0))
+                NumFrame.of(Map.of("A", 125.0)),
+                NumFrame.of(Map.of("A", 500.0)),
+                NumFrame.of(Map.of("A", 200.0)),
+                NumFrame.of(Map.of("A", 20.0)),
+                NumFrame.of(Map.of("A", 350.0)),
+                NumFrame.of(Map.of("A", 5.0))
         };
-        var prices = new NumDataMatrix<Date, String>(Map.of(
+        var prices = NumMatrix.of(Map.of(
                 Pair.of(timePoints[0], "A"), 125.0,
                 Pair.of(timePoints[1], "A"), 500.0,
                 Pair.of(timePoints[2], "A"), 200.0,
@@ -216,16 +210,16 @@ public class BacktestTest {
                 new GregorianCalendar(2012, Calendar.DECEMBER, 31).getTime()
         };
         var priceMaps = new NumFrame[]{
-                new NumRecord<>(Map.of("A", 125.0)),
-                new NumRecord<>(Map.of("A", 80.0)),
-                new NumRecord<>(Map.of("A", 260.0))
+                NumFrame.of(Map.of("A", 125.0)),
+                NumFrame.of(Map.of("A", 80.0)),
+                NumFrame.of(Map.of("A", 260.0))
         };
-        var prices = new NumDataMatrix<Date, String>(Map.of(
+        var prices = NumMatrix.of(Map.of(
                 Pair.of(timePoints[0], "A"), 125.0,
                 Pair.of(timePoints[1], "A"), 80.0,
                 Pair.of(timePoints[2], "A"), 260.0));
 
-        var assetAmounts = new NumRecord<>(Map.of("A", 24.0));
+        var assetAmounts = NumFrame.of(Map.of("A", 24.0));
 
         var constAlloc = new ConstantAllocation(assetAmounts);
         var backtest = new Backtest(constAlloc, prices);
@@ -234,8 +228,8 @@ public class BacktestTest {
 
         var result = backtest.getResult();
 
-        var expValue0 = new NumRecord<>(assetAmounts.mult(priceMaps[0])).sum();
-        var expValueN = new NumRecord<>(assetAmounts.mult(priceMaps[priceMaps.length-1])).sum();
+        var expValue0 = assetAmounts.mult(priceMaps[0]).sum();
+        var expValueN = assetAmounts.mult(priceMaps[priceMaps.length-1]).sum();
         var expTotalReturn = expValueN / expValue0;
 
         Assert.assertEquals(result.quant().totalReturn(), expTotalReturn);
@@ -249,17 +243,17 @@ public class BacktestTest {
                 new GregorianCalendar(2007, Calendar.DECEMBER, 31).getTime()
         };
         var priceMaps = new NumFrame[]{
-                new NumRecord<>(Map.of("A", 50.0, "B", 120.0)),
-                new NumRecord<>(Map.of("A", 20.0, "B", 200.0)),
-                new NumRecord<>(Map.of("A", 80.0, "B", 150.0))
+                NumFrame.of(Map.of("A", 50.0, "B", 120.0)),
+                NumFrame.of(Map.of("A", 20.0, "B", 200.0)),
+                NumFrame.of(Map.of("A", 80.0, "B", 150.0))
         };
-        var prices = new NumDataMatrix<Date, String>(Map.of(
+        var prices = NumMatrix.of(Map.of(
                 Pair.of(timePoints[0], "A"), 50.0, Pair.of(timePoints[0], "B"), 120.0,
                 Pair.of(timePoints[1], "A"), 20.0, Pair.of(timePoints[1], "B"), 200.0,
                 Pair.of(timePoints[2], "A"), 80.0, Pair.of(timePoints[2], "B"), 150.0
         ));
 
-        NumFrame<String> assetAmounts = new NumRecord<>(Map.of("A", 10.0, "B", 25.0));
+        NumFrame<String> assetAmounts = NumFrame.of(Map.of("A", 10.0, "B", 25.0));
 
         var constAlloc = new ConstantAllocation(assetAmounts);
         var backtest = new Backtest(constAlloc, prices);
@@ -268,8 +262,8 @@ public class BacktestTest {
 
         var result = backtest.getResult();
 
-        var expValue0 = new NumRecord<>(assetAmounts.mult(priceMaps[0])).sum();
-        var expValueN = new NumRecord<>(assetAmounts.mult(priceMaps[priceMaps.length-1])).sum();
+        var expValue0 = NumFrame.of(assetAmounts.mult(priceMaps[0])).sum();
+        var expValueN = NumFrame.of(assetAmounts.mult(priceMaps[priceMaps.length-1])).sum();
         var expTotalReturn = expValueN / expValue0;
 
         Assert.assertEquals(result.quant().totalReturn(), expTotalReturn);
