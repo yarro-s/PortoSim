@@ -7,8 +7,7 @@ package money.portosim.usecases;
 import java.io.FileReader;
 import money.portosim.Backtest;
 import money.portosim.containers.NumericMap;
-import money.portosim.containers.QuoteSeries;
-import money.portosim.containers.sources.QuoteSeriesCSVSource;
+import money.portosim.containers.sources.NumMatrixCSVSource;
 import money.portosim.strategies.ConstantAllocation;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -23,8 +22,7 @@ public class BacktestFromCSVTest {
 
     @Test
     public void constantAllocSP500() throws Exception {    
-        var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500DailyCSV));
-        var prices = new QuoteSeries(priceSource).transpose();
+        var prices = new NumMatrixCSVSource(new FileReader(sp500DailyCSV));
 
         var asset = new NumericMap<String>();
         asset.put("SP500TR", 1.0);
@@ -36,11 +34,11 @@ public class BacktestFromCSVTest {
         var result = backtest.getResult();
         var pfHist = backtest.getResult().getPortfolioHistory();
         
-        var expTotalReturn = prices.transpose().lastEntry()
-                .getValue().div(prices.transpose().firstEntry().getValue())
+        var expTotalReturn = prices.rows().lastEntry()
+                .getValue().div(prices.rows().firstEntry().getValue())
                 .getOrDefault("SP500TR", 0.0);
 
         Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 0.001);
-        Assert.assertEquals(pfHist.size(), prices.transpose().size());
+        Assert.assertEquals(pfHist.size(), prices.rows().size());
     }
 }
