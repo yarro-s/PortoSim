@@ -17,9 +17,9 @@ import money.portosim.containers.sources.CSVHeaderRowColumn;
  *
  * @author yarro
  */
-public class QuoteSeriesCSVSource extends CSVHeaderRowColumn<Date, Map<String, Double>> {
+public class CSVPriceSource extends CSVHeaderRowColumn<Date, Map<String, Double>> {
 
-    public QuoteSeriesCSVSource(FileReader fileReader) throws IOException {
+    public CSVPriceSource(FileReader fileReader) throws IOException {
         super(fileReader);
     }
  

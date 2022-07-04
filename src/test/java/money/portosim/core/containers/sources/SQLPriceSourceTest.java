@@ -10,21 +10,21 @@ import java.util.TreeMap;
 import org.testng.annotations.Test;
 
 import money.portosim.containers.core.Series;
-import money.portosim.containers.sources.QuoteSeriesSQLSource;
+import money.portosim.containers.sources.SQLPriceSource;
 import org.testng.Assert;
 
 /**
  *
  * @author yarro
  */
-public class SQLSourceTest {
+public class SQLPriceSourceTest {
     
     final String connectionString = "jdbc:sqlite:src/test/resources/fin_db.db";
 
     @Test
     public void readQuoteSeriesFromSQL() throws Exception {
         
-        var priceSource = new QuoteSeriesSQLSource(connectionString);
+        var priceSource = new SQLPriceSource(connectionString);
         var quoteSeries = new TreeMap<Date, Map<String, Double>>(priceSource);       
         
         Assert.assertEquals(quoteSeries.size(), 30);      

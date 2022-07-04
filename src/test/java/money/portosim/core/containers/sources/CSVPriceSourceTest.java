@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 import money.portosim.containers.core.Series;
-import money.portosim.containers.sources.QuoteSeriesCSVSource;
+import money.portosim.containers.sources.CSVPriceSource;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -19,12 +19,12 @@ import org.testng.annotations.Test;
  *
  * @author yarro
  */
-public class CSVSourceTest {
+public class CSVPriceSourceTest {
     private final String csvDataSourcePath = "src/test/resources/simple.csv";
     
     @Test
     public void readQuoteSeriesFromCSV() throws FileNotFoundException, IOException {
-        var quoteSeriesSource = new QuoteSeriesCSVSource(new FileReader(csvDataSourcePath));
+        var quoteSeriesSource = new CSVPriceSource(new FileReader(csvDataSourcePath));
         var quoteSeries = new TreeMap<Date, Map<String, Double>>(quoteSeriesSource);
         
         Assert.assertEquals(quoteSeries.size(), 4);      

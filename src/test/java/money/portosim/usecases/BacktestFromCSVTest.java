@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import money.portosim.Backtest;
 import money.portosim.containers.NumericMap;
-import money.portosim.containers.sources.QuoteSeriesCSVSource;
+import money.portosim.containers.sources.CSVPriceSource;
 import money.portosim.strategies.ConstantAllocation;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -26,8 +26,7 @@ public class BacktestFromCSVTest {
 
     @Test
     public void constantAllocSP500() throws Exception {    
-        var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500DailyCSV));
-        var prices = new HashMap<Date, Map<String, Double>>(priceSource);
+        var prices = new CSVPriceSource(new FileReader(sp500DailyCSV));
 
         var asset = new NumericMap<String>();
         asset.put("SP500TR", 1.0);

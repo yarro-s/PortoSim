@@ -13,14 +13,14 @@ import money.portosim.containers.core.Series;
  *
  * @author yarro
  */
-public class QuoteSeriesSQLSource extends SQLKeyCategoryData<Date, Map<String, Double>> {
+public class SQLPriceSource extends SQLKeyCategoryData<Date, Map<String, Double>> {
 
-    public QuoteSeriesSQLSource(String connectionString) throws SQLException {
+    public SQLPriceSource(String connectionString) throws SQLException {
         
         this(connectionString, "quotes", "date", "ticker", "price");
     }
     
-    public QuoteSeriesSQLSource(String connectionString, String table, String keyColumn, 
+    public SQLPriceSource(String connectionString, String table, String keyColumn, 
             String categoryColumn, String dataColumn) throws SQLException {
         
         super(connectionString, table, keyColumn, categoryColumn, dataColumn);
