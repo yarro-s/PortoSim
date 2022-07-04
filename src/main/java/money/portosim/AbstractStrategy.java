@@ -1,13 +1,13 @@
 package money.portosim;
 
 import java.util.Date;
-import money.portosim.containers.Quote;
+import java.util.Map;
 
 public abstract class AbstractStrategy implements Strategy {
     private Portfolio portfolio;
     
     @Override
-    public final Portfolio makePortfolio(Date date, Quote prices) {
+    public final Portfolio makePortfolio(Date date, Map<String, Double> prices) {
         var result = apply(date, prices);
         if (result == null) {
             result = portfolio;
@@ -17,7 +17,7 @@ public abstract class AbstractStrategy implements Strategy {
         return result;
     }
     
-    protected abstract Portfolio apply(Date date, Quote prices);
+    protected abstract Portfolio apply(Date date, Map<String, Double> prices);
      
     protected Portfolio getPortfolio() {
         return portfolio;

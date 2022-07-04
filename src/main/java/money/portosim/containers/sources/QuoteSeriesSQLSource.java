@@ -7,14 +7,13 @@ package money.portosim.containers.sources;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
-import money.portosim.containers.Quote;
-import money.portosim.containers.QuoteSeries;
+import money.portosim.containers.core.Series;
 
 /**
  *
  * @author yarro
  */
-public class QuoteSeriesSQLSource extends SQLKeyCategoryData<Date, Quote> {
+public class QuoteSeriesSQLSource extends SQLKeyCategoryData<Date, Map<String, Double>> {
 
     public QuoteSeriesSQLSource(String connectionString) throws SQLException {
         
@@ -29,17 +28,17 @@ public class QuoteSeriesSQLSource extends SQLKeyCategoryData<Date, Quote> {
 
     @Override
     protected Date toKey(String rawKey) {
-        return QuoteSeries.isoStringToDate(rawKey);
+        return Series.isoStringToDate(rawKey);
     }
 
     @Override
     protected String toRawKey(Date key) {
-        return QuoteSeries.dateToIsoString(key);
+        return Series.dateToIsoString(key);
     }
 
     @Override
-    protected Quote toValue(Map<String, Double> mappedRecord) {
-        return new Quote(mappedRecord);
+    protected Map<String, Double> toValue(Map<String, Double> mappedRecord) {
+        return mappedRecord;
     }
     
 }

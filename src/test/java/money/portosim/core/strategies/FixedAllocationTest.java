@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import money.portosim.Portfolio;
-import money.portosim.containers.Quote;
 import money.portosim.strategies.FixedAllocation;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -12,19 +11,18 @@ import org.testng.annotations.Test;
 import money.portosim.containers.NumericMap;
 
 import java.util.Map;
-import money.portosim.containers.QuoteSeries;
 
 public class FixedAllocationTest {
 
     private NumericMap<String> targetAlloc;
-    private Quote currentPrices;
-    private Quote updatedPrices;
+    private NumericMap<String> currentPrices;
+    private NumericMap<String> updatedPrices;
 
     @BeforeMethod
     public void setUp() {
         targetAlloc = new NumericMap<>(Map.of("A", 0.4, "B", 0.6));
-        currentPrices = new Quote(Map.of("A", 10.0, "B", 60.0));
-        updatedPrices = new Quote(Map.of("A", 200.0, "B", 350.0));
+        currentPrices = NumericMap.of(Map.of("A", 10.0, "B", 60.0));
+        updatedPrices = NumericMap.of(Map.of("A", 200.0, "B", 350.0));
     }
     
     @Test
@@ -36,11 +34,10 @@ public class FixedAllocationTest {
             new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
             new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime()
         };
-        var prices = new QuoteSeries(Map.of(
-            timePoints[0], new Quote(Map.of("SP500", 5511.21, "GOLD", 1343.35)),
-            timePoints[1], new Quote(Map.of("SP500", 5383.6299, "GOLD", 1322.5000)),
-            timePoints[2], new Quote(Map.of("SP500", 6551.0000, "GOLD", 1580.8500))
-        ));
+        var prices = Map.of(
+            timePoints[0], Map.of("SP500", 5511.21, "GOLD", 1343.35),
+            timePoints[1], Map.of("SP500", 5383.6299, "GOLD", 1322.5000),
+            timePoints[2], Map.of("SP500", 6551.0000, "GOLD", 1580.8500));
 
         var currPrice = prices.get(timePoints[0]);
         var pf = strategy.makePortfolio(timePoints[0], currPrice);

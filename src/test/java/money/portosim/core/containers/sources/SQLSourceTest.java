@@ -4,9 +4,12 @@
  */
 package money.portosim.core.containers.sources;
 
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 import org.testng.annotations.Test;
 
-import money.portosim.containers.QuoteSeries;
+import money.portosim.containers.core.Series;
 import money.portosim.containers.sources.QuoteSeriesSQLSource;
 import org.testng.Assert;
 
@@ -22,12 +25,11 @@ public class SQLSourceTest {
     public void readQuoteSeriesFromSQL() throws Exception {
         
         var priceSource = new QuoteSeriesSQLSource(connectionString);
-        
-        var quoteSeries = new QuoteSeries(priceSource);       
+        var quoteSeries = new TreeMap<Date, Map<String, Double>>(priceSource);       
         
         Assert.assertEquals(quoteSeries.size(), 30);      
-        Assert.assertEquals(quoteSeries.firstKey(), QuoteSeries.isoStringToDate("2018-01-01"));
-        Assert.assertEquals(quoteSeries.lastKey(), QuoteSeries.isoStringToDate("2020-06-01"));
+        Assert.assertEquals(quoteSeries.firstKey(), Series.isoStringToDate("2018-01-01"));
+        Assert.assertEquals(quoteSeries.lastKey(), Series.isoStringToDate("2020-06-01"));
         
         var firstEntry = quoteSeries.firstEntry().getValue();
         var lastEntry = quoteSeries.lastEntry().getValue();

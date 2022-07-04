@@ -5,7 +5,8 @@
 package money.portosim;
 
 import java.time.temporal.ChronoUnit;
-import money.portosim.containers.QuoteSeries;
+import java.util.Date;
+import java.util.Map;
 import money.portosim.strategies.TimedStrategy;
 
 /**
@@ -13,18 +14,18 @@ import money.portosim.strategies.TimedStrategy;
  * @author yarro
  */
 public class BacktestBuilder {
-    private AbstractStrategy strategy;
+    private Strategy strategy;
     private TimedStrategy timedStrategy; 
     private Backtest backtest;
-    private QuoteSeries prices;
+    private Map<Date, Map<String, Double>> prices;
 
     public BacktestBuilder() { }
     
-    public BacktestBuilder(AbstractStrategy strategy) {
+    public BacktestBuilder(Strategy strategy) {
         setStrategy(strategy);
     }    
 
-    public BacktestBuilder(QuoteSeries prices) {
+    public BacktestBuilder(Map<Date, Map<String, Double>> prices) {
         setPrices(prices);
     }
 
@@ -32,12 +33,12 @@ public class BacktestBuilder {
         setRebalancePeriod(rebalancePeriod);
     }
     
-    public Result run(AbstractStrategy strategy) {
+    public Result run(Strategy strategy) {
         setStrategy(strategy);
         return run();
     }
     
-    public Result run(QuoteSeries prices) {
+    public Result run(Map<Date, Map<String, Double>> prices) {
         setPrices(prices);
         return run();
     }
@@ -53,7 +54,7 @@ public class BacktestBuilder {
         return backtest.run();
     }
     
-    public BacktestBuilder setPrices(QuoteSeries prices) {
+    public BacktestBuilder setPrices(Map<Date, Map<String, Double>> prices) {
         this.prices = prices;
         return this;
     }
@@ -63,12 +64,12 @@ public class BacktestBuilder {
         return this;
     }
     
-    public BacktestBuilder setStrategy(AbstractStrategy strategy) {
+    public BacktestBuilder setStrategy(Strategy strategy) {
         this.strategy = strategy;
         return this;
     }
 
-    public AbstractStrategy getStrategy() {
+    public Strategy getStrategy() {
         return timedStrategy == null ? strategy : timedStrategy.chainTo(strategy);
     }
 

@@ -1,8 +1,6 @@
 package money.portosim;
 
 import money.portosim.containers.NumericMap;
-import money.portosim.containers.Quote;
-
 import java.util.Map;
 import java.util.OptionalDouble;
 
@@ -13,8 +11,9 @@ public class Portfolio {
         return positions;
     }
 
-    public OptionalDouble valueAtPrice(Quote assetPrices) {
-        return this.positions().mult(assetPrices).values().stream().reduce(Double::sum)
+    public OptionalDouble valueAtPrice(Map<String, Double> assetPrices) {
+        var quote = NumericMap.of(assetPrices);
+        return this.positions().mult(quote).values().stream().reduce(Double::sum)
                 .map(OptionalDouble::of).orElseGet(OptionalDouble::empty);
     }
 

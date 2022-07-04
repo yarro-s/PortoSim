@@ -2,15 +2,14 @@ package money.portosim;
 
 import java.util.*;
 import money.portosim.containers.NumericSeries;
-import money.portosim.containers.Quote;
 import money.portosim.containers.core.Series;
 
 public class Result {
-    private final Series<Portfolio> portfolioHistory;
-    private final NumericSeries valueHistory;
+    private final Map<Date, Portfolio> portfolioHistory;
+    private final Map<Date, Double> valueHistory;
 
     public QuantifiableSeries quant() {
-        return valueHistory.quant();
+        return new NumericSeries(valueHistory).quant();
     }
 
     Result() {
@@ -18,7 +17,7 @@ public class Result {
         this.valueHistory = new NumericSeries();
     }
 
-    void update(Date date, Quote prices, Portfolio portfolio) {
+    void update(Date date, Map<String, Double> prices, Portfolio portfolio) {
         try {
             portfolioHistory.put(date, (Portfolio) portfolio.clone());
         } catch (CloneNotSupportedException e) {
@@ -26,11 +25,11 @@ public class Result {
         valueHistory.put(date, portfolio.valueAtPrice(prices).orElse(0.0));
     }
 
-    public Series<Portfolio> getPortfolioHistory() {
+    public Map<Date, Portfolio> getPortfolioHistory() {
         return portfolioHistory;
     }
 
-    public NumericSeries getValueHistory() {
+    public Map<Date, Double> getValueHistory() {
         return valueHistory;
     }
 }

@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import money.portosim.Portfolio;
-import money.portosim.containers.Quote;
 import money.portosim.containers.NumericMap;
 import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
@@ -21,9 +20,9 @@ import org.testng.annotations.Test;
 public class TimedStrategyTest {
     
     private NumericMap<String> targetAlloc;
-    private Quote currentPrices;
-    private Quote updatedPrices1;
-    private Quote updatedPrices2;
+    private Map<String, Double> currentPrices;
+    private Map<String, Double> updatedPrices1;
+    private Map<String, Double> updatedPrices2;
     private Date initDate;
     private Date noUpdateDate;
     private Date updateDate;
@@ -32,9 +31,9 @@ public class TimedStrategyTest {
     public void setUp() {
         targetAlloc = new NumericMap<>(Map.of("A", 0.4, "B", 0.6));
         
-        currentPrices = new Quote(Map.of("A", 10.0, "B", 60.0));
-        updatedPrices1 = new Quote(Map.of("A", 200.0, "B", 350.0));
-        updatedPrices2 = new Quote(Map.of("A", 500.0, "B", 100.0));
+        currentPrices = Map.of("A", 10.0, "B", 60.0);
+        updatedPrices1 = Map.of("A", 200.0, "B", 350.0);
+        updatedPrices2 = Map.of("A", 500.0, "B", 100.0);
         
         initDate = new GregorianCalendar(2009, Calendar.DECEMBER, 10).getTime();
         noUpdateDate = new GregorianCalendar(2009, Calendar.DECEMBER, 21).getTime();

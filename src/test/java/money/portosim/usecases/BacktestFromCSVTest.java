@@ -5,9 +5,12 @@
 package money.portosim.usecases;
 
 import java.io.FileReader;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import money.portosim.Backtest;
 import money.portosim.containers.NumericMap;
-import money.portosim.containers.QuoteSeries;
 import money.portosim.containers.sources.QuoteSeriesCSVSource;
 import money.portosim.strategies.ConstantAllocation;
 import org.testng.Assert;
@@ -24,7 +27,7 @@ public class BacktestFromCSVTest {
     @Test
     public void constantAllocSP500() throws Exception {    
         var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500DailyCSV));
-        var prices = new QuoteSeries(priceSource);
+        var prices = new HashMap<Date, Map<String, Double>>(priceSource);
 
         var asset = new NumericMap<String>();
         asset.put("SP500TR", 1.0);
@@ -36,8 +39,8 @@ public class BacktestFromCSVTest {
         var result = backtest.getResult();
         var pfHist = backtest.getResult().getPortfolioHistory();
         
-        var expTotalReturn = prices.ordered().lastEntry()
-                .getValue().div(prices.ordered().firstEntry().getValue())
+        var expTotalReturn = NumericMap.of(new TreeMap<>(prices).lastEntry()
+                .getValue()).div(NumericMap.of(new TreeMap<>(prices).firstEntry().getValue()))
                 .getOrDefault("SP500TR", 0.0);
 
         Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 0.001);

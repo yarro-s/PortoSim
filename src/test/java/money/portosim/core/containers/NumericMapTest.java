@@ -7,7 +7,6 @@ package money.portosim.core.containers;
 import java.util.Map;
 import java.util.Set;
 import money.portosim.containers.NumericMap;
-import money.portosim.containers.Quote;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -20,7 +19,7 @@ public class NumericMapTest {
     @Test
     public void addQuoteToNumericMaps() {
         var nm1 = new NumericMap<String>(Map.of("A", 100.5, "B", 800.0));
-        var quote2 = new Quote(Map.of("A", 5.0, "B", 100.0));       
+        var quote2 = NumericMap.of(Map.of("A", 5.0, "B", 100.0));       
 
         var sum12 = nm1.add(quote2);
 

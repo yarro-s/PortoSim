@@ -12,6 +12,7 @@ import money.portosim.containers.core.AlgebraicMap;
  * @author yarro
  */
 public class Quote extends NumericMap<String> {
+    
 
     public Quote() { 
         super();

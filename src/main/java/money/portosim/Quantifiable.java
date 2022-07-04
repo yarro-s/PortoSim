@@ -6,8 +6,8 @@ package money.portosim;
 
 import java.util.ArrayList;
 import java.util.function.Function;
+import money.portosim.containers.NumericMap;
 import money.portosim.containers.NumericSeries;
-import money.portosim.containers.Quote;
 
 /**
  *
@@ -15,21 +15,21 @@ import money.portosim.containers.Quote;
  */
 public interface Quantifiable {
     
-    Quote seriesMap(Function<NumericSeries, Double> f);
+    NumericMap<String> seriesMap(Function<NumericSeries, Double> f);
 
-    default Quote volatility() {
+    default NumericMap<String> volatility() {
         return seriesMap(s -> Metrics.volatility(s.values()));    
     }
     
-    default Quote average() {
+    default NumericMap<String> average() {
         return seriesMap(s -> Metrics.average(s.values()));       
     }
     
-    default Quote cummulativeGrowthRate() {
+    default NumericMap<String> cummulativeGrowthRate() {
         return seriesMap(s -> Metrics.cummulativeGrowthRate(new ArrayList<>(s.values())));       
     }
     
-    default Quote totalReturn() {
+    default NumericMap<String> totalReturn() {
         return seriesMap(s -> Metrics.totalReturn(new ArrayList<>(s.values())));       
     }
 }

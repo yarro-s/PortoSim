@@ -17,6 +17,10 @@ import money.portosim.containers.core.AlgebraicMap;
 public class NumericMap<K> extends AbstractMap<K, Double> implements AlgebraicMap<K, Double> {
     
     private final Map<K, Double> m;
+        
+    public static <K> NumericMap<K> of(Map<K, Double> m) {
+        return new NumericMap<>(m);
+    }
 
     public NumericMap() { 
         m = new HashMap<>();

@@ -6,7 +6,6 @@ import money.portosim.AbstractStrategy;
 
 import java.util.Date;
 import java.util.Map;
-import money.portosim.containers.Quote;
 
 public class FixedAllocation extends AbstractStrategy {
     private final NumericMap<String> targetAllocation;
@@ -16,15 +15,16 @@ public class FixedAllocation extends AbstractStrategy {
     }
 
     @Override
-    public Portfolio apply(Date date, Quote prices) {
+    public Portfolio apply(Date date, Map<String, Double> prices) {
         var pf = getPortfolio();
+        var quote = NumericMap.of(prices);
         if (pf == null) {
-            return rebalancePortfolio(prices, 1000.0);
+            return rebalancePortfolio(quote, 1000.0);
         } 
-        return rebalancePortfolio(prices, pf.valueAtPrice(prices).getAsDouble());
+        return rebalancePortfolio(quote, pf.valueAtPrice(quote).getAsDouble());
     }
     
-    private Portfolio rebalancePortfolio(Quote prices, double availableValue) {
+    private Portfolio rebalancePortfolio(NumericMap<String> prices, double availableValue) {
         var scaledAllocation = new NumericMap<String>(targetAllocation.mult(availableValue));
         var updatedAmounts = scaledAllocation.div(prices);
 

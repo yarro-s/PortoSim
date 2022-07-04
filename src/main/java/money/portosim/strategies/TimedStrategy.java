@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Map;
 import money.portosim.Portfolio;
-import money.portosim.containers.Quote;
 
 /**
  *
@@ -21,7 +21,7 @@ public class TimedStrategy extends StrategyChain {
     } 
 
     @Override
-    public Portfolio apply(Date date, Quote prices) {
+    public Portfolio apply(Date date, Map<String, Double> prices) {
         if (needsRebalance(date)) {
             return runNextStrategy(date, prices);
         }

@@ -6,9 +6,10 @@ package money.portosim.core;
 
 import java.io.FileReader;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import money.portosim.BacktestBuilder;
-import money.portosim.containers.QuoteSeries;
 import money.portosim.containers.sources.QuoteSeriesCSVSource;
 import money.portosim.strategies.FixedAllocation;
 import org.testng.Assert;
@@ -28,7 +29,7 @@ public class BacktestBuilderTest {
     public void sp500PlusGoldConvenienceMethods() throws Exception {
         // Load prices from the CSV file
         var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500GoldMonthlyCSV));
-        var prices = new QuoteSeries(priceSource);
+        var prices = new HashMap<Date, Map<String, Double>>(priceSource);
         
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
@@ -59,7 +60,7 @@ public class BacktestBuilderTest {
     public void sp500PlusGoldBuilding() throws Exception {
         // Load prices from the CSV file
         var priceSource = new QuoteSeriesCSVSource(new FileReader(sp500GoldMonthlyCSV));
-        var prices = new QuoteSeries(priceSource);
+        var prices = new HashMap<Date, Map<String, Double>>(priceSource);
         
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));

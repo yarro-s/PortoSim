@@ -10,15 +10,14 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import money.portosim.containers.Quote;
-import money.portosim.containers.QuoteSeries;
+import money.portosim.containers.core.Series;
 import money.portosim.containers.sources.CSVHeaderRowColumn;
 
 /**
  *
  * @author yarro
  */
-public class QuoteSeriesCSVSource extends CSVHeaderRowColumn<Date, Quote> {
+public class QuoteSeriesCSVSource extends CSVHeaderRowColumn<Date, Map<String, Double>> {
 
     public QuoteSeriesCSVSource(FileReader fileReader) throws IOException {
         super(fileReader);
@@ -26,13 +25,13 @@ public class QuoteSeriesCSVSource extends CSVHeaderRowColumn<Date, Quote> {
  
     @Override
     protected Date toKey(String rawKey) {
-        return QuoteSeries.isoStringToDate(rawKey);
+        return Series.isoStringToDate(rawKey);
     }
 
     @Override
-    protected Quote toValue(Map<String, String> mappedRecord) {
-        return new Quote(mappedRecord.keySet().stream().collect(Collectors
+    protected Map<String, Double> toValue(Map<String, String> mappedRecord) {
+        return mappedRecord.keySet().stream().collect(Collectors
                 .toMap(Function.identity(), k -> 
-                        Double.parseDouble((String) mappedRecord.get(k)))));
+                        Double.parseDouble((String) mappedRecord.get(k))));
     }
 }

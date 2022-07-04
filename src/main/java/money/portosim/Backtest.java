@@ -1,19 +1,21 @@
 package money.portosim;
 
-import money.portosim.containers.QuoteSeries;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Backtest {
-    private final AbstractStrategy strategy;
-    private final QuoteSeries priceSeries;
+    private final Strategy strategy;
+    private final Map<Date, Map<String, Double>> priceSeries;
     private final Result result = new Result();
 
-    public Backtest(AbstractStrategy strategy, QuoteSeries priceSeries) {
+    public Backtest(Strategy strategy, Map<Date, Map<String, Double>> priceSeries) {
         this.strategy = strategy;
         this.priceSeries = priceSeries;
     }
 
     public Result run() {
-        priceSeries.ordered().entrySet().stream().forEach(currentPrices -> {
+        new TreeMap<>(priceSeries).entrySet().stream().forEach(currentPrices -> {
             var date = currentPrices.getKey();
             var prices = currentPrices.getValue();
 
