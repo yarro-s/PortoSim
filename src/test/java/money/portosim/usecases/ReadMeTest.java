@@ -22,20 +22,6 @@ import org.testng.annotations.Test;
 public class ReadMeTest {
     
     private final String sp500GoldMonthlyCSV = "src/test/resources/sp500_gold_3yr_monthly.csv";
-    private final String spyGoldDailyCSV = "src/test/resources/spy_gld_2010_2020.csv";
-    
-    @Test
-    public void containerFeatures() throws Exception { 
-        // Load prices from a CSV file   
-//        var priceSource = new CSVPriceSource(new FileReader(spyGoldDailyCSV));
-//        var prices = new QuoteSeries(priceSource);
-//        
-//        var priceSlice = prices.from("2015-01-02").to("2018-11-30");   // also accepts Date
-//       
-//        Assert.assertTrue(priceSlice.size() < prices.size());
-//        Assert.assertEquals(priceSlice.firstEntry().getKey(), Series.isoStringToDate("2015-01-02"));
-//        Assert.assertEquals(priceSlice.lastEntry().getKey(), Series.isoStringToDate("2018-11-30"));
-    }
     
     @Test
     public void sp500PlusGoldSimpleBuild() throws Exception {
