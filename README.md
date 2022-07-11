@@ -25,5 +25,5 @@ var result = new BacktestBuilder(myStrategy)
 
 Get the total return (120.26%)
 ```java
-System.out.println("Total return is " + result.quant().totalReturn()); 
+System.out.println("Total return is " + result.apply(Metrics::totalReturn)); 
 ```

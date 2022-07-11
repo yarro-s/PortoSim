@@ -1,40 +1,33 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
 package money.portosim;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
+/**
+ *
+ * @author yarro
+ */
 public interface Quantifiable {
     
-    List<Double> asList();
+    Collection<Double> values();   
     
-    default double sharpeRatio(List<Double> values, double riskFreeRate) {
-        return Metrics.sharpeRatio(values, riskFreeRate);
-    }
-    
-    default List<Double> toReturns() {
-        return Metrics.toReturns(asList());   
+    default <V> V apply(Function<List<Double>, V> f) {
+        return f.apply(new ArrayList<>(values()));
     }
     
-    default double stdDeviation() {
-        return Metrics.stdDeviation(asList());      
+    default <V> Function<Function<List<Double>, V>, List<V>> rolling(int n) {
+        var valuesList = new ArrayList<>(values());
+        var rolled = IntStream.rangeClosed(0, valuesList.size() - n).boxed()
+                .map(j -> valuesList.subList(j, j + n));
+        
+        return (f) -> rolled.map(f).toList();
     }
     
-    default double variance() {
-        return Metrics.variance(asList());      
-    }
-
-    default double volatility() {
-        return Metrics.volatility(asList());      
-    }
-    
-    default double average() {
-        return Metrics.average(asList());             
-    }
-    
-    default double cummulativeGrowthRate() {
-        return Metrics.cummulativeGrowthRate(asList());     
-    }
-    
-    default double totalReturn() {
-        return Metrics.totalReturn(asList());      
-    }
 }

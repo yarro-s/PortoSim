@@ -4,12 +4,13 @@ import java.util.*;
 import money.portosim.containers.NumericSeries;
 import money.portosim.containers.core.Series;
 
-public class Result {
+public class Result implements Quantifiable {
     private final Map<Date, Portfolio> portfolioHistory;
     private final Map<Date, Double> valueHistory;
-
-    public Quantifiable quant() {
-        return new NumericSeries(valueHistory).quant();
+    
+    @Override
+    public Collection<Double> values() {
+        return valueHistory.values();
     }
 
     Result() {

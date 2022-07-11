@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import money.portosim.Backtest;
 import money.portosim.BacktestBuilder;
+import money.portosim.Metrics;
 import money.portosim.containers.sources.CSVPriceSource;
 import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
@@ -36,7 +37,7 @@ public class ReadMeTest {
                 .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
                 .run(prices);    // test on the historic prices
         
-        Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.00001);
+        Assert.assertEquals(result.apply(Metrics::totalReturn), 1.2026, 0.00001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
     }
     
@@ -57,7 +58,7 @@ public class ReadMeTest {
         // Run the backtest
         var result = backtest.run();
         
-        Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.00001);
+        Assert.assertEquals(result.apply(Metrics::totalReturn), 1.2026, 0.00001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
     }    
 }

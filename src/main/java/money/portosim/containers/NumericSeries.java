@@ -4,37 +4,19 @@
  */
 package money.portosim.containers;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import money.portosim.containers.core.AlgebraicMap;
 import money.portosim.containers.core.Series;
 import money.portosim.Quantifiable;
-import money.portosim.RollingQuantifiable;
 
 /**
  *
  * @author yarro
  */
-public class NumericSeries extends Series<Double> implements AlgebraicMap<Date, Double>,
-        RollingQuantifiable {
-     
-    public Quantifiable quant() {
-        return new Quantifiable() {
-
-            @Override
-            public List<Double> asList() {
-                return new ArrayList<>(NumericSeries.this.values());
-            }
-        };
-    }
-    
-    @Override
-    public List<Double> asList() {
-        return new ArrayList<>(NumericSeries.this.values());
-    }
-    
+public class NumericSeries extends Series<Double> 
+        implements AlgebraicMap<Date, Double>, Quantifiable {
+         
     public NumericSeries() { 
         super();
     }

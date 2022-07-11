@@ -5,11 +5,9 @@
 package money.portosim.usecases;
 
 import java.io.FileReader;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TreeMap;
 import money.portosim.Backtest;
+import money.portosim.Metrics;
 import money.portosim.containers.NumericMap;
 import money.portosim.containers.sources.CSVPriceSource;
 import money.portosim.strategies.ConstantAllocation;
@@ -42,7 +40,7 @@ public class BacktestFromCSVTest {
                 .getValue()).div(NumericMap.of(new TreeMap<>(prices).firstEntry().getValue()))
                 .getOrDefault("SP500TR", 0.0);
 
-        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 0.001);
+        Assert.assertEquals(result.apply(Metrics::totalReturn), expTotalReturn, 0.001);
         Assert.assertEquals(pfHist.size(), prices.size());
     }
 }
