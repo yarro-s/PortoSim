@@ -11,12 +11,14 @@ import java.util.Map;
 import money.portosim.containers.core.AlgebraicMap;
 import money.portosim.containers.core.Series;
 import money.portosim.Quantifiable;
+import money.portosim.RollingQuantifiable;
 
 /**
  *
  * @author yarro
  */
-public class NumericSeries extends Series<Double> implements AlgebraicMap<Date, Double> {
+public class NumericSeries extends Series<Double> implements AlgebraicMap<Date, Double>,
+        RollingQuantifiable {
      
     public Quantifiable quant() {
         return new Quantifiable() {
@@ -26,6 +28,11 @@ public class NumericSeries extends Series<Double> implements AlgebraicMap<Date, 
                 return new ArrayList<>(NumericSeries.this.values());
             }
         };
+    }
+    
+    @Override
+    public List<Double> asList() {
+        return new ArrayList<>(NumericSeries.this.values());
     }
     
     public NumericSeries() { 
