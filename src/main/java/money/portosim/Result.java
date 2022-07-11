@@ -8,7 +8,7 @@ public class Result {
     private final Map<Date, Portfolio> portfolioHistory;
     private final Map<Date, Double> valueHistory;
 
-    public QuantifiableSeries quant() {
+    public Quantifiable quant() {
         return new NumericSeries(valueHistory).quant();
     }
 

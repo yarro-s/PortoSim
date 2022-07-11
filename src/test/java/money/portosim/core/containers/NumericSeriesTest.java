@@ -55,7 +55,7 @@ public class NumericSeriesTest {
                 + Math.pow(120.0 - expAverage, 2.0) + Math.pow(90.0 - expAverage, 2.0) 
                 + Math.pow(135.0 - expAverage, 2.0)) / 4.0);
 
-        Assert.assertEquals(actualVolatility, expVolatility);
+        Assert.assertEquals(actualVolatility, expVolatility, 1e-4);
     }
     
     @Test

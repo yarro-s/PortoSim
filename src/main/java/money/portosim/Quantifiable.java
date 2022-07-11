@@ -1,35 +1,40 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package money.portosim;
 
-import java.util.ArrayList;
-import java.util.function.Function;
-import money.portosim.containers.NumericMap;
-import money.portosim.containers.NumericSeries;
+import java.util.List;
 
-/**
- *
- * @author yarro
- */
 public interface Quantifiable {
     
-    NumericMap<String> seriesMap(Function<NumericSeries, Double> f);
+    List<Double> asList();
+    
+    default double sharpeRatio(List<Double> values, double riskFreeRate) {
+        return Metrics.sharpeRatio(values, riskFreeRate);
+    }
+    
+    default List<Double> toReturns() {
+        return Metrics.toReturns(asList());   
+    }
+    
+    default double stdDeviation() {
+        return Metrics.stdDeviation(asList());      
+    }
+    
+    default double variance() {
+        return Metrics.variance(asList());      
+    }
 
-    default NumericMap<String> volatility() {
-        return seriesMap(s -> Metrics.volatility(s.values()));    
+    default double volatility() {
+        return Metrics.volatility(asList());      
     }
     
-    default NumericMap<String> average() {
-        return seriesMap(s -> Metrics.average(s.values()));       
+    default double average() {
+        return Metrics.average(asList());             
     }
     
-    default NumericMap<String> cummulativeGrowthRate() {
-        return seriesMap(s -> Metrics.cummulativeGrowthRate(new ArrayList<>(s.values())));       
+    default double cummulativeGrowthRate() {
+        return Metrics.cummulativeGrowthRate(asList());     
     }
     
-    default NumericMap<String> totalReturn() {
-        return seriesMap(s -> Metrics.totalReturn(new ArrayList<>(s.values())));       
+    default double totalReturn() {
+        return Metrics.totalReturn(asList());      
     }
 }

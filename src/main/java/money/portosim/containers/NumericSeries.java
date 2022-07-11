@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import money.portosim.QuantifiableSeries;
 import money.portosim.containers.core.AlgebraicMap;
 import money.portosim.containers.core.Series;
+import money.portosim.Quantifiable;
 
 /**
  *
@@ -18,17 +18,14 @@ import money.portosim.containers.core.Series;
  */
 public class NumericSeries extends Series<Double> implements AlgebraicMap<Date, Double> {
      
-    private class Quant implements QuantifiableSeries {
+    public Quantifiable quant() {
+        return new Quantifiable() {
 
-        @Override
-        public List<Double> asList() {
-            return new ArrayList<>(NumericSeries.this.values());
-        }
-        
-    }
-    
-    public QuantifiableSeries quant() {
-        return new Quant();
+            @Override
+            public List<Double> asList() {
+                return new ArrayList<>(NumericSeries.this.values());
+            }
+        };
     }
     
     public NumericSeries() { 
