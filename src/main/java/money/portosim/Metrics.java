@@ -2,12 +2,22 @@ package money.portosim;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 public interface Metrics {
     
-    static double maxDrawDown(List<Double> values, double riskFreeRate) {
-        return 0.0;
+    static double maxDrawdown(List<Double> values) {
+        BiFunction<List<Double>, Double, DoubleStream> listMinusVal = (l, x) -> 
+                l.stream().mapToDouble(v -> v - x);
+        
+        var n = values.size();      
+        return IntStream.range(0, n).boxed().flatMapToDouble(i -> {
+            var currentValue = values.get(i);
+            var remainingValues = values.subList(i + 1, n);
+            return listMinusVal.apply(remainingValues, currentValue);
+        }).filter(v -> v < 0).min().orElse(0.0);
     }
     
     static double sharpeRatio(List<Double> values, double riskFreeRate) {

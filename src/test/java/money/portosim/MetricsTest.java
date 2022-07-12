@@ -37,6 +37,27 @@ public class MetricsTest {
     }
     
     @Test
+    public void noDrawdown() {
+        var noDrawdown = List.of(10.5, 17.7, 17.7, 25.2);
+        
+        var actualDD = Metrics.maxDrawdown(noDrawdown);
+        
+        Assert.assertEquals(actualDD, 0.0);
+    }
+    
+    @Test
+    public void someMaxDrawdown() {
+        var someDrawdownMiddle = List.of(17.5, 20.3, 5.2, 15.7);
+        var someDrawdownEdges = List.of(20.5, 10.0, 15.1, 2.5);
+        
+        var actualMaxDDMiddle = Metrics.maxDrawdown(someDrawdownMiddle);
+        var actualMaxDDEdges = Metrics.maxDrawdown(someDrawdownEdges);
+        
+        Assert.assertEquals(actualMaxDDMiddle, 5.2 - 20.3);
+        Assert.assertEquals(actualMaxDDEdges, 2.5 - 20.5);
+    }
+    
+    @Test
     public void toReturns() {
         var returnsA = quoteSeries.get("A");
         
