@@ -8,6 +8,10 @@ import java.util.stream.IntStream;
 
 public interface Metrics {
     
+    static double marRatio(List<Double> values) {
+        return cummulativeGrowthRate(values) / maxDrawdown(values);
+    }
+    
     static double maxDrawdown(List<Double> values) {
         BiFunction<List<Double>, Double, DoubleStream> listMinusVal = (l, x) -> 
                 l.stream().mapToDouble(v -> v - x);
