@@ -105,8 +105,15 @@ public class MetricsTest {
     }
     
     @Test
+    public void seriesCummulativeGrowthRateMultiperiod() {
+        var biAnnualCGRA = Metrics.cummulativeGrowthRate(quoteSeries.get("A"), 2);
+        
+        Assert.assertEquals(biAnnualCGRA, Math.pow(30.1 / 20.0, 2 / 3.0) - 1, 1e-6);
+    }
+    
+    @Test
     public void seriesCummulativeGrowthRate() {
-        var cgrA = Metrics.cummulativeGrowthRate(new ArrayList<>(quoteSeries.get("A")));
+        var cgrA = Metrics.cummulativeGrowthRate(quoteSeries.get("A"));
         
         Assert.assertEquals(cgrA, Math.pow(30.1 / 20.0, 1.0 / 3.0) - 1, 1e-6);
     }

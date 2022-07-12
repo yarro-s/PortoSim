@@ -55,11 +55,15 @@ public interface Metrics {
         return values.stream().mapToDouble(Double::doubleValue).average().orElseThrow();
     }
 
-    static double cummulativeGrowthRate(List<Double> values) {
+    static double cummulativeGrowthRate(List<Double> values, int valuesPerRefPeriod) {
         var totalReturn = totalReturn(values);
 
         final double nTimePeriods = values.size() - 1;
-        return Math.pow(totalReturn, 1.0 / nTimePeriods) - 1.0;
+        return Math.pow(totalReturn, valuesPerRefPeriod / nTimePeriods) - 1.0;
+    }
+    
+    static double cummulativeGrowthRate(List<Double> values) {
+        return cummulativeGrowthRate(values, 1);
     }
 
     static double totalReturn(List<Double> values) {
