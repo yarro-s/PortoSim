@@ -8,6 +8,10 @@ import java.util.stream.IntStream;
 
 public interface Metrics {
     
+    static double calmarRatio(List<Double> values, int valuesPerRefPeriod) {
+        return (Math.pow(average(toReturns(values)), valuesPerRefPeriod) - 1) / maxDrawdown(values);
+    }
+    
     static double marRatio(List<Double> values) {
         return cummulativeGrowthRate(values) / maxDrawdown(values);
     }
