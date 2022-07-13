@@ -7,7 +7,6 @@ package money.portosim;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -35,20 +34,30 @@ public class QuantifiableTest {
                         .toMap(Map.Entry::getKey, e -> e.getValue().get(key))))));
     }
     
-    @Test
-    public void rollingAverage() {      
-        var rollAvgVal_A = quoteSeries.get("A").rolling(2).apply(Metrics::average);
-        
-        Assert.assertEquals(rollAvgVal_A, List.of((20.0 + 25.5) / 2, (25.5 + 23.0) / 2,
-                (23.0 + 30.1) / 2));
-    }
     
     @Test
-    public void rollingCummulativeGrowthRate() {
-        var rollCGR_A = quoteSeries.get("A").rolling(2).apply(Metrics::cummulativeGrowthRate);
+    public void rollingWindowAverage() {
+        var ns = new NumericSeries();
         
-        var expRollCGR_A = List.of(25.5 / 20.0 - 1, 23.0 / 25.5 - 1, 30.1 / 23.0 - 1);
-        Assert.assertEquals(rollCGR_A, expRollCGR_A);
+        ns.put("2010-01-01", 100.0);
+        ns.put("2010-02-01", 120.0);
+        ns.put("2010-03-01", 90.0);
+        ns.put("2010-04-01", 15.5);
+        ns.put("2010-05-01", 32.0);
+        ns.put("2010-06-01", 60.0);
+        ns.put("2010-07-01", 75.0);
+
+        var nsAverage = ns.rolling(3).apply(Metrics::average);
+
+        var expAverage = new NumericSeries();
+        
+        expAverage.put("2010-03-01", (100.0 + 120.0 + 90.0) / 3);
+        expAverage.put("2010-04-01", (120.0 + 90.0 + 15.5) / 3);
+        expAverage.put("2010-05-01", (90.0 + 15.5 + 32.0) / 3);
+        expAverage.put("2010-06-01", (15.5 + 32.0 + 60.0) / 3);
+        expAverage.put("2010-07-01", (32.0 + 60.0 + 75.0) / 3);
+        
+        Assert.assertEquals(nsAverage, expAverage);
     }
     
     @Test

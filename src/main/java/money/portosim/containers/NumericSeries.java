@@ -6,6 +6,7 @@ package money.portosim.containers;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.NavigableMap;
 import money.portosim.containers.core.AlgebraicMap;
 import money.portosim.containers.core.Series;
 import money.portosim.Quantifiable;
@@ -15,8 +16,13 @@ import money.portosim.Quantifiable;
  * @author yarro
  */
 public class NumericSeries extends Series<Double> 
-        implements AlgebraicMap<Date, Double>, Quantifiable {
-         
+        implements AlgebraicMap<Date, Double>, Quantifiable<Date> {
+
+    @Override
+    public NavigableMap<Date, Double> getNavigableMap() {
+        return this;
+    }
+    
     public NumericSeries() { 
         super();
     }
@@ -27,6 +33,7 @@ public class NumericSeries extends Series<Double>
 
     @Override
     public Double add(Double arg1, Double arg2) {
+        
         return arg1 + arg2;
     }
 

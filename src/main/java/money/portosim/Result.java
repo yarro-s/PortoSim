@@ -4,15 +4,15 @@ import java.util.*;
 import money.portosim.containers.NumericSeries;
 import money.portosim.containers.core.Series;
 
-public class Result implements Quantifiable {
+public class Result implements Quantifiable<Date> {
     private final Map<Date, Portfolio> portfolioHistory;
-    private final Map<Date, Double> valueHistory;
-    
-    @Override
-    public Collection<Double> values() {
-        return valueHistory.values();
-    }
+    private final NavigableMap<Date, Double> valueHistory;
 
+    @Override
+    public NavigableMap<Date, Double> getNavigableMap() {
+        return valueHistory;
+    }
+    
     Result() {
         this.portfolioHistory = new Series<>();
         this.valueHistory = new NumericSeries();
