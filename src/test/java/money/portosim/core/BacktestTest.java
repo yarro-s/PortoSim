@@ -1,7 +1,6 @@
 package money.portosim.core;
 
 import java.time.temporal.ChronoUnit;
-import money.portosim.Backtest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import money.portosim.containers.NumericMap;
@@ -12,6 +11,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import money.portosim.Backtest;
 import money.portosim.Metrics;
 import money.portosim.helpers.SpecifiedAllocation;
 import money.portosim.helpers.SpecifiedMultiAllocation;
@@ -35,7 +35,7 @@ public class BacktestTest {
         var strategy = new TimedStrategy(ChronoUnit.YEARS);
         strategy.chainTo(new FixedAllocation(Map.of("SP500", 0.7, "GOLD", 0.3))); 
         
-        var backtest = new Backtest(strategy, prices);
+        var backtest = Backtest.withStrategy(strategy).setPrices(prices);
 
         backtest.run();
 
@@ -58,7 +58,7 @@ public class BacktestTest {
             timePoints[1], Map.of("SP500", 957.538, "GOLD", 977.282),
             timePoints[2], Map.of("SP500", 1141.291, "GOLD", 1169.839));
         
-        var backtest = new Backtest(strategy, prices);
+        var backtest = Backtest.withStrategy(strategy).setPrices(prices);
 
         backtest.run();
 
@@ -81,7 +81,7 @@ public class BacktestTest {
             timePoints[1], Map.of("SP500", 957.538),
             timePoints[2], Map.of("SP500", 1141.291));
         
-        var backtest = new Backtest(strategy, prices);
+        var backtest = Backtest.withStrategy(strategy).setPrices(prices);
 
         backtest.run();
 
@@ -121,8 +121,8 @@ public class BacktestTest {
         
         var timedAlloc = new TimedStrategy(ChronoUnit.YEARS);
         timedAlloc.chainTo(multiAlloc); 
-        
-        var backtest = new Backtest(timedAlloc, prices);
+                
+        var backtest = Backtest.withStrategy(timedAlloc).setPrices(prices);
 
         backtest.run();
         
@@ -173,7 +173,7 @@ public class BacktestTest {
         var timedAlloc = new TimedStrategy(ChronoUnit.YEARS);
         timedAlloc.chainTo(s); 
         
-        var backtest = new Backtest(timedAlloc, prices);
+        var backtest = Backtest.withStrategy(timedAlloc).setPrices(prices);
 
         backtest.run();
         
@@ -215,8 +215,8 @@ public class BacktestTest {
 
         var assetAmounts = new NumericMap<>(Map.of("A", 24.0));
 
-        var constAlloc = new ConstantAllocation(assetAmounts);
-        var backtest = new Backtest(constAlloc, prices);
+        var constAlloc = new ConstantAllocation(assetAmounts);     
+        var backtest = Backtest.withStrategy(constAlloc).setPrices(prices);
 
         backtest.run();
 
@@ -247,8 +247,8 @@ public class BacktestTest {
 
         NumericMap<String> assetAmounts = new NumericMap<>(Map.of("A", 10.0, "B", 25.0));
 
-        var constAlloc = new ConstantAllocation(assetAmounts);
-        var backtest = new Backtest(constAlloc, prices);
+        var constAlloc = new ConstantAllocation(assetAmounts);    
+        var backtest = Backtest.withStrategy(constAlloc).setPrices(prices);
 
         backtest.run();
 

@@ -1,31 +1,57 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
 package money.portosim;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
-import java.util.TreeMap;
 
-public class Backtest {
-    private final Strategy strategy;
-    private final Map<Date, Map<String, Double>> priceSeries;
-    private final Result result = new Result();
-
-    public Backtest(Strategy strategy, Map<Date, Map<String, Double>> priceSeries) {
-        this.strategy = strategy;
-        this.priceSeries = priceSeries;
+/**
+ *
+ * @author yarro
+ */
+public interface Backtest {
+    
+    static Backtest create() {
+        return new BacktestBuilder();
     }
-
-    public Result run() {
-        new TreeMap<>(priceSeries).entrySet().stream().forEach(currentPrices -> {
-            var date = currentPrices.getKey();
-            var prices = currentPrices.getValue();
-
-            var portfolio = strategy.makePortfolio(date, prices);
-            result.update(date, prices, portfolio);
-        });
-        return getResult();
+    
+    static Backtest withStrategy(Strategy strategy) {
+        return new BacktestBuilder(strategy);
     }
-
-    public Result getResult() {
-        return result;
+    
+    static Backtest forPrices(Map<Date, Map<String, Double>> prices) {
+        return new BacktestBuilder(prices);
     }
+    
+    static Backtest rebalanceEvery(ChronoUnit rebalancePeriod) {
+        return new BacktestBuilder(rebalancePeriod);
+    }
+    
+    default Result run(Strategy strategy) {
+        setStrategy(strategy);
+        return run();
+    }
+    
+    default Result run(Map<Date, Map<String, Double>> prices) {
+        setPrices(prices);
+        return run();
+    }
+    
+    default Result run(ChronoUnit rebalancePeriod) {
+        setRebalancePeriod(rebalancePeriod);
+        return run();
+    }
+    
+    Backtest setPrices(Map<Date, Map<String, Double>> prices);
+    
+    Backtest setRebalancePeriod(ChronoUnit rebalancePeriod);
+    
+    Backtest setStrategy(Strategy strategy);
+    
+    Result getResult();
+    
+    Result run();
 }

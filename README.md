@@ -18,7 +18,7 @@ var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
 
 Build a backtest with a rebalancing period of one year
 ```java
-var result = new BacktestBuilder(myStrategy)
+var result = Backtest.withStrategy(myStrategy)
                 .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
                 .run(prices);    // test on the historic prices
 ```

@@ -13,10 +13,10 @@ import money.portosim.strategies.TimedStrategy;
  *
  * @author yarro
  */
-public class BacktestBuilder {
+class BacktestBuilder implements Backtest {
     private Strategy strategy;
     private TimedStrategy timedStrategy; 
-    private Backtest backtest;
+    private BacktestRun backtest;
     private Map<Date, Map<String, Double>> prices;
 
     public BacktestBuilder() { }
@@ -32,48 +32,40 @@ public class BacktestBuilder {
     public BacktestBuilder(ChronoUnit rebalancePeriod) {
         setRebalancePeriod(rebalancePeriod);
     }
-    
-    public Result run(Strategy strategy) {
-        setStrategy(strategy);
-        return run();
-    }
-    
-    public Result run(Map<Date, Map<String, Double>> prices) {
-        setPrices(prices);
-        return run();
-    }
-    
-    public Result run(ChronoUnit rebalancePeriod) {
-        setRebalancePeriod(rebalancePeriod);
-        return run();
-    }
-    
+     
+    @Override
     public Result run() {
         backtest = getStrategy() == null || prices == null 
-                ? null : new Backtest(getStrategy(), prices);
+                ? null : new BacktestRun(getStrategy(), prices);
         return backtest.run();
     }
     
-    public BacktestBuilder setPrices(Map<Date, Map<String, Double>> prices) {
+    @Override
+    public Backtest setPrices(Map<Date, Map<String, Double>> prices) {
         this.prices = prices;
         return this;
     }
     
-    public BacktestBuilder setRebalancePeriod(ChronoUnit rebalancePeriod) {
+    @Override
+    public Backtest setRebalancePeriod(ChronoUnit rebalancePeriod) {
         timedStrategy = new TimedStrategy(rebalancePeriod);
         return this;
     }
     
-    public BacktestBuilder setStrategy(Strategy strategy) {
+    @Override
+    public Backtest setStrategy(Strategy strategy) {
         this.strategy = strategy;
         return this;
     }
 
-    public Strategy getStrategy() {
+    private Strategy getStrategy() {
         return timedStrategy == null ? strategy : timedStrategy.chainTo(strategy);
     }
 
-    public Backtest getBacktest() {
-        return backtest;
+    @Override
+    public Result getResult() {
+        return backtest.getResult();
     }
+
+    
 }

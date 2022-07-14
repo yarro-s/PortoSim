@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import money.portosim.Backtest;
-import money.portosim.BacktestBuilder;
 import money.portosim.Metrics;
 import money.portosim.containers.sources.CSVPriceSource;
 import money.portosim.strategies.FixedAllocation;
@@ -33,9 +32,9 @@ public class ReadMeTest {
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
         
         // Build a backtest
-        var result = new BacktestBuilder(myStrategy)
+        var result = Backtest.withStrategy(myStrategy)
                 .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
-                .run(prices);    // test on the historic prices
+                .run(prices);    // test forPrices the historic prices
         
         Assert.assertEquals(result.apply(Metrics::totalReturn), 1.2026, 0.00001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
@@ -52,8 +51,8 @@ public class ReadMeTest {
         // Chain the strategies so that the fixed allocation is rebalanced every year
         var rebalancedStrategy = new TimedStrategy(ChronoUnit.YEARS).chainTo(fixedAllocation); 
         
-        // Create a new backtest with the strategy and the price data
-        var backtest = new Backtest(rebalancedStrategy, prices);
+        // Create a new backtest forPrices the strategy and the price data
+        var backtest = Backtest.withStrategy(rebalancedStrategy).setPrices(prices);
 
         // Run the backtest
         var result = backtest.run();

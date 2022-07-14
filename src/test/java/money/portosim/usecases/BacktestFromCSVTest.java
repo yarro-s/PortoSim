@@ -28,8 +28,8 @@ public class BacktestFromCSVTest {
 
         var asset = new NumericMap<String>();
         asset.put("SP500TR", 1.0);
-
-        var backtest = new Backtest(new ConstantAllocation(asset), prices);
+        
+        var backtest = Backtest.withStrategy(new ConstantAllocation(asset)).setPrices(prices);
 
         backtest.run();
 

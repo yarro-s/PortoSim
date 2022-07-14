@@ -7,7 +7,7 @@ package money.portosim.core;
 import java.io.FileReader;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
-import money.portosim.BacktestBuilder;
+import money.portosim.Backtest;
 import money.portosim.Metrics;
 import money.portosim.containers.sources.CSVPriceSource;
 import money.portosim.strategies.FixedAllocation;
@@ -32,21 +32,21 @@ public class BacktestBuilderTest {
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
         
-        var resStratInitRunPrices = new BacktestBuilder(myStrategy)
+        var resStratInitRunPrices = Backtest.withStrategy(myStrategy)
                 .setRebalancePeriod(ChronoUnit.YEARS)
                 .run(prices);
         
         Assert.assertEquals(resStratInitRunPrices.apply(Metrics::totalReturn), 1.2026, 0.0001);
         Assert.assertEquals(resStratInitRunPrices.getPortfolioHistory().size(), prices.size());
         
-        var resPricesInitRunStrategy = new BacktestBuilder(prices)
+        var resPricesInitRunStrategy = Backtest.forPrices(prices)
                 .setRebalancePeriod(ChronoUnit.YEARS)
                 .run(myStrategy);
         
         Assert.assertEquals(resPricesInitRunStrategy.apply(Metrics::totalReturn), 1.2026, 0.0001);
         Assert.assertEquals(resPricesInitRunStrategy.getPortfolioHistory().size(), prices.size());  
         
-        var resRebalanceInitRunPrices = new BacktestBuilder(ChronoUnit.YEARS)
+        var resRebalanceInitRunPrices = Backtest.rebalanceEvery(ChronoUnit.YEARS)
                 .setStrategy(myStrategy)
                 .run(prices);
         
@@ -62,7 +62,7 @@ public class BacktestBuilderTest {
         // Define a constant allocation portfolio
         var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
         
-        var result = new BacktestBuilder()
+        var result = Backtest.create()
                 .setStrategy(myStrategy)
                 .setRebalancePeriod(ChronoUnit.YEARS)
                 .setPrices(prices)
