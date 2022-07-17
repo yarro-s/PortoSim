@@ -29,12 +29,12 @@ public class ReadMeTest {
         var prices = new CSVPriceSource(new FileReader(sp500GoldMonthlyCSV));
         
         // Define a constant allocation portfolio
-        var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
+        var fixedAlloc = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
         
         // Build a backtest
-        var result = Backtest.withStrategy(myStrategy)
+        var result = Backtest.withStrategy(fixedAlloc)
                 .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
-                .run(prices);    // test forPrices the historic prices
+                .run(prices);   // test on the historic prices
         
         Assert.assertEquals(result.apply(Metrics::totalReturn), 1.2026, 0.00001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());

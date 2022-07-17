@@ -13,14 +13,14 @@ var prices = new CSVPriceSource(new FileReader(sp500GoldMonthlyCSV));
 
 Then define a fixed allocation 70% stocks / 30% gold portfolio
 ```java
-var myStrategy = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
+var fixedAlloc = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
 ```
 
 Build a backtest with a rebalancing period of one year
 ```java
-var result = Backtest.withStrategy(myStrategy)
+var result = Backtest.withStrategy(fixedAlloc)
                 .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
-                .run(prices);    // test on the historic prices
+                .run(prices);   // test on the historic prices
 ```
 
 Get the total return (120.26%)
