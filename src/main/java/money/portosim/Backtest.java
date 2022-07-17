@@ -51,6 +51,14 @@ public interface Backtest {
     
     Backtest setStrategy(Strategy strategy);
     
+    Backtest setStart(Date startDate);
+    
+    Backtest setEnd(Date endDate);
+    
+    default Backtest setPeriod(Date startDate, Date endDate) {
+        return setStart(startDate).setEnd(endDate);
+    }
+    
     Result getResult();
     
     Result run();

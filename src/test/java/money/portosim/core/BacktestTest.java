@@ -20,6 +20,43 @@ import money.portosim.strategies.TimedStrategy;
 
 public class BacktestTest {
     
+    @Test 
+    public void backtestPeriodSpecified() throws Exception {    
+        final Date[] timePoints = new Date[]{
+            new GregorianCalendar(2015, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2016, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2017, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2018, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2020, Calendar.JANUARY, 31).getTime(),
+            new GregorianCalendar(2021, Calendar.JANUARY, 31).getTime()
+        };
+        var prices = Map.of(
+            timePoints[0], Map.of("SP500", 10.0),
+            timePoints[1], Map.of("SP500", 12.0),
+            timePoints[2], Map.of("SP500", 1000.0),
+            timePoints[3], Map.of("SP500", 2500.0),
+            timePoints[4], Map.of("SP500", 10000.0),
+            timePoints[5], Map.of("SP500", 2.0),
+            timePoints[6], Map.of("SP500", 2.5));
+        
+        var startDate = new GregorianCalendar(2017, Calendar.JANUARY, 31).getTime();
+        var endDate = new GregorianCalendar(2019, Calendar.JANUARY, 31).getTime();
+        
+        var backtestStartSet = Backtest.withStrategy(new ConstantAllocation(Map.of("SP500", 1.0)))
+                .setPrices(prices)
+                .setPeriod(startDate, endDate);
+        backtestStartSet.run();
+
+        var result = backtestStartSet.getResult();
+        var pfHist = backtestStartSet.getResult().getPortfolioHistory();
+        
+        var expTotalReturn = 10000.0 / 1000.0;
+
+        Assert.assertEquals(result.apply(Metrics::totalReturn), expTotalReturn, 10e-6);
+        Assert.assertEquals(pfHist.size(), 3);
+    }
+    
     @Test
     public void sp500GoldScaledTimedAllocTest() {       
         final Date[] timePoints = new Date[]{
