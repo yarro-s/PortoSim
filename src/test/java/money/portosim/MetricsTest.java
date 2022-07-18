@@ -24,16 +24,37 @@ import org.testng.annotations.Test;
  */
 public class MetricsTest {
     private final String csvDataSourcePath = "src/test/resources/simple.csv"; 
+    private final String spyPlusGold_10yr = "src/test/resources/spy_gld_2010_2020.csv";
+    
     private Map<String, List<Double>> quoteSeries; 
+    private Map<String, List<Double>> spyGldSeries; 
     
     @BeforeClass
     public void setup() throws FileNotFoundException, IOException {
-        var quoteData = new CSVPriceSource(new FileReader(csvDataSourcePath));
-        var quoteKeySet = quoteData.entrySet().iterator().next().getValue().keySet();
+        var simpleData = new CSVPriceSource(new FileReader(csvDataSourcePath)).entrySet();
+        var simpleKeySet = simpleData.iterator().next().getValue().keySet();
 
-        quoteSeries = quoteKeySet.stream().collect(Collectors.toMap(Function.identity(),
-                key -> new ArrayList<>(new NumericSeries(quoteData.entrySet().stream().collect(
+        quoteSeries = simpleKeySet.stream().collect(Collectors.toMap(Function.identity(),
+                key -> new ArrayList<>(new NumericSeries(simpleData.stream().collect(
                         Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(key)))).values())));
+                
+        var spyGldData = new CSVPriceSource(new FileReader(spyPlusGold_10yr)).entrySet();
+        var spyGldSet = spyGldData.iterator().next().getValue().keySet();
+
+        spyGldSeries = spyGldSet.stream().collect(Collectors.toMap(Function.identity(),
+                key -> new ArrayList<>(new NumericSeries(spyGldData.stream().collect(
+                        Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(key)))).values())));
+    }
+    
+    
+    @Test
+    public void sharpeRatio() {
+        var spy10Yr = spyGldSeries.get("SPY");
+        
+        var cgr = Metrics.cummulativeGrowthRate(spy10Yr, 365);
+        var actualSharpe = Metrics.sharpeRatio(spy10Yr, cgr);
+        
+//        Assert.assertEquals(actualSharpe, 0.0);
     }
     
     @Test
@@ -53,8 +74,8 @@ public class MetricsTest {
         var actualMaxDDMiddle = Metrics.maxDrawdown(someDrawdownMiddle);
         var actualMaxDDEdges = Metrics.maxDrawdown(someDrawdownEdges);
         
-        Assert.assertEquals(actualMaxDDMiddle, 5.2 - 20.3);
-        Assert.assertEquals(actualMaxDDEdges, 2.5 - 20.5);
+        Assert.assertEquals(actualMaxDDMiddle, (5.2 - 20.3) / 20.3);
+        Assert.assertEquals(actualMaxDDEdges, (2.5 - 20.5) / 20.5);
     }
     
     @Test

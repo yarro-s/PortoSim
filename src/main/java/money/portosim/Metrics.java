@@ -18,7 +18,7 @@ public interface Metrics {
     
     static double maxDrawdown(List<Double> values) {
         BiFunction<List<Double>, Double, DoubleStream> listMinusVal = (l, x) -> 
-                l.stream().mapToDouble(v -> v - x);
+                l.stream().mapToDouble(v -> (v - x) / x);
         
         var n = values.size();      
         return IntStream.range(0, n).boxed().flatMapToDouble(i -> {
