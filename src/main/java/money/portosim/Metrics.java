@@ -32,6 +32,10 @@ public interface Metrics {
         return (cummulativeGrowthRate(values) - riskFreeRate) / stdDeviation(toReturns(values));
     }
     
+    static List<Double> excessReturns(List<Double> values, double baseRate) {
+        return toReturns(values).stream().map(v -> v - baseRate).toList();
+    }
+    
     static List<Double> toReturns(List<Double> values) {
         return IntStream.range(1, values.size()).boxed().map(i -> 
                 cummulativeGrowthRate(List.of(values.get(i - 1), values.get(i)))

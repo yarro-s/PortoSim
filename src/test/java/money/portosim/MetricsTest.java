@@ -79,12 +79,23 @@ public class MetricsTest {
     }
     
     @Test
+    public void excessReturns() {
+        var valsA = quoteSeries.get("A");
+        var baseRate = 0.15;
+        
+        var expExcessReturns = List.of(25.5 / 20.0 - 1, 23.0 / 25.5 - 1, 30.1 / 23.0 - 1)
+                .stream().map(v -> v - baseRate).toList();
+        
+        Assert.assertEquals(Metrics.excessReturns(valsA, baseRate), expExcessReturns);
+    }
+    
+    @Test
     public void toReturns() {
-        var returnsA = quoteSeries.get("A");
+        var returnsA = Metrics.toReturns(quoteSeries.get("A"));
         
         var expReturns = List.of(25.5 / 20.0 - 1, 23.0 / 25.5 - 1, 30.1 / 23.0 - 1);
         
-        Assert.assertEquals(Metrics.toReturns(returnsA), expReturns);
+        Assert.assertEquals(returnsA, expReturns);
     }
     
     @Test
