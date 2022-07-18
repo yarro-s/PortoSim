@@ -29,7 +29,8 @@ public interface Metrics {
     }
     
     static double sharpeRatio(List<Double> values, double riskFreeRate) {
-        return (cummulativeGrowthRate(values) - riskFreeRate) / stdDeviation(toReturns(values));
+        return (cummulativeGrowthRate(values) - riskFreeRate) 
+                / stdDeviation(excessReturns(values, riskFreeRate));
     }
     
     static List<Double> excessReturns(List<Double> values, double baseRate) {
