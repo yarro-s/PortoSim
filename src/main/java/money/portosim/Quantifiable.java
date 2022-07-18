@@ -24,7 +24,7 @@ public interface Quantifiable<K> {
         return f.apply(new ArrayList<>(getNavigableMap().values()));
     }
     
-    default <V, K> Function<Function<List<Double>, V>, ? extends Map<K, V>> rolling(int n) {
+    default <V> Function<Function<List<Double>, V>, ? extends Map<K, V>> rolling(int n) {
         Function<Integer, K> keyMapper = i -> (K) (getNavigableMap().navigableKeySet().toArray()[i]);
                 
         var valuesList = new ArrayList<>(getNavigableMap().values());
