@@ -137,6 +137,17 @@ public class MetricsTest {
     }
     
     @Test
+    public void seriesCummulativeGrowthRateAnnual() {
+        var spySeries = spyGldSeries.get("SPY");
+        var valuesPerYear = spySeries.size() / 10.0;
+        
+        var cagrActual = Metrics.cummulativeGrowthRate(spySeries, valuesPerYear);
+        var cagrExpected = Math.pow(321.9 / 113.3, valuesPerYear / spySeries.size()) - 1;
+        
+        Assert.assertEquals(cagrActual, cagrExpected, 1e-4);
+    }
+    
+    @Test
     public void seriesCummulativeGrowthRateMultiperiod() {
         var biAnnualCGRA = Metrics.cummulativeGrowthRate(quoteSeries.get("A"), 2);
         

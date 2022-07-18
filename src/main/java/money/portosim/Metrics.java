@@ -28,13 +28,28 @@ public interface Metrics {
         }).filter(v -> v < 0).min().orElse(0.0);
     }
     
+    static double sharpeRatio(List<Double> values, double riskFreeRate, int valuesPerRefPeriod) {
+        return (cummulativeGrowthRate(values, valuesPerRefPeriod) - riskFreeRate) 
+                / stdDeviation(excessReturns(values, riskFreeRate, valuesPerRefPeriod));
+    }
+    
     static double sharpeRatio(List<Double> values, double riskFreeRate) {
         return (cummulativeGrowthRate(values) - riskFreeRate) 
                 / stdDeviation(excessReturns(values, riskFreeRate));
     }
     
+    static List<Double> excessReturns(List<Double> values, double baseRate, int valuesPerRefPeriod) {
+        return toReturns(values, valuesPerRefPeriod).stream().map(v -> v - baseRate).toList();
+    }
+    
     static List<Double> excessReturns(List<Double> values, double baseRate) {
         return toReturns(values).stream().map(v -> v - baseRate).toList();
+    }
+    
+    static List<Double> toReturns(List<Double> values, int valuesPerRefPeriod) {
+        return IntStream.range(1, values.size()).boxed().map(i -> 
+                cummulativeGrowthRate(List.of(values.get(i - 1), values.get(i)), valuesPerRefPeriod)
+        ).toList();
     }
     
     static List<Double> toReturns(List<Double> values) {
@@ -42,7 +57,7 @@ public interface Metrics {
                 cummulativeGrowthRate(List.of(values.get(i - 1), values.get(i)))
         ).toList();
     }
-    
+     
     static double stdDeviation(Collection<Double> values) {
         return Math.sqrt(variance(values));
     }
@@ -64,11 +79,12 @@ public interface Metrics {
         return values.stream().mapToDouble(Double::doubleValue).average().orElseThrow();
     }
 
-    static double cummulativeGrowthRate(List<Double> values, int valuesPerRefPeriod) {
+    static double cummulativeGrowthRate(List<Double> values, double valuesPerRefPeriod) {
         var totalReturn = totalReturn(values);
 
-        final double nTimePeriods = values.size() - 1;
-        return Math.pow(totalReturn, valuesPerRefPeriod / nTimePeriods) - 1.0;
+        final double nValues = values.size() - 1;
+        final double nPeriods = nValues / valuesPerRefPeriod;
+        return Math.pow(totalReturn, 1 / nPeriods) - 1.0;
     }
     
     static double cummulativeGrowthRate(List<Double> values) {
