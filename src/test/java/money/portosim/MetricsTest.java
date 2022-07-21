@@ -51,10 +51,15 @@ public class MetricsTest {
     public void sharpeRatio() {
         var spy10Yr = spyGldSeries.get("SPY");
         
-        var cgr = Metrics.cummulativeGrowthRate(spy10Yr, 365);
-        var actualSharpe = Metrics.sharpeRatio(spy10Yr, cgr);
+        var riskFreeRate = Metrics.cummulativeGrowthRate(spy10Yr, 365);
+        var actualSharpe = Metrics.sharpeRatio(spy10Yr, riskFreeRate, 365);
         
-//        Assert.assertEquals(actualSharpe, 0.0);
+        Assert.assertEquals(actualSharpe, 0.0);        
+        
+        riskFreeRate = 0.5 / 100;
+        actualSharpe = Metrics.sharpeRatio(spy10Yr, riskFreeRate, 365);
+        
+        Assert.assertEquals(actualSharpe, 1.54, 0.01);
     }
     
     @Test
@@ -87,6 +92,35 @@ public class MetricsTest {
                 .stream().map(v -> v - baseRate).toList();
         
         Assert.assertEquals(Metrics.excessReturns(valsA, baseRate), expExcessReturns);
+    }
+    
+    @Test
+    public void toReturnsOverPeriod() {
+        var seriesNOdd = List.of(25.0, 12.5, 30.2, 32.4, 45.6);
+        
+        var refPeriod = 2;      
+        var expReturns = List.of(12.5 / 25.0 - 1, 30.2 / 12.5 - 1, 
+                32.4 / 30.2 - 1, 45.6 / 32.4 - 1);
+        
+        Assert.assertEquals(Metrics.toReturns(seriesNOdd, refPeriod), expReturns);
+        
+        refPeriod = 3;
+        expReturns = List.of(30.2 / 25.0 - 1, 32.4 / 12.5 - 1, 45.6 / 30.2 - 1);
+        
+        Assert.assertEquals(Metrics.toReturns(seriesNOdd, refPeriod), expReturns);    
+        
+        var seriesNEven = List.of(25.0, 12.5, 30.2, 32.4, 45.6, 23.5);
+        refPeriod = 2;      
+        expReturns = List.of(12.5 / 25.0 - 1, 30.2 / 12.5 - 1, 
+                32.4 / 30.2 - 1, 45.6 / 32.4 - 1, 23.5 / 45.6 - 1);
+        
+        Assert.assertEquals(Metrics.toReturns(seriesNEven, refPeriod), expReturns);
+        
+        refPeriod = 3;
+        expReturns = List.of(30.2 / 25.0 - 1, 32.4 / 12.5 - 1, 45.6 / 30.2 - 1, 
+                23.5 / 32.4 - 1);
+        
+        Assert.assertEquals(Metrics.toReturns(seriesNEven, refPeriod), expReturns);
     }
     
     @Test

@@ -28,14 +28,13 @@ public interface Metrics {
         }).filter(v -> v < 0).min().orElse(0.0);
     }
     
-    static double sharpeRatio(List<Double> values, double riskFreeRate, int valuesPerRefPeriod) {
-        return (cummulativeGrowthRate(values, valuesPerRefPeriod) - riskFreeRate) 
-                / stdDeviation(excessReturns(values, riskFreeRate, valuesPerRefPeriod));
+    static double sharpeRatio(List<Double> values, double meanRiskFreeRate, int valuesPerRefPeriod) {
+        return (cummulativeGrowthRate(values, valuesPerRefPeriod) - meanRiskFreeRate) 
+                / stdDeviation(excessReturns(values, meanRiskFreeRate, valuesPerRefPeriod));
     }
     
-    static double sharpeRatio(List<Double> values, double riskFreeRate) {
-        return (cummulativeGrowthRate(values) - riskFreeRate) 
-                / stdDeviation(excessReturns(values, riskFreeRate));
+    static double sharpeRatio(List<Double> values, double meanRiskFreeRate) {
+        return sharpeRatio(values, meanRiskFreeRate, 2);
     }
     
     static List<Double> excessReturns(List<Double> values, double baseRate, int valuesPerRefPeriod) {
@@ -43,19 +42,16 @@ public interface Metrics {
     }
     
     static List<Double> excessReturns(List<Double> values, double baseRate) {
-        return toReturns(values).stream().map(v -> v - baseRate).toList();
+        return excessReturns(values, baseRate, 2);
     }
     
     static List<Double> toReturns(List<Double> values, int valuesPerRefPeriod) {
-        return IntStream.range(1, values.size()).boxed().map(i -> 
-                cummulativeGrowthRate(List.of(values.get(i - 1), values.get(i)), valuesPerRefPeriod)
-        ).toList();
+        return IntStream.range(0, values.size() - valuesPerRefPeriod + 1).boxed().map(i -> 
+            values.get(i + valuesPerRefPeriod - 1) / values.get(i) - 1).toList();
     }
     
     static List<Double> toReturns(List<Double> values) {
-        return IntStream.range(1, values.size()).boxed().map(i -> 
-                cummulativeGrowthRate(List.of(values.get(i - 1), values.get(i)))
-        ).toList();
+        return toReturns(values, 2);
     }
      
     static double stdDeviation(Collection<Double> values) {
