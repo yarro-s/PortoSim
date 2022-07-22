@@ -47,8 +47,7 @@ public class QuantifiableTest {
         ns.put("2010-06-01", 60.0);
         ns.put("2010-07-01", 75.0);
 
-        var nsAverage = ns.<Double>rolling(3).apply(Metrics::average)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        var nsAverage = ns.rollingMap(3).apply(Metrics::average);
 
         var expAverage = new NumericSeries();
         

@@ -40,13 +40,11 @@ public class ReadMeTest {
         double totalReturn = result.apply(Metrics::totalReturn);
         double cagr = result.apply(vals -> Metrics.cummulativeGrowthRate(vals, 365));
         
-        var volatility90Day = result.<Double>rolling(90).apply(Metrics::volatility)
-                .mapToDouble(Map.Entry::getValue);
+        var volatility90Day = result.rollingDouble(90).apply(Metrics::volatility);
         double max3MVolatility = volatility90Day.max().orElse(0.0);
         
-        var sharpeYearly = result.<Double>rolling(365).apply(vals -> 
-                Metrics.sharpeRatio(vals, 0.5 / 100))
-                .mapToDouble(Map.Entry::getValue);
+        var sharpeYearly = result.rollingDouble(365).apply(vals -> 
+                Metrics.sharpeRatio(vals, 0.5 / 100));
         double minSharpeYearly = sharpeYearly.min().orElse(0.0);
         
         Assert.assertEquals(totalReturn, 2.326, 0.001);

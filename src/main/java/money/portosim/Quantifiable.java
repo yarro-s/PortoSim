@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -34,5 +36,14 @@ public interface Quantifiable<K> {
                     var key = window.get(window.size() - 1).getKey();
                     return Map.entry(key, f.apply(vals));
                 });
+    }
+    
+    default Function<Function<List<Double>, Double>, DoubleStream> rollingDouble(int n) {
+        return (f) -> this.<Double>rolling(n).apply(f).mapToDouble(Map.Entry::getValue);
+    }
+    
+    default <V> Function<Function<List<Double>, V>, Map<K, V>> rollingMap(int n) {
+        return (f) -> this.<V>rolling(n).apply(f).collect(Collectors
+                .toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }
