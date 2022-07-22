@@ -21,11 +21,15 @@ public interface Metrics {
                 l.stream().mapToDouble(v -> (v - x) / x);
         
         var n = values.size();      
-        return IntStream.range(0, n).boxed().flatMapToDouble(i -> {
+        var drawdowns = IntStream.range(0, n).boxed().flatMapToDouble(i -> {
             var currentValue = values.get(i);
             var remainingValues = values.subList(i + 1, n);
             return listMinusVal.apply(remainingValues, currentValue);
-        }).filter(v -> v < 0).min().orElse(0.0);
+        }).filter(v -> v < 0);
+        
+        var maxDrawdown = drawdowns.min().orElse(0.0);
+        
+        return maxDrawdown;
     }
     
     static double sharpeRatio(List<Double> values, double meanRiskFreeRate, int valuesPerRefPeriod) {
