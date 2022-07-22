@@ -45,21 +45,20 @@ public class MetricsTest {
                 key -> new ArrayList<>(new NumericSeries(spyGldData.stream().collect(
                         Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(key)))).values())));
     }
-    
-    
+       
     @Test
     public void sharpeRatio() {
         var spy10Yr = spyGldSeries.get("SPY");
         
-        var riskFreeRate = Metrics.cummulativeGrowthRate(spy10Yr, 365);
-        var actualSharpe = Metrics.sharpeRatio(spy10Yr, riskFreeRate, 365);
+        var meanRiskFreeRate = Metrics.cummulativeGrowthRate(spy10Yr, 365);
+        var actualSharpe = Metrics.sharpeRatio(spy10Yr, meanRiskFreeRate, 365);
         
         Assert.assertEquals(actualSharpe, 0.0);        
         
-        riskFreeRate = 0.5 / 100;
-        actualSharpe = Metrics.sharpeRatio(spy10Yr, riskFreeRate, 365);
+        meanRiskFreeRate = 5.5 / 100;
+        actualSharpe = Metrics.sharpeRatio(spy10Yr, meanRiskFreeRate, 365);
         
-        Assert.assertEquals(actualSharpe, 1.54, 0.01);
+        Assert.assertEquals(actualSharpe, 1.06, 0.01);
     }
     
     @Test
