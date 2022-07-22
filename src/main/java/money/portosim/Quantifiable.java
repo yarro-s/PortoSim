@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  *
@@ -23,16 +23,16 @@ public interface Quantifiable<K> {
     default <V> V apply(Function<List<Double>, V> f) {
         return f.apply(new ArrayList<>(getNavigableMap().values()));
     }
-    
-    default <V> Function<Function<List<Double>, V>, ? extends Map<K, V>> rolling(int n) {
-        Function<Integer, K> keyMapper = i -> (K) (getNavigableMap().navigableKeySet().toArray()[i]);
-                
-        var valuesList = new ArrayList<>(getNavigableMap().values());
-        Map<K, List<Double>> rolled = IntStream.rangeClosed(0, valuesList.size() - n).boxed()
-                .collect(Collectors.toMap(j -> keyMapper.apply(j + n - 1), 
-                        j -> valuesList.subList(j, j + n)));
-        
-        return (f) -> rolled.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, 
-                e -> f.apply(e.getValue())));
+       
+    default <V> Function<Function<List<Double>, V>, Stream<Map.Entry<K, V>>> rolling(int n) {
+        var entries = new ArrayList<>(getNavigableMap().entrySet());
+
+        return (f) -> IntStream.rangeClosed(0, entries.size() - n).boxed()
+                .map(i -> {
+                    var window = entries.subList(i, i + n);
+                    var vals = window.stream().map(Map.Entry::getValue).toList();
+                    var key = window.get(window.size() - 1).getKey();
+                    return Map.entry(key, f.apply(vals));
+                });
     }
 }
