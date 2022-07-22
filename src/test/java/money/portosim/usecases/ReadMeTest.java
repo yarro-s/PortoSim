@@ -22,6 +22,38 @@ import org.testng.annotations.Test;
 public class ReadMeTest {
     
     private final String sp500GoldMonthlyCSV = "src/test/resources/sp500_gold_3yr_monthly.csv";
+    private final String spyPlusGold_10yr = "src/test/resources/spy_gld_2010_2020.csv";
+    
+    @Test
+    public void sp500PlusGoldExtendedUseCases() throws Exception {
+        // Load prices from a CSV file
+        var prices = new CSVPriceSource(new FileReader(spyPlusGold_10yr));
+        
+        // Define a constant allocation portfolio
+        var fixedAlloc = new FixedAllocation(Map.of("SPY", 0.7, "GLD", 0.3));
+        
+        // Build the backtest
+        var result = Backtest.withStrategy(fixedAlloc)
+                .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
+                .run(prices);   // test on the historic prices
+        
+        double totalReturn = result.apply(Metrics::totalReturn);
+        double cagr = result.apply(vals -> Metrics.cummulativeGrowthRate(vals, 365));
+        
+        var volatility90Day = result.<Double>rolling(90).apply(Metrics::volatility)
+                .mapToDouble(Map.Entry::getValue);
+        double max3MVolatility = volatility90Day.max().orElse(0.0);
+        
+        var sharpeYearly = result.<Double>rolling(365).apply(vals -> 
+                Metrics.sharpeRatio(vals, 0.5 / 100))
+                .mapToDouble(Map.Entry::getValue);
+        double minSharpeYearly = sharpeYearly.min().orElse(0.0);
+        
+        Assert.assertEquals(totalReturn, 2.326, 0.001);
+        Assert.assertEquals(cagr, 0.1303, 0.0001);
+        Assert.assertEquals(max3MVolatility, 75.3545, 0.001);
+        Assert.assertEquals(minSharpeYearly, -1.16, 0.01);
+    }
     
     @Test
     public void sp500PlusGoldSimpleBuild() throws Exception {
@@ -31,7 +63,7 @@ public class ReadMeTest {
         // Define a constant allocation portfolio
         var fixedAlloc = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
         
-        // Build a backtest
+        // Build the backtest
         var result = Backtest.withStrategy(fixedAlloc)
                 .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
                 .run(prices);   // test on the historic prices
