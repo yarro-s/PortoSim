@@ -33,8 +33,8 @@ public interface Metrics {
     }
     
     static double sharpeRatio(List<Double> values, double meanRiskFreeRate, int valuesPerRefPeriod) {
-        return (cummulativeGrowthRate(values, valuesPerRefPeriod) - meanRiskFreeRate) 
-                / stdDeviation(excessReturns(values, meanRiskFreeRate, valuesPerRefPeriod));
+        var excReturns = excessReturns(values, meanRiskFreeRate, valuesPerRefPeriod);
+        return Math.sqrt(valuesPerRefPeriod) * average(excReturns) / stdDeviation(excReturns);
     }
     
     static double sharpeRatio(List<Double> values, double meanRiskFreeRate) {

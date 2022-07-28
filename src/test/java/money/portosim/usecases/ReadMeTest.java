@@ -46,7 +46,7 @@ public class ReadMeTest {
         Assert.assertEquals(totalReturn, 2.326, 0.001);
         Assert.assertEquals(cagr, 0.1303, 0.0001);
         Assert.assertEquals(max3MVolatility, 75.3545, 0.001);
-        Assert.assertEquals(minSharpeYearly, -1.16, 0.01);
+        Assert.assertEquals(minSharpeYearly, -1.777, 0.01);
     }
     
     @Test

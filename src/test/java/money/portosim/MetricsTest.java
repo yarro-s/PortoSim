@@ -41,20 +41,32 @@ public class MetricsTest {
                 key -> new ArrayList<>(new NumericSeries(spyGldData.stream().collect(
                         Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(key)))).values())));
     }
-       
+    
     @Test
-    public void sharpeRatio() {
+    public void sharpeRatioSynthetic() {
+        var assetPrice = List.of(90.0, 100.0, 120.0, 110.0, 90.0, 150.0, 130.0, 
+                128.0, 180.0, 270.0, 220.0, 210.0, 300.0);
+                
+        var meanRiskFreeRate = 2.0 / 100;
+        var actualSharpe = Metrics.sharpeRatio(assetPrice, meanRiskFreeRate, 4);
+        
+        Assert.assertEquals(actualSharpe, 1.7998, 0.0001);
+    }
+    
+    @Test
+    public void sharpeRatioReal() {
         var spy10Yr = spyGldSeries.get("SPY");
         
-        var meanRiskFreeRate = Metrics.cummulativeGrowthRate(spy10Yr, 365);
+        var meanRiskFreeRate = Metrics.toReturns(spy10Yr, 365).stream()
+                .mapToDouble(a->a).average().getAsDouble();
         var actualSharpe = Metrics.sharpeRatio(spy10Yr, meanRiskFreeRate, 365);
         
-        Assert.assertEquals(actualSharpe, 0.0);        
+        Assert.assertEquals(actualSharpe, 0.0, 0.001);        
         
-        meanRiskFreeRate = 5.5 / 100;
+        meanRiskFreeRate = 0.5 / 100;
         actualSharpe = Metrics.sharpeRatio(spy10Yr, meanRiskFreeRate, 365);
         
-        Assert.assertEquals(actualSharpe, 1.06, 0.01);
+        Assert.assertEquals(actualSharpe, 29.63, 0.01);
     }
     
     @Test
