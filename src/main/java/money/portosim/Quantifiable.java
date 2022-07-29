@@ -1,5 +1,6 @@
 package money.portosim;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public interface Quantifiable<K> {
         return f.apply(new ArrayList<>(getNavigableMap().values()));
     }
        
-    default <V> Function<Function<List<Double>, V>, Stream<Map.Entry<K, V>>> rolling(int n) {
+    default <V> Function<Function<List<Double>, V>, Stream<Map.Entry<K, V>>> rolling_depr(int n) {
         var entries = new ArrayList<>(getNavigableMap().entrySet());
 
         return (f) -> IntStream.rangeClosed(0, entries.size() - n).boxed()
@@ -35,11 +36,71 @@ public interface Quantifiable<K> {
     }
     
     default Function<Function<List<Double>, Double>, DoubleStream> rollingDouble(int n) {
-        return (f) -> this.<Double>rolling(n).apply(f).mapToDouble(Map.Entry::getValue);
+        return (f) -> this.<Double>rolling_depr(n).apply(f).mapToDouble(Map.Entry::getValue);
     }
     
     default <V> Function<Function<List<Double>, V>, Map<K, V>> rollingMap(int n) {
-        return (f) -> this.<V>rolling(n).apply(f).collect(Collectors
+        return (f) -> this.<V>rolling_depr(n).apply(f).collect(Collectors
                 .toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
+    
+    default double calmarRatio() {
+        return apply(vals -> Metrics.calmarRatio(vals, getValuesPerYear()));
+    }
+    
+    default double marRatio() {
+        return apply(vals -> Metrics.marRatio(vals, getValuesPerYear()));
+    }
+    
+    default double maxDrawdown() {
+        return apply(Metrics::maxDrawdown);
+    }
+    
+    default double sharpeRatio() {
+        return apply(vals -> Metrics.sharpeRatio(vals, getRiskFreeRate(), getValuesPerYear()));
+    }
+    
+    default List<Double> excessReturns() {
+        return apply(vals -> Metrics.excessReturns(vals, getRiskFreeRate(), getValuesPerYear()));
+    }
+    
+    default List<Double> toReturns() {
+        return apply(vals -> Metrics.toReturns(vals, getValuesPerYear()));
+    }
+     
+    default double stdDeviation() {
+        return apply(Metrics::stdDeviation);
+    }
+    
+    default double variance() {
+        return apply(Metrics::variance);
+    }
+
+    default double volatility() {
+        return apply(Metrics::volatility);
+    }
+
+    default double average() {
+        return apply(Metrics::average);
+    }
+    
+    default double cummulativeGrowthRate() {
+        return apply(vals -> Metrics.cummulativeGrowthRate(vals, getValuesPerYear()));
+    }
+
+    default double totalReturn() {
+        return apply(Metrics::totalReturn);
+    }
+
+    default int getValuesPerYear() {
+        return (int) (365 / getTimeFrame().getDuration().toDays());
+    }
+    
+    ChronoUnit getTimeFrame();
+    
+    Quantifiable<K> setTimeFrame(ChronoUnit timeFrame);
+    
+    double getRiskFreeRate();
+    
+    Quantifiable<K> setRiskFreeRate(double riskFreeRate);
 }

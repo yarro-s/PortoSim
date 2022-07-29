@@ -4,7 +4,6 @@ import java.io.FileReader;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import money.portosim.Backtest;
-import money.portosim.Metrics;
 import money.portosim.containers.sources.CSVPriceSource;
 import money.portosim.strategies.FixedAllocation;
 import org.testng.Assert;
@@ -32,21 +31,21 @@ public class BacktestBuilderTest {
                 .setRebalancePeriod(ChronoUnit.YEARS)
                 .run(prices);
         
-        Assert.assertEquals(resStratInitRunPrices.apply(Metrics::totalReturn), 1.2026, 0.0001);
+        Assert.assertEquals(resStratInitRunPrices.quant().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(resStratInitRunPrices.getPortfolioHistory().size(), prices.size());
         
         var resPricesInitRunStrategy = Backtest.forPrices(prices)
                 .setRebalancePeriod(ChronoUnit.YEARS)
                 .run(myStrategy);
         
-        Assert.assertEquals(resPricesInitRunStrategy.apply(Metrics::totalReturn), 1.2026, 0.0001);
+        Assert.assertEquals(resPricesInitRunStrategy.quant().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(resPricesInitRunStrategy.getPortfolioHistory().size(), prices.size());  
         
         var resRebalanceInitRunPrices = Backtest.rebalanceEvery(ChronoUnit.YEARS)
                 .setStrategy(myStrategy)
                 .run(prices);
         
-        Assert.assertEquals(resRebalanceInitRunPrices.apply(Metrics::totalReturn), 1.2026, 0.0001);
+        Assert.assertEquals(resRebalanceInitRunPrices.quant().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(resRebalanceInitRunPrices.getPortfolioHistory().size(), prices.size());
     }
     
@@ -64,7 +63,7 @@ public class BacktestBuilderTest {
                 .setPrices(prices)
                 .run();
         
-        Assert.assertEquals(result.apply(Metrics::totalReturn), 1.2026, 0.0001);
+        Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
     }
     

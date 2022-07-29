@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 import money.portosim.Backtest;
-import money.portosim.Metrics;
 import money.portosim.containers.NumericMap;
 import money.portosim.containers.sources.CSVPriceSource;
 import money.portosim.strategies.ConstantAllocation;
@@ -46,7 +45,7 @@ public class BacktestFromCSVTest {
                 .div(NumericMap.of(priceSlice.firstEntry().getValue()))
                 .getOrDefault(ticker, 0.0);
 
-        Assert.assertEquals(result.apply(Metrics::totalReturn), expTotalReturn, 10e-6);
+        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 10e-6);
         Assert.assertEquals(pfHist.size(), priceSlice.size());
     }
     
@@ -72,7 +71,7 @@ public class BacktestFromCSVTest {
                 .div(NumericMap.of(priceSlice.firstEntry().getValue()))
                 .getOrDefault(ticker, 0.0);
 
-        Assert.assertEquals(result.apply(Metrics::totalReturn), expTotalReturn, 10e-6);
+        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 10e-6);
         Assert.assertEquals(pfHist.size(), priceSlice.size());
     }
     
@@ -94,7 +93,7 @@ public class BacktestFromCSVTest {
                 .getValue()).div(NumericMap.of(new TreeMap<>(prices).firstEntry().getValue()))
                 .getOrDefault("SP500TR", 0.0);
 
-        Assert.assertEquals(result.apply(Metrics::totalReturn), expTotalReturn, 0.0001);
+        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 0.0001);
         Assert.assertEquals(pfHist.size(), prices.size());
     }
 }

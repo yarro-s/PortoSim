@@ -12,7 +12,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import money.portosim.Backtest;
-import money.portosim.Metrics;
 import money.portosim.helpers.SpecifiedAllocation;
 import money.portosim.helpers.SpecifiedMultiAllocation;
 import money.portosim.strategies.FixedAllocation;
@@ -53,7 +52,7 @@ public class BacktestTest {
         
         var expTotalReturn = 10000.0 / 1000.0;
 
-        Assert.assertEquals(result.apply(Metrics::totalReturn), expTotalReturn, 10e-6);
+        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 10e-6);
         Assert.assertEquals(pfHist.size(), 3);
     }
     
@@ -78,7 +77,7 @@ public class BacktestTest {
 
         var result = backtest.getResult();
         
-        Assert.assertEquals(result.apply(Metrics::totalReturn), 1149.86 / 1000.0, 0.001);
+        Assert.assertEquals(result.quant().totalReturn(), 1149.86 / 1000.0, 0.001);
     }
     
     @Test
@@ -101,7 +100,7 @@ public class BacktestTest {
 
         var result = backtest.getResult();
         
-        Assert.assertEquals(result.apply(Metrics::totalReturn), 1152.710 / 1000.0, 0.001);
+        Assert.assertEquals(result.quant().totalReturn(), 1152.710 / 1000.0, 0.001);
     }
     
     @Test
@@ -124,7 +123,7 @@ public class BacktestTest {
 
         var result = backtest.getResult();
         
-        Assert.assertEquals(result.apply(Metrics::totalReturn), 1141.291 / 1000.0);
+        Assert.assertEquals(result.quant().totalReturn(), 1141.291 / 1000.0);
     }
     
     @Test
@@ -263,7 +262,7 @@ public class BacktestTest {
         var expValueN = assetAmounts.mult(NumericMap.of(priceMaps.get(priceMaps.size()-1))).sum();
         var expTotalReturn = expValueN / expValue0;
 
-        Assert.assertEquals(result.apply(Metrics::totalReturn), expTotalReturn);
+        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn);
     }
 
     @Test
@@ -295,6 +294,6 @@ public class BacktestTest {
         var expValueN = assetAmounts.mult(NumericMap.of(priceMaps.get(priceMaps.size()-1))).sum();
         var expTotalReturn = expValueN / expValue0;
 
-        Assert.assertEquals(result.apply(Metrics::totalReturn), expTotalReturn);
+        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn);
     }
 }

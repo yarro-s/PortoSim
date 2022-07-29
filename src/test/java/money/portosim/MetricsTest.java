@@ -98,7 +98,7 @@ public class MetricsTest {
         var expExcessReturns = List.of(25.5 / 20.0 - 1, 23.0 / 25.5 - 1, 30.1 / 23.0 - 1)
                 .stream().map(v -> v - baseRate).toList();
         
-        Assert.assertEquals(Metrics.excessReturns(valsA, baseRate), expExcessReturns);
+        Assert.assertEquals(Metrics.excessReturns(valsA, baseRate, 2), expExcessReturns);
     }
     
     @Test
@@ -132,7 +132,7 @@ public class MetricsTest {
     
     @Test
     public void toReturns() {
-        var returnsA = Metrics.toReturns(quoteSeries.get("A"));
+        var returnsA = Metrics.toReturns(quoteSeries.get("A"), 2);
         
         var expReturns = List.of(25.5 / 20.0 - 1, 23.0 / 25.5 - 1, 30.1 / 23.0 - 1);
         
@@ -197,7 +197,7 @@ public class MetricsTest {
     
     @Test
     public void seriesCummulativeGrowthRate() {
-        var cgrA = Metrics.cummulativeGrowthRate(quoteSeries.get("A"));
+        var cgrA = Metrics.cummulativeGrowthRate(quoteSeries.get("A"), 1);
         
         Assert.assertEquals(cgrA, Math.pow(30.1 / 20.0, 1.0 / 3.0) - 1, 1e-6);
     }

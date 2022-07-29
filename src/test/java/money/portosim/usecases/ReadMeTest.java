@@ -3,8 +3,8 @@ package money.portosim.usecases;
 import java.io.FileReader;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
-import money.portosim.Backtest;
 import money.portosim.Metrics;
+import money.portosim.Backtest;
 import money.portosim.containers.sources.CSVPriceSource;
 import money.portosim.strategies.FixedAllocation;
 import money.portosim.strategies.TimedStrategy;
@@ -33,14 +33,14 @@ public class ReadMeTest {
                 .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
                 .run(prices);   // test on the historic prices
         
-        double totalReturn = result.apply(Metrics::totalReturn);
-        double cagr = result.apply(vals -> Metrics.cummulativeGrowthRate(vals, 365));
+        double totalReturn = result.quant().apply(Metrics::totalReturn);
+        double cagr = result.quant().apply(vals -> Metrics.cummulativeGrowthRate(vals, 365));
         
-        var volatility90Day = result.rollingDouble(90).apply(Metrics::volatility);
+        var volatility90Day = result.quant().rollingDouble(90).apply(Metrics::volatility);
         double max3MVolatility = volatility90Day.max().orElse(0.0);
         
-        var sharpeYearly = result.rollingDouble(365).apply(vals -> 
-                Metrics.sharpeRatio(vals, 0.5 / 100));
+        var sharpeYearly = result.quant().rollingDouble(365).apply(vals -> 
+                Metrics.sharpeRatio(vals, 0.5 / 100, 2));
         double minSharpeYearly = sharpeYearly.min().orElse(0.0);
         
         Assert.assertEquals(totalReturn, 2.326, 0.001);
@@ -62,7 +62,7 @@ public class ReadMeTest {
                 .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
                 .run(prices);   // test on the historic prices
         
-        Assert.assertEquals(result.apply(Metrics::totalReturn), 1.2026, 0.00001);
+        Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.00001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
     }
     
@@ -83,7 +83,7 @@ public class ReadMeTest {
         // Run the backtest
         var result = backtest.run();
         
-        Assert.assertEquals(result.apply(Metrics::totalReturn), 1.2026, 0.00001);
+        Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.00001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
     }    
 }
