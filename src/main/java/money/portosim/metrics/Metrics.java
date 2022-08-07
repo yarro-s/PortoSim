@@ -6,7 +6,7 @@ import java.util.function.BiFunction;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
-public interface Metrics {
+interface Metrics {
     
     static double calmarRatio(List<Double> values, int valuesPerRefPeriod) {
         return (Math.pow(average(toReturns(values, valuesPerRefPeriod)), valuesPerRefPeriod) - 1) 
