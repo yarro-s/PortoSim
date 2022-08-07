@@ -8,6 +8,7 @@ Find the full sample [here](https://github.com/yarro-s/PortoSim/blob/master/samp
 First load prices from a CSV file
 
 ```java
+var sp500GoldMonthlyCSV = "sp500_gold_3yr_monthly.csv";
 var prices = new CSVPriceSource(new FileReader(sp500GoldMonthlyCSV));
 ```
 
@@ -25,5 +26,5 @@ var result = Backtest.withStrategy(fixedAlloc)
 
 Get the total return (120.26%)
 ```java
-System.out.println("Total return is " + result.apply(Metrics::totalReturn)); 
+System.out.println("Total return is " + result.full().totalReturn()); 
 ```

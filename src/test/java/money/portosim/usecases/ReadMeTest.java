@@ -53,10 +53,10 @@ public class ReadMeTest {
         // Load prices from a CSV file
         var prices = new CSVPriceSource(new FileReader(sp500GoldMonthlyCSV));
         
-        // Define a constant allocation portfolio
+        // Then define a fixed allocation 70% stocks / 30% gold portfolio
         var fixedAlloc = new FixedAllocation(Map.of("SP500TR", 0.7, "GOLD", 0.3));
         
-        // Build the backtest
+        // Build a backtest with a rebalancing period of one year
         var result = Backtest.withStrategy(fixedAlloc)
                 .setRebalancePeriod(ChronoUnit.YEARS)   // rebalance every year
                 .run(prices);   // test on the historic prices
