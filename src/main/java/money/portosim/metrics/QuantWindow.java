@@ -27,10 +27,7 @@ class QuantWindow<K> implements Quant<K> {
     }
     
     QuantWindow(QuantContext<K> context) {
-        var lastK = context.entries().get(context.entries().size() - 1).getKey();
-        var q = QuantSpan.of(context);
-        
-        qs = List.of(Map.entry(lastK, q));
+        this(context, 1);
     }
 
     @Override

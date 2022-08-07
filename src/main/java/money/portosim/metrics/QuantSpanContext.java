@@ -13,8 +13,12 @@ import java.util.List;
 public interface QuantSpanContext {
     
     int getValuesPerRefPeriod();
+    
+    public QuantSpanContext setValuesPerRefPeriod(int valuesPerRefPeriod);
         
     double getMeanRiskFreeRate();
+    
+    public QuantSpanContext setMeanRiskFreeRate(double meanRiskFreeRate);
     
     List<Double> values();
 }

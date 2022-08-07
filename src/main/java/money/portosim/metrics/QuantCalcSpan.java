@@ -18,10 +18,22 @@ class QuantCalcSpan implements QuantSpan {
     public int getValuesPerRefPeriod() {
         return context.getValuesPerRefPeriod();
     }
+    
+    @Override
+    public QuantSpanContext setValuesPerRefPeriod(int valuesPerRefPeriod) {
+        context.setValuesPerRefPeriod(valuesPerRefPeriod);
+        return context;
+    }
 
     @Override
     public double getMeanRiskFreeRate() {
         return context.getMeanRiskFreeRate();
+    }
+    
+    @Override
+    public QuantSpanContext setMeanRiskFreeRate(double meanRiskFreeRate) {
+        context.setMeanRiskFreeRate(meanRiskFreeRate);
+        return context;
     }
 
     @Override
