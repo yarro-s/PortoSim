@@ -11,6 +11,7 @@ import money.portosim.containers.sources.CSVPriceSource;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import money.portosim.metrics.Quant;
 
 /**
  *
@@ -30,7 +31,6 @@ public class QuantifiableTest {
                         .toMap(Map.Entry::getKey, e -> e.getValue().get(key))))));
     }
     
-    
     @Test
     public void rollingWindowAverage() {
         var ns = new NumericSeries();
@@ -42,8 +42,8 @@ public class QuantifiableTest {
         ns.put("2010-05-01", 32.0);
         ns.put("2010-06-01", 60.0);
         ns.put("2010-07-01", 75.0);
-
-        var nsAverage = ns.quant().rollingMap(3).apply(Metrics::average);
+        
+        var nsAverage = Quant.of(ns).rolling(3).average();
 
         var expAverage = new NumericSeries();
         
@@ -58,16 +58,15 @@ public class QuantifiableTest {
     
     @Test
     public void seriesAverage() {      
-        var seriesAvgVal_A = quoteSeries.get("A").quant().apply(Metrics::average);
+        var seriesAvgVal_A = Quant.of(quoteSeries.get("A")).full().average();
         
-        Assert.assertEquals(seriesAvgVal_A, 24.65, 1e-3);
+        Assert.assertEquals(seriesAvgVal_A, 24.65);
     }
     
     @Test
     public void seriesCummulativeGrowthRate() {
-        var seriesCGR_A = quoteSeries.get("A").quant()
-                .apply(vals -> Metrics.cummulativeGrowthRate(vals, 1));
+        var seriesCGR_A = Quant.of(quoteSeries.get("A")).full().cummulativeGrowthRate();
         
-        Assert.assertEquals(seriesCGR_A, Math.pow(30.1 / 20.0, 1.0 / 3.0) - 1, 1e-6);
+        Assert.assertEquals(seriesCGR_A, Math.pow(30.1 / 20.0, 1.0 / 3.0) - 1);
     }
 }

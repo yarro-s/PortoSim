@@ -1,4 +1,4 @@
-package money.portosim;
+package money.portosim.metrics;
 
 import java.util.Collection;
 import java.util.List;
@@ -38,7 +38,7 @@ public interface Metrics {
         return Math.sqrt(valuesPerRefPeriod) * average(excReturns) / stdDeviation(excReturns);
     }
     
-    static List<Double> excessReturns(List<Double> values, double baseRate, int valuesPerRefPeriod) {
+    static List<Double> excessReturns(List<Double> values, double baseRate, int valuesPerRefPeriod) { 
         return toReturns(values, valuesPerRefPeriod).stream().map(v -> v - baseRate).toList();
     }
    

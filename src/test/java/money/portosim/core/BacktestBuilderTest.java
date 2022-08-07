@@ -31,21 +31,21 @@ public class BacktestBuilderTest {
                 .setRebalancePeriod(ChronoUnit.YEARS)
                 .run(prices);
         
-        Assert.assertEquals(resStratInitRunPrices.quant().totalReturn(), 1.2026, 0.0001);
+        Assert.assertEquals(resStratInitRunPrices.full().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(resStratInitRunPrices.getPortfolioHistory().size(), prices.size());
         
         var resPricesInitRunStrategy = Backtest.forPrices(prices)
                 .setRebalancePeriod(ChronoUnit.YEARS)
                 .run(myStrategy);
         
-        Assert.assertEquals(resPricesInitRunStrategy.quant().totalReturn(), 1.2026, 0.0001);
+        Assert.assertEquals(resPricesInitRunStrategy.full().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(resPricesInitRunStrategy.getPortfolioHistory().size(), prices.size());  
         
         var resRebalanceInitRunPrices = Backtest.rebalanceEvery(ChronoUnit.YEARS)
                 .setStrategy(myStrategy)
                 .run(prices);
         
-        Assert.assertEquals(resRebalanceInitRunPrices.quant().totalReturn(), 1.2026, 0.0001);
+        Assert.assertEquals(resRebalanceInitRunPrices.full().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(resRebalanceInitRunPrices.getPortfolioHistory().size(), prices.size());
     }
     
@@ -63,7 +63,7 @@ public class BacktestBuilderTest {
                 .setPrices(prices)
                 .run();
         
-        Assert.assertEquals(result.quant().totalReturn(), 1.2026, 0.0001);
+        Assert.assertEquals(result.full().totalReturn(), 1.2026, 0.0001);
         Assert.assertEquals(result.getPortfolioHistory().size(), prices.size());
     }
     

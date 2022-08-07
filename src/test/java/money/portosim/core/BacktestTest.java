@@ -52,7 +52,7 @@ public class BacktestTest {
         
         var expTotalReturn = 10000.0 / 1000.0;
 
-        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 10e-6);
+        Assert.assertEquals(result.full().totalReturn(), expTotalReturn, 10e-6);
         Assert.assertEquals(pfHist.size(), 3);
     }
     
@@ -77,7 +77,7 @@ public class BacktestTest {
 
         var result = backtest.getResult();
         
-        Assert.assertEquals(result.quant().totalReturn(), 1149.86 / 1000.0, 0.001);
+        Assert.assertEquals(result.full().totalReturn(), 1149.86 / 1000.0, 0.001);
     }
     
     @Test
@@ -100,7 +100,7 @@ public class BacktestTest {
 
         var result = backtest.getResult();
         
-        Assert.assertEquals(result.quant().totalReturn(), 1152.710 / 1000.0, 0.001);
+        Assert.assertEquals(result.full().totalReturn(), 1152.710 / 1000.0, 0.001);
     }
     
     @Test
@@ -123,7 +123,7 @@ public class BacktestTest {
 
         var result = backtest.getResult();
         
-        Assert.assertEquals(result.quant().totalReturn(), 1141.291 / 1000.0);
+        Assert.assertEquals(result.full().totalReturn(), 1141.291 / 1000.0);
     }
     
     @Test
@@ -262,7 +262,7 @@ public class BacktestTest {
         var expValueN = assetAmounts.mult(NumericMap.of(priceMaps.get(priceMaps.size()-1))).sum();
         var expTotalReturn = expValueN / expValue0;
 
-        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn);
+        Assert.assertEquals(result.full().totalReturn(), expTotalReturn);
     }
 
     @Test
@@ -294,6 +294,6 @@ public class BacktestTest {
         var expValueN = assetAmounts.mult(NumericMap.of(priceMaps.get(priceMaps.size()-1))).sum();
         var expTotalReturn = expValueN / expValue0;
 
-        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn);
+        Assert.assertEquals(result.full().totalReturn(), expTotalReturn);
     }
 }

@@ -2,11 +2,8 @@ package money.portosim.containers;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.NavigableMap;
 import money.portosim.containers.core.AlgebraicMap;
 import money.portosim.containers.core.Series;
-import money.portosim.Quantifiable;
-import money.portosim.TimedQuant;
 
 /**
  *
@@ -14,17 +11,7 @@ import money.portosim.TimedQuant;
  */
 public class NumericSeries extends Series<Double> 
         implements AlgebraicMap<Date, Double> {
-    
-    public Quantifiable<Date> quant() {
-        return new TimedQuant() {
-            
-            @Override
-            public NavigableMap<Date, Double> getNavigableMap() {
-                return NumericSeries.this;
-            }
-        };
-    }
-    
+                
     public NumericSeries() { 
         super();
     }

@@ -45,7 +45,7 @@ public class BacktestFromCSVTest {
                 .div(NumericMap.of(priceSlice.firstEntry().getValue()))
                 .getOrDefault(ticker, 0.0);
 
-        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 10e-6);
+        Assert.assertEquals(result.full().totalReturn(), expTotalReturn, 10e-6);
         Assert.assertEquals(pfHist.size(), priceSlice.size());
     }
     
@@ -71,7 +71,7 @@ public class BacktestFromCSVTest {
                 .div(NumericMap.of(priceSlice.firstEntry().getValue()))
                 .getOrDefault(ticker, 0.0);
 
-        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 10e-6);
+        Assert.assertEquals(result.full().totalReturn(), expTotalReturn, 10e-6);
         Assert.assertEquals(pfHist.size(), priceSlice.size());
     }
     
@@ -93,7 +93,7 @@ public class BacktestFromCSVTest {
                 .getValue()).div(NumericMap.of(new TreeMap<>(prices).firstEntry().getValue()))
                 .getOrDefault("SP500TR", 0.0);
 
-        Assert.assertEquals(result.quant().totalReturn(), expTotalReturn, 0.0001);
+        Assert.assertEquals(result.full().totalReturn(), expTotalReturn, 0.0001);
         Assert.assertEquals(pfHist.size(), prices.size());
     }
 }
